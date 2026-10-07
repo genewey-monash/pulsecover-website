@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Premium calculator | PulseCover</title><meta name="description" content="See how your daily habits change your yearly premium.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css"></head><body>
+<main><section class="sec"><div class="wrap"><h1 data-i18n="calc.h1"></h1><p class="lead" data-i18n="calc.sub"></p>
+<div class="calc" style="margin-top:28px"><div class="card">
+ <label data-i18n="calc.plan"></label><select id="planSel"></select>
+ <div class="rng"><label data-i18n="calc.steps"></label><b id="v_steps"></b></div><input type="range" id="steps" min="0" max="20000" step="250" value="7500">
+ <div class="rng"><label data-i18n="calc.exercise"></label><b id="v_exercise"></b></div><input type="range" id="exerciseMin" min="0" max="400" step="5" value="100">
+ <div class="rng"><label data-i18n="calc.sleep"></label><b id="v_sleep"></b></div><input type="range" id="sleepHours" min="3" max="11" step="0.25" value="7.5">
+ <div class="rng"><label data-i18n="calc.hr"></label><b id="v_hr"></b></div><input type="range" id="restingHr" min="40" max="100" step="1" value="66">
+ <label class="check"><input type="checkbox" id="appSub"><span data-i18n="calc.sub.opt"></span></label>
+ <p style="font-size:.85rem;color:var(--mute);margin-top:14px" data-i18n="calc.note"></p></div>
+<div class="result"><h3 data-i18n="calc.score"></h3><div class="big" id="r_score">-</div><span id="r_badge" class="badge neu"></span>
+ <div style="margin-top:14px" class="row"><span data-i18n="calc.base"></span><b id="r_base"></b></div>
+ <div class="row"><span data-i18n="calc.adj"></span><b id="r_adj"></b></div>
+ <div class="row"><span data-i18n="calc.yours"></span><b id="r_total" style="font-size:1.3rem"></b></div>
+ <div class="row"><span data-i18n="calc.permonth"></span><b id="r_month"></b></div>
+ <div class="row" style="border:0"><span id="r_savlbl"></span><b id="r_sav"></b></div>
+ <h3 style="margin-top:18px;font-size:1rem" data-i18n="calc.breakdown"></h3><div class="bars" id="bars"></div>
+ <a class="btn" style="width:100%;margin-top:18px" id="applybtn" href="/apply" data-i18n="calc.cta"></a></div></div>
+<div class="card" style="margin-top:24px"><h3 data-i18n="calc.formula.h"></h3><p data-i18n="calc.formula.p"></p></div></div></section></main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/app.js"></script><script>
+const ids=['steps','exerciseMin','sleepHours','restingHr'];let timer,last;
+function vals(){const g=i=>+document.getElementById(i).value;return{steps:g('steps'),exerciseMin:g('exerciseMin'),sleepHours:g('sleepHours'),restingHr:g('restingHr'),appSubscription:document.getElementById('appSub').checked,plan:document.getElementById('planSel').value||'A'}}
+function labels(v){document.getElementById('v_steps').textContent=v.steps.toLocaleString();document.getElementById('v_exercise').textContent=v.exerciseMin+' min';document.getElementById('v_sleep').textContent=v.sleepHours+' h';document.getElementById('v_hr').textContent=v.restingHr+' bpm'}
+function paint(){if(!last)return;const q=last;document.getElementById('r_score').textContent=q.score+' / 100';
+ const adj=q.adjustmentPct,b=document.getElementById('r_badge');b.textContent=(adj>0?'+':'')+adj+'%';b.className='badge '+(adj<0?'good':adj>0?'up':'neu');
+ document.getElementById('r_base').textContent='RM '+PC.fmt(q.base);document.getElementById('r_adj').textContent=(adj>0?'+':'')+adj+'%';
+ document.getElementById('r_total').textContent='RM '+PC.fmt(q.totalAnnual)+PC.t('common.year');document.getElementById('r_month').textContent='RM '+PC.fmt(q.monthlyPremium+(q.appSubscriptionAnnual/12))+PC.t('common.month');
+ document.getElementById('r_savlbl').textContent=q.savings>=0?PC.t('calc.saved'):PC.t('calc.extra');document.getElementById('r_sav').textContent='RM '+PC.fmt(Math.abs(q.savings));
+ document.getElementById('bars').innerHTML=Object.entries(q.components).map(([k,v])=>'<div class="b"><div class="t"><span>'+PC.t('comp.'+k)+'</span><span>'+v+'</span></div><div class="tr"><i style="width:'+v+'%"></i></div></div>').join('');
+ const v=vals();document.getElementById('applybtn').href='/apply?plan='+document.getElementById('planSel').value+'&steps='+v.steps+'&ex='+v.exerciseMin+'&sl='+v.sleepHours+'&hr='+v.restingHr;}
+async function run(){const v=vals();labels(v);try{last=await PC.api('/quote',v);paint()}catch(e){}}
+PC.api('/plans').then(ps=>{const s=document.getElementById('planSel');s.innerHTML=ps.map(p=>'<option value="'+p.id+'">'+PC.planName(p.id)+' - RM '+p.base+'</option>').join('');const q=new URLSearchParams(location.search).get('plan');if(q)s.value=q;s.onchange=()=>{clearTimeout(timer);timer=setTimeout(run,60)};window.addEventListener('pc:lang',()=>{[...s.options].forEach(o=>o.textContent=PC.planName(o.value)+' - RM '+ps.find(p=>p.id===o.value).base)});run()});
+ids.concat('appSub').forEach(i=>document.getElementById(i).addEventListener('input',()=>{labels(vals());clearTimeout(timer);timer=setTimeout(run,120)}));
+window.addEventListener('pc:lang',paint);</script></body></html>

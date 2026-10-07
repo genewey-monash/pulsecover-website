@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My dashboard | PulseCover</title><meta name="description" content="Your policy, health score and projected premium.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css"></head><body>
+<main><section class="sec"><div class="wrap"><h1><span data-i18n="dash.h1"></span>, <span id="who"></span></h1>
+<div id="nop" class="card" style="display:none"><p data-i18n="dash.nopolicy"></p><a class="btn" href="/apply" data-i18n="nav.apply"></a></div>
+<div id="main" style="display:none"><div class="kpi">
+ <div class="card"><span data-i18n="dash.policy"></span><b id="k_pol"></b></div><div class="card"><span data-i18n="dash.premium"></span><b id="k_prem"></b></div>
+ <div class="card"><span data-i18n="dash.score30"></span><b id="k_score"></b></div><div class="card"><span data-i18n="dash.projected"></span><b id="k_proj"></b></div></div>
+<div class="dgrid"><div>
+ <div class="card"><h3 data-i18n="dash.trend"></h3><canvas id="chart" width="700" height="260"></canvas><p id="nodata" style="display:none;color:var(--mute)" data-i18n="dash.nodata"></p>
+  <div class="cta" style="margin-top:12px"><button class="btn sm" id="sync" data-i18n="dash.sync"></button></div><div class="msg" id="sm"></div>
+  <details style="margin-top:14px"><summary data-i18n="dash.sync.manual"></summary><div class="rowf"><div><label data-i18n="dash.steps"></label><input type="number" id="m_s" value="8000"></div><div><label data-i18n="dash.exercise"></label><input type="number" id="m_e" value="30"></div><div><label data-i18n="dash.sleep"></label><input type="number" step="0.25" id="m_sl" value="7.5"></div><div><label data-i18n="dash.hr"></label><input type="number" id="m_h" value="65"></div></div><button class="btn sm" style="margin-top:12px" id="msave" data-i18n="dash.save"></button></details></div>
+ <div class="card" style="margin-top:18px"><h3 data-i18n="dash.myclaims"></h3><div id="cl"></div><a class="btn sm" href="/claims" data-i18n="dash.newclaim"></a></div></div>
+<div><div class="card"><h3 data-i18n="dash.pause.h"></h3><p data-i18n="dash.pause.p"></p><div id="pausedmsg" class="pill" style="display:none"></div>
+ <div class="rowf"><div><label data-i18n="dash.pause.days"></label><input type="number" id="pdays" value="14" min="1" max="60"></div><div><label>&nbsp;</label><select id="preason"><option value="illness">Illness</option><option value="injury">Injury</option><option value="travel">Travel</option><option value="pregnancy">Pregnancy</option><option value="other">Other</option></select></div></div><button class="btn sm" style="margin-top:12px" id="pbtn" data-i18n="dash.pause.btn"></button><div class="msg" id="pm"></div></div>
+ <div class="card" style="margin-top:18px"><h3 data-i18n="dash.ref.h"></h3><p data-i18n="dash.ref.p"></p><p><span data-i18n="dash.ref.code"></span>: <b id="rcode"></b> &middot; <span data-i18n="dash.ref.count"></span>: <b id="rcount"></b> <span id="medal"></span></p><button class="btn sm" id="copy" data-i18n="dash.ref.copy"></button>
+  <h3 style="margin-top:18px;font-size:1rem" data-i18n="dash.board"></h3><ul class="board" id="board" style="list-style:none;padding:0;margin:0"></ul><p style="font-size:.82rem;color:var(--mute);margin-top:10px" data-i18n="dash.milestone"></p></div>
+ <p style="margin-top:18px"><a href="#" id="lo" data-i18n="nav.logout"></a></p></div></div></div></div></section></main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/app.js"></script><script>
+let D;
+function chart(){const c=document.getElementById('chart'),x=c.getContext('2d'),W=c.width,H=c.height;x.clearRect(0,0,W,H);const m=(D.metrics||[]).slice(-30);
+ document.getElementById('nodata').style.display=m.length?'none':'';c.style.display=m.length?'':'none';if(!m.length)return;
+ x.strokeStyle='#e3e9f0';x.fillStyle='#5b6b80';x.font='12px Inter,sans-serif';for(let i=0;i<=4;i++){const y=20+(H-50)*i/4;x.beginPath();x.moveTo(40,y);x.lineTo(W-10,y);x.stroke();x.fillText(100-i*25,8,y+4)}
+ const px=i=>40+(W-60)*(m.length===1?.5:i/(m.length-1)),py=s=>20+(H-50)*(1-s/100);
+ x.strokeStyle='#0fb5a6';x.lineWidth=3;x.beginPath();m.forEach((p,i)=>i?x.lineTo(px(i),py(p.score)):x.moveTo(px(i),py(p.score)));x.stroke();
+ x.fillStyle='#0fb5a6';m.forEach((p,i)=>{x.beginPath();x.arc(px(i),py(p.score),4,0,7);x.fill()});
+ x.fillStyle='#5b6b80';x.fillText(m[0].day.slice(5),40,H-10);x.fillText(m[m.length-1].day.slice(5),W-50,H-10)}
+function paint(){if(!D)return;const p=D.policy;who.textContent=D.user.name.split(' ')[0];if(!p){nop.style.display='';main.style.display='none';return}
+ nop.style.display='none';main.style.display='';k_pol.textContent=PC.planName(p.plan||'A')+' \u00b7 '+p.number;k_prem.textContent='RM '+PC.fmt(p.premium)+PC.t('common.year');k_score.textContent=D.score30==null?'-':D.score30;
+ k_proj.textContent='RM '+PC.fmt(D.projected.annualPremium)+' ('+(D.projected.adjustmentPct>0?'+':'')+D.projected.adjustmentPct+'%)';
+ if(D.paused){pausedmsg.style.display='';pausedmsg.textContent=PC.t('dash.paused')+' '+D.paused}else pausedmsg.style.display='none';
+ rcode.textContent=D.user.refcode;rcount.textContent=D.referrals;medal.textContent=D.referrals>=25?'\u{1F947}':D.referrals>=10?'\u{1F948}':D.referrals>=3?'\u{1F949}':'';
+ board.innerHTML=D.ranking.length?D.ranking.map((r,i)=>'<li><span>'+(i+1)+'. '+PC.esc(r.name)+'</span><b>'+r.count+'</b></li>').join(''):'<li style="color:var(--mute)">-</li>';
+ cl.innerHTML=D.claims.length?D.claims.slice(0,3).map(c=>'<p><b>'+PC.esc(c.number)+'</b> &middot; RM '+PC.fmt(c.amount)+' &middot; <span class="pill">'+PC.t('cl.s.'+c.status)+'</span></p>').join(''):'<p style="color:var(--mute)">'+PC.t('cl.none')+'</p>';chart()}
+async function load(){try{D=await PC.api('/dashboard');paint()}catch(e){if(e.status===401)location.href='/account?next=/dashboard'}}
+PC.ready.then(load);window.addEventListener('pc:lang',paint);
+sync.onclick=async()=>{try{const r=await PC.api('/sync',{});PC.msg(sm,PC.t('dash.synced')+': '+r.steps+' / '+r.exerciseMin+' / '+r.sleepHours+' / '+r.restingHr,true);load()}catch(e){PC.msg(sm,e.message)}};
+msave.onclick=async()=>{try{await PC.api('/sync',{manual:true,steps:+m_s.value,exerciseMin:+m_e.value,sleepHours:+m_sl.value,restingHr:+m_h.value});PC.msg(sm,PC.t('dash.synced'),true);load()}catch(e){PC.msg(sm,e.message)}};
+pbtn.onclick=async()=>{try{await PC.api('/pause',{days:+pdays.value,reason:preason.value});PC.msg(pm,PC.t('dash.synced'),true);load()}catch(e){PC.msg(pm,e.message)}};
+copy.onclick=()=>{const u=location.origin+'/account?ref='+D.user.refcode;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).catch(()=>{}).finally(()=>{copy.textContent=PC.t('dash.ref.copied');setTimeout(()=>copy.textContent=PC.t('dash.ref.copy'),1500)})};
+lo.onclick=e=>{e.preventDefault();PC.logout()};</script></body></html>

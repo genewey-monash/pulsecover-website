@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Account | PulseCover</title><meta name="description" content="Log in or create your PulseCover account.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css"></head><body>
+<main><section class="sec"><div class="wrap" style="max-width:520px"><h1 data-i18n="acc.h1"></h1>
+<div class="card" id="loginbox"><h3 data-i18n="acc.login"></h3><form id="lf"><label data-i18n="field.email"></label><input type="email" id="le" required autocomplete="email"><label data-i18n="field.password"></label><input type="password" id="lp" required autocomplete="current-password"><div id="lm" class="msg"></div><button class="btn" style="margin-top:16px;width:100%" data-i18n="acc.login"></button></form>
+<p style="margin:16px 0 0"><span data-i18n="acc.new"></span> <a href="#" id="toreg" data-i18n="acc.register"></a></p></div>
+<div class="card" id="regbox" style="display:none"><h3 data-i18n="acc.register"></h3><form id="rf"><label data-i18n="field.name"></label><input id="rn" required autocomplete="name"><label data-i18n="field.email"></label><input type="email" id="re" required autocomplete="email"><label data-i18n="field.dob"></label><input type="date" id="rd" required><p style="font-size:.8rem;color:var(--mute);margin:4px 0 0" data-i18n="acc.minage"></p><label data-i18n="field.password"></label><input type="password" id="rp" required minlength="8" autocomplete="new-password"><label data-i18n="field.referral"></label><input id="rr"><div id="rm" class="msg"></div><button class="btn" style="margin-top:16px;width:100%" data-i18n="acc.register"></button></form>
+<p style="margin:16px 0 0"><span data-i18n="acc.have"></span> <a href="#" id="tolog" data-i18n="acc.login"></a></p></div></div></section></main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/app.js"></script><script>
+const q=new URLSearchParams(location.search);const next=q.get('next')&&q.get('next').startsWith('/')?q.get('next'):'/dashboard';
+if(q.get('ref')){document.getElementById('rr').value=q.get('ref');show(true)}
+function show(r){document.getElementById('loginbox').style.display=r?'none':'';document.getElementById('regbox').style.display=r?'':'none'}
+document.getElementById('toreg').onclick=e=>{e.preventDefault();show(true)};document.getElementById('tolog').onclick=e=>{e.preventDefault();show(false)};
+document.getElementById('rd').max=new Date().toISOString().slice(0,10);
+PC.ready.then(()=>{if(PC.user)location.href=next});
+document.getElementById('lf').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('lm');try{await PC.api('/login',{email:le.value,password:lp.value});location.href=next}catch(x){PC.msg(m,x.message)}};
+document.getElementById('rf').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('rm');try{await PC.api('/register',{name:rn.value,email:re.value,dob:rd.value,password:rp.value,referral:rr.value,lang:PC.lang});location.href=next}catch(x){PC.msg(m,x.message)}};</script></body></html>
