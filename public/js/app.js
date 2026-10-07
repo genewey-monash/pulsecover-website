@@ -47,11 +47,35 @@
   };
   const TOP = [['mega:products'], ['/how-pricing-works', 'nav.pricing'], ['/calculator', 'nav.calc'], ['/business', 'nav.sme'], ['mega:help']];
   const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/claims': 'nav.claims' };
+  // Search index: [href, titleKey, descKey, group, extra English keywords]. Matches the current language AND English keywords.
   const SEARCH = [
-    ['/', 'nav.home', 'footer.tag'], ['/plans', 'nav.plans', 'plans.sub'], ['/connect', 'nav.connect', 'connect.sub'], ['/calculator', 'nav.calc', 'calc.sub'], ['/how-pricing-works', 'nav.how', 'how.sub'],
-    ['/compare', 'nav.compare', 'cmp.sub'], ['/business', 'nav.sme', 'sme.sub'], ['/investors', 'nav.investors', 'inv.sub'], ['/privacy', 'footer.privacy', 'prv.sub'],
-    ['/claims', 'nav.claims', 'cl.sub'], ['/apply', 'nav.apply', 'apply.sub'], ['/contact', 'nav.contact', 'ct.sub'], ['/dashboard', 'nav.dashboard', 'dash.nopolicy']
-  ].concat([1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => ['/faq', 'faq.q' + i, 'faq.a' + i]));
+    ['/', 'nav.home', 'footer.tag', 'page', 'home start welcome'],
+    ['/plans', 'nav.plans', 'plans.sub', 'page', 'plans cover insurance products packages price'],
+    ['/connect', 'nav.connect', 'connect.sub', 'tool', 'wearable fitbit garmin whoop google health connect device sync link'],
+    ['/calculator', 'nav.calc', 'calc.sub', 'tool', 'calculator premium quote price estimate steps sleep heart rate'],
+    ['/how-pricing-works', 'nav.how', 'how.sub', 'page', 'pricing rules formula band fair how it works'],
+    ['/how-pricing-works#bands', 'rate.bands', 'rate.sub', 'page', 'risk rating grade score a+ band credit score'],
+    ['/compare', 'nav.compare', 'cmp.sub', 'page', 'compare aia vitality traditional flat rate difference'],
+    ['/business', 'nav.sme', 'sme.sub', 'tool', 'business sme employer staff group employees hr'],
+    ['/business#enquiry', 'sme.enquiry.h', 'sme.assoc', 'tool', 'enquiry business quote group contact'],
+    ['/investors', 'nav.investors', 'inv.sub', 'page', 'investors market financials breakeven revenue cost sources'],
+    ['/privacy', 'footer.privacy', 'prv.sub', 'page', 'privacy data protection consent security pdpa'],
+    ['/claims', 'nav.claims', 'cl.sub', 'tool', 'claim claims file submit track hospital accident'],
+    ['/apply', 'nav.apply', 'apply.sub', 'tool', 'apply get covered buy join sign up policy'],
+    ['/account', 'nav.login', 'acc.sub', 'tool', 'login log in register sign up account password'],
+    ['/dashboard', 'nav.dashboard', 'dash.summ.note', 'tool', 'dashboard policy weekly summary devices pause referral'],
+    ['/dashboard', 'dash.ref.h', 'dash.ref.p', 'tool', 'referral refer friend code credit leaderboard'],
+    ['/dashboard', 'dash.pause.h', 'dash.pause.p', 'tool', 'pause tracking illness injury travel pregnancy'],
+    ['/contact', 'nav.contact', 'ct.sub', 'page', 'contact email phone address message help'],
+    ['#callback', 'cb.h', 'cb.sub', 'tool', 'call back advisor talk callback phone request'],
+    ['/plans#A', 'plan.A', 'plan.wear', 'plan', 'plan a 600 individual online'],
+    ['/plans#B', 'plan.B', 'plan.wear', 'plan', 'plan b 900 individual'],
+    ['/plans#C', 'plan.C', 'plan.wear', 'plan', 'plan c 1500 family'],
+    ['/plans#D', 'plan.D', 'plan.wear', 'plan', 'plan d 2400 family']
+  ].concat([1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => ['/faq#faq' + i, 'faq.q' + i, 'faq.a' + i, 'faq', 'faq question']));
+  const GROUPS = { page: 'search.g.page', tool: 'search.g.tool', plan: 'search.g.plan', faq: 'search.g.faq' };
+  const POPULAR = [['/calculator', 'nav.calc'], ['/connect', 'nav.connect'], ['/claims', 'nav.claims'], ['/faq', 'nav.faq'], ['/plans', 'nav.plans']];
+  const EN = (k) => (DICT[k] ? DICT[k][0] : k);
 
   const path = () => (location.pathname.replace(/\.html$/, '').replace(/\/index$/, '/') || '/');
   const mi = (href, icon, labelKey) => {
@@ -67,7 +91,7 @@
     const hdr = document.createElement('header'); hdr.className = 'top';
     const promoOn = store.get('pc_promo') !== '1';
     const nav = TOP.map((t) => {
-      if (t[0].startsWith('mega:')) { const m = t[0].slice(5); return `<button class="nv" data-mega="${m}" aria-expanded="false">${'<span data-i18n="' + MEGA[m].key + '"></span>'}${chev}</button>`; }
+      if (t[0].startsWith('mega:')) { const m = t[0].slice(5); return `<button class="nv" data-mega="${m}" aria-expanded="false">${'<span data-i18n="' + MEGA[m].key + '"></span>'}</button>`; }
       return `<a href="${t[0]}" class="${t[0] === here ? 'on' : ''}" data-i18n="${t[1]}"></a>`;
     }).join('');
     const megaHtml = Object.entries(MEGA).map(([k, m]) => `<div class="mega" id="mega-${k}"><div class="wrap"><div class="mgrid" style="grid-template-columns:repeat(${m.cols.length},1fr)">${m.cols.map(([h, items]) => `<div><h4 data-i18n="${h}"></h4>${items.map((i) => mi(i[0], i[1], i[2])).join('')}</div>`).join('')}</div>${m.links.length ? `<div class="mlinks">${m.links.map((l) => `<a href="${l[0]}"><span data-i18n="${l[1]}"></span><small data-i18n="${l[2]}"></small></a>`).join('')}</div>` : ''}</div></div>`).join('');
@@ -77,13 +101,14 @@
       <nav class="main" id="mainnav" aria-label="Main">${nav}</nav>
       <div class="tools">
         <button class="ibtn" id="sbtn" aria-label="Search">${PC.icon('search')}</button>
+        <button class="ibtn" id="themebtn" aria-label="Theme" aria-pressed="false"></button>
         <select class="lang" id="langsel" aria-label="Language">${LANGS.map((l) => `<option value="${l.code}">${l.label}</option>`).join('')}</select>
         <a class="btn ghost sm" id="authbtn" href="/account"></a>
         <a class="btn sm" href="/connect" data-i18n="nav.connect"></a>
         <button class="burger" id="burger" aria-label="Menu">&#9776;</button>
       </div></div>
       ${megaHtml}
-      <div class="spanel" id="spanel"><div class="wrap"><div class="sbox"><span style="color:var(--red)">${PC.icon('search')}</span><input id="sq" type="search" autocomplete="off" data-i18n-ph="search.ph"><button id="sclear" data-i18n="search.clear"></button></div><div class="sres" id="sres"></div></div></div>
+      <div class="spanel" id="spanel"><div class="wrap"><div class="sbox"><span class="sico">${PC.icon('search')}</span><input id="sq" type="search" role="combobox" aria-expanded="true" aria-controls="sres" aria-autocomplete="list" autocomplete="off" spellcheck="false" data-i18n-ph="search.ph"><button id="sclear" data-i18n="search.clear"></button><kbd class="skey">Esc</kbd></div><div class="sres" id="sres" role="listbox"></div></div></div>
     </div>`;
     document.body.prepend(hdr);
 
@@ -99,8 +124,8 @@
     ft.innerHTML = `<div class="wrap"><div class="fgrid">
       <div><div class="brand" style="color:#fff"><img class="logo-img" src="/img/logo-mark.png" alt="PulseCover logo" width="46" height="46"><span class="name">PulseCover</span></div><p style="margin-top:12px" data-i18n="footer.tag"></p>
         <p style="margin:6px 0"><b style="color:#fff">1300-00-0000</b><br>hello@pulsecover.example</p>
-        <div class="soc"><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="Instagram">ig</a><a href="#" aria-label="TikTok">tt</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="YouTube">yt</a></div>
-        <div class="badges"><span>App Store</span><span>Google Play</span></div></div>
+        <div class="soc">${[['Facebook', 'facebook', 'https://www.facebook.com/'], ['Instagram', 'instagram', 'https://www.instagram.com/'], ['X', 'x', 'https://x.com/'], ['Telegram', 'telegram', 'https://t.me/'], ['LinkedIn', 'linkedin', 'https://www.linkedin.com/'], ['YouTube', 'youtube', 'https://www.youtube.com/']].map(([n, f, u]) => `<a href="${u}" target="_blank" rel="noopener noreferrer" aria-label="${n}" title="${n}"><img src="/img/social/${f}.svg" alt="" width="18" height="18"></a>`).join('')}</div>
+        <div class="badges"><a class="badge-app" href="https://www.apple.com/app-store/" target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store"><img src="/img/social/apple.svg" alt="" width="22" height="22"><span><small>Download on the</small><b>App Store</b></span></a><a class="badge-app" href="https://play.google.com/" target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play"><img src="/img/social/google-play.svg" alt="" width="22" height="22"><span><small>Get it on</small><b>Google Play</b></span></a></div></div>
       <div><h4 data-i18n="footer.product"></h4><a href="/plans" data-i18n="nav.plans"></a><a href="/calculator" data-i18n="nav.calc"></a><a href="/compare" data-i18n="nav.compare"></a><a href="/apply" data-i18n="nav.apply"></a><a href="/business" data-i18n="nav.sme"></a></div>
       <div><h4 data-i18n="footer.support"></h4><a href="/claims" data-i18n="nav.claims"></a><a href="/dashboard" data-i18n="nav.dashboard"></a><a href="/faq" data-i18n="nav.faq"></a><a href="/contact" data-i18n="nav.contact"></a></div>
       <div><h4 data-i18n="footer.company"></h4><a href="/how-pricing-works" data-i18n="nav.how"></a><a href="/investors" data-i18n="nav.investors"></a><a href="/privacy" data-i18n="footer.privacy"></a></div>
@@ -130,23 +155,42 @@
     const sel = document.getElementById('langsel'); sel.value = lang; sel.onchange = () => PC.setLang(sel.value);
     ft.querySelectorAll('#flangs button').forEach((b) => (b.onclick = () => PC.setLang(b.dataset.l)));
     document.getElementById('burger').onclick = () => document.getElementById('mainnav').classList.toggle('open');
-    const px = document.getElementById('promox'); if (px) px.onclick = () => { store.set('pc_promo', '1'); document.getElementById('promo').remove(); };
+    const px = document.getElementById('promox'); if (px) px.onclick = () => { store.set('pc_promo', '1'); const pr = document.getElementById('promo'); pr.classList.add('gone'); setTimeout(() => pr.remove(), 380); };
     document.getElementById('ckok').onclick = () => { store.set('pc_cookie', 'all'); ck.classList.remove('open'); };
     document.getElementById('ckno').onclick = () => { store.set('pc_cookie', 'essential'); ck.classList.remove('open'); };
+    // light / dark mode (remembered per visitor)
+    const tb = document.getElementById('themebtn');
+    const paintTheme = () => { const dark = document.documentElement.dataset.theme === 'dark'; tb.innerHTML = PC.icon(dark ? 'sun' : 'moon'); tb.title = tb.ariaLabel = PC.t(dark ? 'theme.light' : 'theme.dark'); tb.setAttribute('aria-pressed', dark ? 'true' : 'false'); };
+    PC.paintTheme = paintTheme;
+    tb.onclick = () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next; store.set('pc_theme', next); paintTheme(); };
+    paintTheme();
     // mega menus
     const closeMega = () => { document.querySelectorAll('.mega').forEach((m) => m.classList.remove('open')); document.querySelectorAll('[data-mega]').forEach((b) => { b.classList.remove('on'); b.setAttribute('aria-expanded', 'false'); }); };
     document.querySelectorAll('[data-mega]').forEach((b) => b.addEventListener('click', (e) => {
       e.stopPropagation(); const el = document.getElementById('mega-' + b.dataset.mega), was = el.classList.contains('open');
-      closeMega(); document.getElementById('spanel').classList.remove('open');
+      closeMega(); PC.closeSearch();
       if (!was) { el.classList.add('open'); b.classList.add('on'); b.setAttribute('aria-expanded', 'true'); }
     }));
-    document.addEventListener('click', (e) => { if (!e.target.closest('.mega') && !e.target.closest('#spanel')) { closeMega(); } });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeMega(); document.getElementById('spanel').classList.remove('open'); document.querySelectorAll('.modal.open').forEach((m) => m.classList.remove('open')); } });
+    document.addEventListener('click', (e) => { if (!e.target.closest('.mega') && !e.target.closest('#spanel') && !e.target.closest('#sbtn')) { closeMega(); if (document.getElementById('spanel').classList.contains('open')) PC.closeSearch(); } });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeMega(); document.getElementById('spanel').classList.remove('open'); document.querySelectorAll('.modal.open').forEach((m) => m.classList.remove('open')); PC.closeSearch && PC.closeSearch(); } });
     // search
     const sp = document.getElementById('spanel'), sq = document.getElementById('sq');
-    document.getElementById('sbtn').onclick = (e) => { e.stopPropagation(); closeMega(); sp.classList.toggle('open'); if (sp.classList.contains('open')) { sq.focus(); runSearch(); } };
+    const openSearch = () => { closeMega(); sp.classList.add('open'); document.getElementById('sbtn').setAttribute('aria-expanded', 'true'); setTimeout(() => sq.focus(), 60); runSearch(); };
+    const closeSearch = () => { sp.classList.remove('open'); document.getElementById('sbtn').setAttribute('aria-expanded', 'false'); };
+    PC.openSearch = openSearch; PC.closeSearch = closeSearch;
+    document.getElementById('sbtn').onclick = (e) => { e.stopPropagation(); sp.classList.contains('open') ? closeSearch() : openSearch(); };
     document.getElementById('sclear').onclick = () => { sq.value = ''; runSearch(); sq.focus(); };
     sq.oninput = runSearch;
+    sq.addEventListener('keydown', (e) => {
+      const items = [...document.querySelectorAll('#sres .si')]; if (!items.length) return;
+      let i = items.findIndex((x) => x.classList.contains('act'));
+      if (e.key === 'ArrowDown') { e.preventDefault(); i = (i + 1) % items.length; }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); i = (i - 1 + items.length) % items.length; }
+      else if (e.key === 'Enter') { e.preventDefault(); (items[i < 0 ? 0 : i]).click(); return; }
+      else return;
+      items.forEach((x) => x.classList.remove('act')); items[i].classList.add('act'); items[i].scrollIntoView({ block: 'nearest' });
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); openSearch(); } });
     // modals
     document.getElementById('cbpill').onclick = () => cm.classList.add('open');
     document.getElementById('fbtab').onclick = () => fm.classList.add('open');
@@ -154,12 +198,46 @@
     document.querySelectorAll('[data-open-callback]').forEach((b) => (b.onclick = (e) => { e.preventDefault(); cm.classList.add('open'); }));
   }
 
+  function hl(text, tokens) {
+    let out = PC.esc(text);
+    tokens.filter(Boolean).forEach((t) => { out = out.replace(new RegExp('(' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'), '<mark>$1</mark>'); });
+    return out;
+  }
   function runSearch() {
     const q = document.getElementById('sq').value.trim().toLowerCase(), box = document.getElementById('sres');
-    const rows = SEARCH.map(([h, tk, dk]) => ({ h, title: PC.t(tk), desc: PC.t(dk) }));
-    const hit = q ? rows.filter((r) => (r.title + ' ' + r.desc).toLowerCase().includes(q)) : rows.slice(0, 6);
-    box.innerHTML = hit.length ? hit.slice(0, 10).map((r) => `<a href="${r.h}">${PC.esc(r.title)}<small>${PC.esc(r.desc.slice(0, 90))}</small></a>`).join('') : `<p style="color:var(--mute)">${PC.t('search.none')}</p>`;
+    const tokens = q.split(/\s+/).filter(Boolean);
+    if (!tokens.length) {
+      box.innerHTML = `<div class="sgrp">${PC.t('search.popular')}</div><div class="spop">${POPULAR.map(([h, k]) => `<a class="si pop" href="${h}">${PC.esc(PC.t(k))}</a>`).join('')}</div><p class="shint">${PC.t('search.hint')}</p>`;
+      return;
+    }
+    const rows = SEARCH.map(([h, tk, dk, g, kw]) => {
+      const title = tk.startsWith('plan.') && /^plan\.[A-D]$/.test(tk) ? PC.planName(tk.slice(5)) : PC.t(tk);
+      const desc = PC.t(dk), en = EN(tk) || '';
+      const T = title.toLowerCase(), D2 = desc.toLowerCase(), K = (kw + ' ' + en).toLowerCase();
+      let score = 0;
+      for (const t of tokens) {
+        if (T.startsWith(t)) score += 6; else if (T.includes(' ' + t)) score += 5; else if (T.includes(t)) score += 4;
+        else if (K.includes(t)) score += 3; else if (D2.includes(t)) score += 1; else return null;
+      }
+      return { h, title, desc, g, score };
+    }).filter(Boolean).sort((x, y) => y.score - x.score).slice(0, 8);
+    if (!rows.length) {
+      box.innerHTML = `<p class="snone">${PC.t('search.none')}</p><div class="sgrp">${PC.t('search.popular')}</div><div class="spop">${POPULAR.map(([h, k]) => `<a class="si pop" href="${h}">${PC.esc(PC.t(k))}</a>`).join('')}</div>`;
+      return;
+    }
+    const order = ['page', 'tool', 'plan', 'faq']; let html = '';
+    for (const g of order) {
+      const list = rows.filter((r) => r.g === g); if (!list.length) continue;
+      html += `<div class="sgrp">${PC.t(GROUPS[g])}</div>` + list.map((r) => `<a class="si" role="option" href="${r.h}"><span class="sti">${hl(r.title, tokens)}</span><span class="sde">${hl(r.desc.length > 110 ? r.desc.slice(0, 107) + '...' : r.desc, tokens)}</span></a>`).join('');
+    }
+    box.innerHTML = html + `<p class="shint">${PC.t('search.enter')}</p>`;
+    const first = box.querySelector('.si'); if (first) first.classList.add('act');
   }
+  document.addEventListener('click', (e) => {
+    const s = e.target.closest('#sres a.si'); if (!s) return;
+    if (s.getAttribute('href') === '#callback') { e.preventDefault(); PC.closeSearch(); document.getElementById('cbmodal').classList.add('open'); }
+    else if (s.getAttribute('href').split('#')[0] === location.pathname.replace(/\.html$/, '') || (s.getAttribute('href').startsWith('#'))) { PC.closeSearch(); }
+  });
 
   /* ---- wearable connect (consent modal -> /api/connect). Simulated: real vendor OAuth needs partner credentials. ---- */
   PC.providers = { healthconnect: 'Google Health Connect', fitbit: 'Fitbit', garmin: 'Garmin', whoop: 'Whoop' };
@@ -182,12 +260,22 @@
     };
   });
 
+  /* ---- "email me this quote" widget (sends a no-reply email with the quote) ---- */
+  PC.emailQuote = (host, getPayload) => {
+    host.innerHTML = `<div class="eqbox"><h4 data-i18n="eq.h"></h4><form class="eqf" novalidate><div class="eqrow"><input type="email" required autocomplete="email" data-i18n-ph="eq.ph" aria-label="Email"><button class="btn sm" data-i18n="eq.btn"></button></div><p class="fhelp" style="display:block;color:var(--mute)" data-i18n="eq.note"></p><div class="msg"></div></form></div>`;
+    const f = host.querySelector('form'), m = host.querySelector('.msg'), inp = f.querySelector('input');
+    f.onsubmit = async (e) => { e.preventDefault(); const b = f.querySelector('button'); b.disabled = true;
+      try { await PC.api('/email-quote', Object.assign({ email: inp.value, lang: PC.lang }, getPayload())); PC.msg(m, PC.t('eq.ok'), true); inp.value = ''; }
+      catch (x) { PC.msg(m, /email/i.test(x.message) ? PC.t('acc.err.email') : x.message); } b.disabled = false; };
+    PC.apply(host);
+  };
+
   /* ---- reusable "talk to an advisor" form ---- */
   const STATES = ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka', 'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Putrajaya', 'Sabah', 'Sarawak', 'Selangor', 'Terengganu'];
   PC.callbackForm = (host, id) => {
     host.innerHTML = `<form id="cb-${id}" novalidate>
       <div class="rowf"><div><label data-i18n="field.name"></label><input name="name" required autocomplete="name"></div><div><label data-i18n="cb.phone"></label><input name="phone" type="tel" required autocomplete="tel" placeholder="+60"></div>
-      <div><label data-i18n="field.email"></label><input name="email" type="email" autocomplete="email"></div>
+      <div><label data-i18n="field.email"></label><input name="email" type="email" required autocomplete="email"><p class="fhelp" style="display:block;color:var(--mute)" data-i18n="cb.email.note"></p></div>
       <div><label data-i18n="cb.state"></label><select name="state" required><option value="" data-i18n-opt="cb.select"></option>${STATES.map((s) => `<option>${s}</option>`).join('')}</select></div>
       <div><label data-i18n="cb.need"></label><select name="need"><option value="info" data-i18n-opt="cb.n1"></option><option value="plan" data-i18n-opt="cb.n2"></option><option value="claims" data-i18n-opt="cb.n3"></option><option value="business" data-i18n-opt="cb.n4"></option><option value="other" data-i18n-opt="cb.n5"></option></select></div>
       <div><label data-i18n="cb.time"></label><select name="time"><option value="morning" data-i18n-opt="cb.t1"></option><option value="afternoon" data-i18n-opt="cb.t2"></option><option value="evening" data-i18n-opt="cb.t3"></option></select></div></div>
@@ -229,6 +317,7 @@
     if (ab) { ab.textContent = PC.user ? PC.t('nav.dash') : PC.t('nav.login'); ab.href = PC.user ? '/dashboard' : '/account'; }
     document.querySelectorAll('#flangs button').forEach((b) => b.classList.toggle('on', b.dataset.l === lang));
     document.querySelectorAll('.modal input[name=clang]').forEach((r) => { r.checked = r.value === lang; });
+    if (PC.paintTheme) PC.paintTheme();
     if (document.getElementById('spanel') && document.getElementById('spanel').classList.contains('open')) runSearch();
     window.dispatchEvent(new CustomEvent('pc:lang', { detail: lang }));
   };

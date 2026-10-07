@@ -60,7 +60,7 @@ PC.api('/plans').then(p=>{PL=p;drawPlans()});ics();
 document.querySelectorAll('#ptabs .tab').forEach(b=>b.onclick=()=>{flt=b.dataset.f;document.querySelectorAll('#ptabs .tab').forEach(x=>x.classList.toggle('on',x===b));drawPlans()});
 window.addEventListener('pc:lang',drawPlans);
 PC.callbackForm(document.getElementById('homecb'),'h');
-document.getElementById('wl').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('wlm');try{await PC.api('/waitlist',{email:document.getElementById('wlemail').value});PC.msg(m,PC.t('home.waitlist.ok'),true);e.target.reset()}catch(x){PC.msg(m,x.message)}}`];
+document.getElementById('wl').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('wlm');try{await PC.api('/waitlist',{email:document.getElementById('wlemail').value,lang:PC.lang});PC.msg(m,PC.t('home.waitlist.ok'),true);e.target.reset()}catch(x){PC.msg(m,x.message)}}`];
 
   // ---------------- PLANS ----------------
   pages['plans'] = ['Plans', 'Browse and compare PulseCover plans.', `

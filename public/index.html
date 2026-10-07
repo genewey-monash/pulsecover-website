@@ -3,7 +3,7 @@
 <title>Wearable-based life & health insurance | PulseCover</title><meta name="description" content="Insurance priced on how you live. Link your wearable, get a fair premium.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="/img/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
+<script>try{var t=localStorage.getItem('pc_theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='light'}</script><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
 <main>
 <section class="hero"><div class="wrap" style="padding:0"><div class="grid">
  <img class="pic" src="/img/hero-family.jpg" alt="A multi-generation Malaysian family walking together in a park, wearing fitness trackers" width="1376" height="768">
@@ -45,6 +45,8 @@
  <a class="card" href="/claims" style="text-decoration:none"><div class="ico" data-ic="file"></div><h3 data-i18n="home.cross.2"></h3><p data-i18n="home.cross.2d"></p></a>
  <a class="card" href="/faq" style="text-decoration:none"><div class="ico" data-ic="book"></div><h3 data-i18n="home.cross.3"></h3><p data-i18n="home.cross.3d"></p></a></div></div></section>
 
+<section class="sec white refsec"><div class="wrap"><div class="cards c2" style="align-items:center;gap:44px"><img class="photo" src="/img/referral-friends.jpg" alt="Two friends walking in a park and looking at a phone together" width="1376" height="768" loading="lazy"><div><span class="kicker" data-i18n="promo.b"></span><h2 data-i18n="ref.h"></h2><p class="lead" data-i18n="ref.p"></p><ul class="stepsmall"><li><b>1</b><span data-i18n="ref.s1"></span></li><li><b>2</b><span data-i18n="ref.s2"></span></li><li><b>3</b><span data-i18n="ref.s3"></span></li></ul><a class="btn" href="/dashboard" data-i18n="ref.cta"></a></div></div></div></section>
+
 <section class="sec red" id="advisor"><div class="wrap"><div class="cards c2" style="gap:40px;align-items:center"><div><h2 data-i18n="home.adv.h"></h2><p class="lead" data-i18n="home.adv.p"></p>
  <ul style="list-style:none;padding:0;margin:18px 0 22px"><li style="padding:5px 0 5px 28px;position:relative"><span style="position:absolute;left:0;color:var(--gold)">&#10003;</span><span data-i18n="home.adv.b1"></span></li><li style="padding:5px 0 5px 28px;position:relative"><span style="position:absolute;left:0;color:var(--gold)">&#10003;</span><span data-i18n="home.adv.b2"></span></li><li style="padding:5px 0 5px 28px;position:relative"><span style="position:absolute;left:0;color:var(--gold)">&#10003;</span><span data-i18n="home.adv.b3"></span></li></ul>
  <img class="photo" style="min-height:0;height:230px" src="/img/advisor.jpg" alt="A friendly advisor with a headset smiling at a laptop" width="1200" height="896" loading="lazy"></div>
@@ -52,7 +54,7 @@
 
 <section class="sec"><div class="wrap center"><h2 data-i18n="home.waitlist.h"></h2><p class="lead" data-i18n="home.waitlist.p"></p>
  <form id="wl" style="max-width:460px;margin:18px auto 0;display:flex;gap:10px"><input type="email" required data-i18n-ph="field.email" id="wlemail"><button class="btn" data-i18n="home.waitlist.btn"></button></form><div id="wlm" class="msg" style="max-width:460px;margin:12px auto"></div></div></section>
-</main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script>
+</main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script><script>
 
 function planCardHome(p){const lo=Math.round(p.base*.85),hi=Math.round(p.base*1.15);return '<div class="card plancard" data-type="'+p.type+'" style="display:flex;flex-direction:column"><div>'+(p.isNew?'<span class="chip">'+PC.t('plan.new')+'</span>':'')+'<span class="chip" style="background:var(--red-t);color:var(--red)">'+PC.t('type.'+p.type)+'</span></div><h3 style="margin-top:10px;font-size:1.35rem">'+PC.planName(p.id)+'</h3><ul style="padding-left:18px;margin:6px 0 14px;color:var(--mute)">'+covs(p).slice(0,3).map(c=>'<li>'+PC.t('cov.'+c)+'</li>').join('')+'<li>'+PC.t('plan.wear')+'</li></ul><div style="margin-top:auto;border-top:1px solid var(--line);padding-top:14px"><small style="color:var(--mute)">'+PC.t('plan.from')+'</small><div style="color:var(--red);font-size:1.35rem;font-weight:800;white-space:nowrap;margin-bottom:12px">RM '+PC.fmt(p.base,0)+'<small style="font-size:.8rem;font-weight:500;color:var(--mute)"> '+PC.t('common.year')+'</small></div><a class="btn sm ghost" style="width:100%" href="/plans#'+p.id+'">'+PC.t('common.learn')+' &rarr;</a></div></div>'}
 function covs(p){return 'ABCDEF'.slice(0,{A:3,B:4,C:5,D:6}[p.id]||3).split('')}
@@ -63,4 +65,4 @@ PC.api('/plans').then(p=>{PL=p;drawPlans()});ics();
 document.querySelectorAll('#ptabs .tab').forEach(b=>b.onclick=()=>{flt=b.dataset.f;document.querySelectorAll('#ptabs .tab').forEach(x=>x.classList.toggle('on',x===b));drawPlans()});
 window.addEventListener('pc:lang',drawPlans);
 PC.callbackForm(document.getElementById('homecb'),'h');
-document.getElementById('wl').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('wlm');try{await PC.api('/waitlist',{email:document.getElementById('wlemail').value});PC.msg(m,PC.t('home.waitlist.ok'),true);e.target.reset()}catch(x){PC.msg(m,x.message)}}</script></body></html>
+document.getElementById('wl').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('wlm');try{await PC.api('/waitlist',{email:document.getElementById('wlemail').value,lang:PC.lang});PC.msg(m,PC.t('home.waitlist.ok'),true);e.target.reset()}catch(x){PC.msg(m,x.message)}}</script></body></html>

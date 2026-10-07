@@ -33,7 +33,18 @@ const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); r
 const rid = (n) => crypto.randomBytes(n).toString('hex').toUpperCase();
 const hash = (pw, salt) => crypto.scryptSync(pw, salt, 64).toString('hex');
 const age = (dob) => { const d = new Date(dob); if (isNaN(d)) return -1; const t = new Date(); let a = t.getFullYear() - d.getFullYear(); const m = t.getMonth() - d.getMonth(); if (m < 0 || (m === 0 && t.getDate() < d.getDate())) a--; return a; };
-const emailOk = (e) => typeof e === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) && e.length < 255;
+// Valid email = something@domain.tld (needs "@", a dot in the domain and a 2+ letter ending such as .com or .edu.my).
+const emailOk = (e) => typeof e === 'string' && e.length < 255 && /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[A-Za-z]{2,}$/.test(e) && !/\.\./.test(e);
+const LANGS = ['en', 'zh', 'ms', 'ta'];
+const langOf = (v) => (LANGS.includes(v) ? v : 'en');
+
+// Google Sheets + email via a Google Apps Script web app (see google-apps-script/). Passwords are NEVER sent.
+const HOOK = process.env.SHEET_WEBHOOK_URL || '', HOOK_SECRET = process.env.SHEET_SECRET || '';
+function notify(action, data) {
+  if (!HOOK) { console.log('[sheet-webhook not configured]', action); return; }
+  fetch(HOOK, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ secret: HOOK_SECRET, action, data }), redirect: 'follow', signal: AbortSignal.timeout(25000) })
+    .then((r) => r.text()).then((t) => console.log('[sheet-webhook]', action, t.slice(0, 120))).catch((e) => console.error('[sheet-webhook failed]', action, e.message));
+}
 const str = (v, max = 500) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 
 class HttpError extends Error { constructor(code, msg) { super(msg); this.code = code; } }
@@ -87,8 +98,9 @@ route('POST', '/api/register', (req, res, b) => {
   limit('auth:' + req.socket.remoteAddress, 10, 600000);
   const name = str(b.name, 100), email = str(b.email, 254).toLowerCase(), pw = typeof b.password === 'string' ? b.password : '';
   if (name.length < 2) bad('Please enter your full name.');
-  if (!emailOk(email)) bad('Please enter a valid email.');
+  if (!emailOk(email)) bad('Invalid email address.');
   if (pw.length < 8) bad('Password must be at least 8 characters.');
+  if (typeof b.password2 !== 'string' || b.password2 !== pw) bad('The passwords do not match. Please enter them again.');
   if (age(b.dob) < 16) bad('You must be at least 16 to register. (Guardian consent applies for ages 16-17 when applying.)');
   if (db.prepare('SELECT 1 FROM users WHERE email=?').get(email)) bad('An account with this email already exists.', 409);
   const salt = rid(16);
@@ -97,12 +109,16 @@ route('POST', '/api/register', (req, res, b) => {
   const info = db.prepare('INSERT INTO users(name,email,pass,salt,dob,lang,refcode,referred_by,created) VALUES(?,?,?,?,?,?,?,?,?)')
     .run(name, email, hash(pw, salt), salt, b.dob, ['en', 'zh', 'ms', 'ta'].includes(b.lang) ? b.lang : 'en', 'PC' + rid(3), referred, now());
   startSession(res, Number(info.lastInsertRowid));
-  return publicUser(db.prepare('SELECT * FROM users WHERE id=?').get(info.lastInsertRowid));
+  const created = db.prepare('SELECT * FROM users WHERE id=?').get(info.lastInsertRowid);
+  notify('register', { name, email, lang: created.lang, refcode: created.refcode, created: created.created });
+  return publicUser(created);
 });
 
 route('POST', '/api/login', (req, res, b) => {
   limit('auth:' + req.socket.remoteAddress, 10, 600000);
-  const u = db.prepare('SELECT * FROM users WHERE email=?').get(str(b.email, 254).toLowerCase());
+  const loginEmail = str(b.email, 254).toLowerCase();
+  if (!emailOk(loginEmail)) bad('Invalid email address.');
+  const u = db.prepare('SELECT * FROM users WHERE email=?').get(loginEmail);
   if (!u || !crypto.timingSafeEqual(Buffer.from(hash(String(b.password || ''), u.salt)), Buffer.from(u.pass))) bad('Incorrect email or password.', 401);
   startSession(res, u.id);
   return publicUser(u);
@@ -150,6 +166,7 @@ route('POST', '/api/apply', (req, res, b) => {
     .run(u.id, plan.id, number, 'active', b.device, cover, q.base, q.annualPremium, b.appSubscription ? 1 : 0, guardian, beneficiary, today(), addDays(today(), 365), now());
   if (!hist28.length) db.prepare('INSERT OR REPLACE INTO metrics(user_id,day,steps,exercise_min,sleep_hours,resting_hr,source) VALUES(?,?,?,?,?,?,?)')
     .run(u.id, today(), metricsOf(b).steps, metricsOf(b).exerciseMin / 7, metricsOf(b).sleepHours, metricsOf(b).restingHr, b.device);
+  notify('application', { name: u.name, email: u.email, number, plan: plan.id, cover, premium: q.annualPremium, grade: q.grade, score: q.score, device: b.device, beneficiary, guardian, lang: u.lang, created: now() });
   return { number, quote: q };
 });
 
@@ -265,6 +282,7 @@ route('POST', '/api/claims', (req, res, b) => {
   const info = db.prepare('INSERT INTO claims(user_id,policy_id,number,type,amount,description,incident_date,status,created) VALUES(?,?,?,?,?,?,?,?,?)')
     .run(u.id, pol.id, number, type, amount, description, incident, 'received', now());
   db.prepare('INSERT INTO claim_events(claim_id,status,note,created) VALUES(?,?,?,?)').run(info.lastInsertRowid, 'received', 'Claim received', now());
+  notify('claim', { name: u.name, email: u.email, number, type, amount, incident, description, lang: u.lang, created: now() });
   return { number };
 });
 
@@ -277,19 +295,23 @@ route('GET', '/api/claims', (req) => {
 route('POST', '/api/sme/enquiry', (req, res, b) => {
   const company = str(b.company, 150), contact = str(b.contact, 100), email = str(b.email, 254);
   if (company.length < 2 || contact.length < 2) bad('Company and contact name are required.');
-  if (!emailOk(email)) bad('Please enter a valid email.');
+  if (!emailOk(email)) bad('Invalid email address.');
   const n = Math.max(1, Math.floor(P.num(b.employees, 1)));
   const q = P.smeQuote(n, b.avgScore);
   db.prepare('INSERT INTO sme(company,contact,email,phone,employees,message,quote,created) VALUES(?,?,?,?,?,?,?,?)')
     .run(company, contact, email, str(b.phone, 30), n, str(b.message, 1000), JSON.stringify(q), now());
+  notify('sme', { company, contact, email, phone: str(b.phone, 30), employees: n, message: str(b.message, 1000), quote: q, lang: langOf(b.lang) });
   return { ok: true, quote: q };
 });
 
 route('POST', '/api/contact', (req, res, b) => {
   limit('contact:' + req.socket.remoteAddress, 5, 600000);
   const name = str(b.name, 100), email = str(b.email, 254), msg = str(b.message, 2000);
-  if (name.length < 2 || !emailOk(email) || msg.length < 5) bad('Please fill in your name, a valid email and a message.');
+  if (name.length < 2) bad('Please enter your name.');
+  if (!emailOk(email)) bad('Invalid email address.');
+  if (msg.length < 5) bad('Please write your message.');
   db.prepare('INSERT INTO contact(name,email,topic,message,created) VALUES(?,?,?,?,?)').run(name, email, str(b.topic, 50), msg, now());
+  notify('contact', { name, email, topic: str(b.topic, 50), message: msg, lang: langOf(b.lang), created: now() });
   return { ok: true };
 });
 
@@ -299,11 +321,12 @@ route('POST', '/api/callback', (req, res, b) => {
   const name = str(b.name, 100), phone = str(b.phone, 30).replace(/[^\d+ -]/g, ''), email = str(b.email, 254);
   if (name.length < 2) bad('Please enter your name.');
   if (phone.replace(/\D/g, '').length < 8) bad('Please enter a valid phone number.');
-  if (email && !emailOk(email)) bad('Please enter a valid email.');
+  if (!emailOk(email)) bad('Invalid email address.');
   if (!STATES.includes(b.state)) bad('Please select your state.');
   if (!b.consent) bad('Please accept the data protection notice.');
   db.prepare('INSERT INTO callbacks(name,phone,email,state,need,lang,time_pref,created) VALUES(?,?,?,?,?,?,?,?)')
-    .run(name, phone, email, b.state, str(b.need, 60), ['en','zh','ms','ta'].includes(b.lang) ? b.lang : 'en', str(b.time, 30), now());
+    .run(name, phone, email, b.state, str(b.need, 60), langOf(b.lang), str(b.time, 30), now());
+  notify('callback', { name, phone, email, state: b.state, need: str(b.need, 60), time: str(b.time, 30), lang: langOf(b.lang), created: now() });
   return { ok: true };
 });
 
@@ -311,12 +334,27 @@ route('POST', '/api/feedback', (req, res, b) => {
   limit('fb:' + req.socket.remoteAddress, 8, 600000);
   const rating = P.clamp(Math.round(P.num(b.rating, 0)), 1, 5);
   db.prepare('INSERT INTO feedback(rating,purpose,comment,page,created) VALUES(?,?,?,?,?)').run(rating, str(b.purpose, 60), str(b.comment, 1000), str(b.page, 100), now());
+  notify('feedback', { rating, purpose: str(b.purpose, 60), comment: str(b.comment, 1000), page: str(b.page, 100), created: now() });
   return { ok: true };
 });
 
+route('POST', '/api/email-quote', (req, res, b) => {
+  limit('eq:' + req.socket.remoteAddress, 6, 600000);
+  const u = userFrom(req);
+  const email = str(b.email, 254).toLowerCase(); if (!emailOk(email)) bad('Invalid email address.');
+  const plan = P.planOf(b.plan);
+  let m = metricsOf(b);
+  const hist = u ? userMetrics(u.id, 28) : [];
+  if (b.useStored && hist.length >= 7) m = P.averageMetrics(hist);
+  const q = P.quote(m, { appSubscription: !!b.appSubscription, plan: plan.id });
+  notify('quote', { name: u ? u.name : str(b.name, 100), email, plan: plan.id, base: q.base, score: q.score, grade: q.grade, adjustmentPct: q.adjustmentPct, annualPremium: q.annualPremium, monthlyPremium: q.monthlyPremium, totalAnnual: q.totalAnnual, lang: langOf(b.lang), created: now() });
+  return { ok: true, quote: q };
+});
+
 route('POST', '/api/waitlist', (req, res, b) => {
-  const email = str(b.email, 254).toLowerCase(); if (!emailOk(email)) bad('Please enter a valid email.');
+  const email = str(b.email, 254).toLowerCase(); if (!emailOk(email)) bad('Invalid email address.');
   db.prepare('INSERT OR IGNORE INTO waitlist(email,created) VALUES(?,?)').run(email, now());
+  notify('waitlist', { email, lang: langOf(b.lang), created: now() });
   return { ok: true };
 });
 

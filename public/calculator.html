@@ -3,7 +3,7 @@
 <title>Premium calculator | PulseCover</title><meta name="description" content="See how your daily habits change your yearly premium.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="/img/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
+<script>try{var t=localStorage.getItem('pc_theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='light'}</script><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
 <main><section class="sec"><div class="wrap"><h1 data-i18n="calc.h1"></h1><p class="lead" data-i18n="calc.sub"></p>
 <div class="calc" style="margin-top:28px"><div class="card">
  <label data-i18n="calc.plan"></label><select id="planSel"></select>
@@ -12,7 +12,7 @@
  <div class="rng"><label data-i18n="calc.sleep"></label><b id="v_sleep"></b></div><input type="range" id="sleepHours" min="3" max="11" step="0.25" value="7.5">
  <div class="rng"><label data-i18n="calc.hr"></label><b id="v_hr"></b></div><input type="range" id="restingHr" min="40" max="100" step="1" value="66">
  <label class="check"><input type="checkbox" id="appSub"><span data-i18n="calc.sub.opt"></span></label>
- <p style="font-size:.85rem;color:var(--mute);margin-top:14px" data-i18n="calc.note"></p><div class="card" style="margin-top:14px;background:var(--gold-t);border-color:#f2dca6"><p style="color:var(--ink);margin:0 0 10px;font-weight:600" data-i18n="calc.connect"></p><a class="btn sm" href="/connect" data-i18n="calc.connect.btn"></a></div></div>
+ <p style="font-size:.85rem;color:var(--mute);margin-top:14px" data-i18n="calc.note"></p><div class="card" style="margin-top:14px;background:var(--gold-t);border-color:#f2dca6"><p style="color:var(--ink);margin:0 0 10px;font-weight:600" data-i18n="calc.connect"></p><a class="btn sm" href="/connect" data-i18n="calc.connect.btn"></a></div><div id="eqhost" style="margin-top:14px"></div></div>
 <div class="result"><h3 data-i18n="calc.score"></h3><div class="big" id="r_score">-</div><span id="r_badge" class="badge neu"></span>
  <div style="margin-top:14px" class="row"><span data-i18n="calc.base"></span><b id="r_base"></b></div>
  <div class="row"><span data-i18n="calc.adj"></span><b id="r_adj"></b></div>
@@ -21,7 +21,7 @@
  <div class="row" style="border:0"><span id="r_savlbl"></span><b id="r_sav"></b></div>
  <h3 style="margin-top:18px;font-size:1rem" data-i18n="calc.breakdown"></h3><div class="bars" id="bars"></div>
  <a class="btn" style="width:100%;margin-top:18px" id="applybtn" href="/apply" data-i18n="calc.cta"></a></div></div>
-<div class="card" style="margin-top:24px"><h3 data-i18n="calc.formula.h"></h3><p data-i18n="calc.formula.p"></p></div></div></section></main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script>
+<div class="card" style="margin-top:24px"><h3 data-i18n="calc.formula.h"></h3><p data-i18n="calc.formula.p"></p></div></div></section></main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script><script>
 const ids=['steps','exerciseMin','sleepHours','restingHr'];let timer,last;
 function vals(){const g=i=>+document.getElementById(i).value;return{steps:g('steps'),exerciseMin:g('exerciseMin'),sleepHours:g('sleepHours'),restingHr:g('restingHr'),appSubscription:document.getElementById('appSub').checked,plan:document.getElementById('planSel').value||'A'}}
 function labels(v){document.getElementById('v_steps').textContent=v.steps.toLocaleString();document.getElementById('v_exercise').textContent=v.exerciseMin+' min';document.getElementById('v_sleep').textContent=v.sleepHours+' h';document.getElementById('v_hr').textContent=v.restingHr+' bpm'}
@@ -35,4 +35,5 @@ function paint(){if(!last)return;const q=last;document.getElementById('r_score')
 async function run(){const v=vals();labels(v);try{last=await PC.api('/quote',v);paint()}catch(e){}}
 PC.api('/plans').then(ps=>{const s=document.getElementById('planSel');s.innerHTML=ps.map(p=>'<option value="'+p.id+'">'+PC.planName(p.id)+' - RM '+p.base+'</option>').join('');const q=new URLSearchParams(location.search).get('plan');if(q)s.value=q;s.onchange=()=>{clearTimeout(timer);timer=setTimeout(run,60)};window.addEventListener('pc:lang',()=>{[...s.options].forEach(o=>o.textContent=PC.planName(o.value)+' - RM '+ps.find(p=>p.id===o.value).base)});run()});
 ids.concat('appSub').forEach(i=>document.getElementById(i).addEventListener('input',()=>{labels(vals());clearTimeout(timer);timer=setTimeout(run,120)}));
-window.addEventListener('pc:lang',paint);</script></body></html>
+window.addEventListener('pc:lang',paint);
+PC.emailQuote(document.getElementById('eqhost'),()=>vals());</script></body></html>
