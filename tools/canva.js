@@ -27,9 +27,11 @@ const covs = (p) => 'ABCDEF'.slice(0, { A: 3, B: 4, C: 5, D: 6 }[p.id]).split(''
 const planCard = (p) => `<div class="card" style="display:flex;flex-direction:column"><div>${p.isNew ? `<span class="chip">${t('plan.new')}</span>` : ''}<span class="chip">${t('type.' + p.type)}</span></div><h3 style="margin-top:10px">${t('plan.word')} ${p.id}</h3><ul>${covs(p).map((c) => `<li>${t('cov.' + c)}</li>`).join('')}<li>${t('plan.wear')}</li></ul><p><small>${t('plan.from')}</small><br><b style="color:var(--red);font-size:1.4rem">RM ${p.base.toLocaleString()}${t('common.year')}</b></p><a class="btn sm ghost">${t('common.learn')}</a></div>`;
 const plans = Object.values(P.PLANS);
 const fin = P.financials();
-const nav = ['nav.products', 'nav.pricing', 'nav.calc', 'nav.sme', 'nav.help'].map((k) => `<a>${t(k)}</a>`).join('');
-const header = `<div class="promo"><div class="wrap"><b>${t('promo.b')}</b> ${t('promo.t')} <a>${t('promo.l')}</a></div></div><header class="top"><div class="wrap bar"><span class="brand"><img class="logo-img" src="https://pulsecover-website.onrender.com/img/logo-mark.png" alt="PulseCover logo" width="46" height="46">PulseCover</span><nav class="main">${nav}</nav><div class="tools"><span class="lang">English</span><a class="btn ghost sm">${t('nav.login')}</a><a class="btn sm">${t('nav.connect')}</a></div></div></header>`;
-const footer = `<footer class="foot"><div class="wrap"><div class="fgrid"><div><div class="brand" style="color:#fff"><img class="logo-img" src="https://pulsecover-website.onrender.com/img/logo-mark.png" alt="PulseCover logo" width="46" height="46">PulseCover</div><p>${t('footer.tag')}</p></div><div><h4>${t('footer.product')}</h4><a>${t('nav.plans')}</a><a>${t('nav.calc')}</a><a>${t('nav.compare')}</a></div><div><h4>${t('footer.support')}</h4><a>${t('nav.claims')}</a><a>${t('nav.faq')}</a><a>${t('nav.contact')}</a></div><div><h4>${t('footer.company')}</h4><a>${t('nav.how')}</a><a>${t('nav.investors')}</a><a>${t('footer.privacy')}</a></div><div></div></div><div class="reg">${t('footer.reg.p')}</div><div class="fbot"><span>${t('footer.group')}</span></div></div></footer>`;
+const LIVE = 'https://pulsecover-website.onrender.com';
+const NAVMAP = { 'nav.products': '/plans', 'nav.pricing': '/how-pricing-works', 'nav.calc': '/calculator', 'nav.sme': '/business', 'nav.help': '/faq' };
+const nav = Object.keys(NAVMAP).map((k) => `<a href="${LIVE}${NAVMAP[k]}">${t(k)}</a>`).join('');
+const header = `<div class="promo"><div class="wrap"><b>${t('promo.b')}</b> ${t('promo.t')} <a>${t('promo.l')}</a></div></div><header class="top"><div class="wrap bar"><a class="brand" href="${LIVE}/"><img class="logo-img" src="https://pulsecover-website.onrender.com/img/logo-mark.png" alt="PulseCover logo" width="46" height="46">PulseCover</a><nav class="main">${nav}</nav><div class="tools"><span class="lang">English</span><a class="btn ghost sm" href="${LIVE}/account">${t('nav.login')}</a><a class="btn sm" href="${LIVE}/connect">${t('nav.connect')}</a></div></div></header>`;
+const footer = `<footer class="foot"><div class="wrap"><div class="fgrid"><div><div class="brand" style="color:#fff"><img class="logo-img" src="https://pulsecover-website.onrender.com/img/logo-mark.png" alt="PulseCover logo" width="46" height="46">PulseCover</div><p>${t('footer.tag')}</p></div><div><h4>${t('footer.product')}</h4><a href="${LIVE}/plans">${t('nav.plans')}</a><a href="${LIVE}/calculator">${t('nav.calc')}</a><a href="${LIVE}/compare">${t('nav.compare')}</a></div><div><h4>${t('footer.support')}</h4><a href="${LIVE}/claims">${t('nav.claims')}</a><a href="${LIVE}/faq">${t('nav.faq')}</a><a href="${LIVE}/contact">${t('nav.contact')}</a></div><div><h4>${t('footer.company')}</h4><a href="${LIVE}/how-pricing-works">${t('nav.how')}</a><a href="${LIVE}/investors">${t('nav.investors')}</a><a href="${LIVE}/privacy">${t('footer.privacy')}</a></div><div></div></div><div class="reg">${t('footer.reg.p')}</div><div class="fbot"><span>${t('footer.group')}</span></div></div></footer>`;
 
 const page = (label, body) => `<div class="cpage" data-document-role="page" data-label="${label}">${header}${body}${footer}</div>`;
 const pages = [];
@@ -65,10 +67,37 @@ inv = inv.replace('<div class="kpi" id="fin"></div>', `<div class="kpi">${[[t('i
   .replace(/<canvas[\s\S]*?<\/canvas>/g, '');
 pages.push(page('Investors', inv));
 
-const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>PulseCover website (Canva pages)</title><style>${css}
+
+// ---- make every link work inside Canva (absolute URLs to the live site) ----
+const BTN = [
+  [/log ?in|login/i, '/account'], [/connect/i, '/connect'], [/get covered|apply/i, '/apply'], [/get (my )?quote|calculator/i, '/calculator'],
+  [/view all plans|learn more|plan/i, '/plans'], [/how it works|how pricing/i, '/how-pricing-works'], [/call back|talk to us/i, '/#advisor'],
+  [/notify/i, '/#how'], [/enquiry|business/i, '/business#enquiry'], [/send message|contact/i, '/contact'], [/feedback/i, '/contact'],
+  [/investor/i, '/investors'], [/compare/i, '/compare'], [/claim/i, '/claims'], [/dashboard/i, '/dashboard']
+];
+const pick = (text) => { for (const [re, to] of BTN) if (re.test(text)) return to; return '/'; };
+const HASH = { '#plans': '/#plans', '#how': '/#how', '#advisor': '/#advisor', '#compare': '/plans#compare', '#list': '/plans#list', '#enquiry': '/business#enquiry', '#': '/' };
+function fixLinks(h) {
+  // <button class="btn ..."> -> <a class="btn ..." href=...>
+  h = h.replace(/<button([^>]*class="[^"]*btn[^"]*"[^>]*)>([\s\S]*?)<\/button>/g, (m, attrs, inner) => {
+    const text = inner.replace(/<[^>]+>/g, '').trim();
+    attrs = attrs.replace(/\s(id|type|disabled)="[^"]*"/g, '').replace(/\sdisabled/g, '');
+    return `<a${attrs} href="${LIVE}${pick(text)}">${inner}</a>`;
+  });
+  // plan filter tabs -> link to the live plans page
+  h = h.replace(/<button class="tab( on)?"[^>]*>([\s\S]*?)<\/button>/g, (m, on, inner) => `<a class="tab${on || ''}" href="${LIVE}/plans">${inner}</a>`);
+  // <a ...btn...> without href
+  h = h.replace(/<a((?:(?!href=)[^>])*class="[^"]*btn[^"]*"(?:(?!href=)[^>])*)>([\s\S]*?)<\/a>/g, (m, attrs, inner) => `<a${attrs} href="${LIVE}${pick(inner.replace(/<[^>]+>/g, '').trim())}">${inner}</a>`);
+  // relative and hash hrefs -> absolute
+  h = h.replace(/href="(#[^"]*|\/[^"]*)"/g, (m, v) => `href="${LIVE}${v.startsWith('#') ? (HASH[v] || '/' + v) : v}"`);
+  return h;
+}
+
+const html0 = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>PulseCover website (Canva pages)</title><style>${css}
 .cpage{width:1440px;overflow:hidden;background:#fff;margin:0}.promo,.cpage header.top{position:static}.cpage .wrap{max-width:1180px}.cpage .sec{padding:56px 0}
 .fpill,.fbtab,.cookie,.modal,.cmpbar{display:none!important}
 h1{line-height:58px;letter-spacing:0}h2{line-height:44px;letter-spacing:0}h3{line-height:30px}p,.lead{line-height:28px}li{line-height:28px;padding:6px 0}.btn{white-space:nowrap}</style></head><body>${pages.join('\n')}</body></html>`;
+const html = fixLinks(html0);
 fs.mkdirSync(path.join(root, 'public/canva'), { recursive: true });
 fs.writeFileSync(path.join(root, 'public/canva/site.html'), html);
 console.log('canva pages:', pages.length, 'size', (html.length / 1024).toFixed(0) + ' KB');

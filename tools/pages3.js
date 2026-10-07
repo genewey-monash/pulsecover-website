@@ -4,11 +4,12 @@ module.exports = (pages, D) => {
   const node = (ic, n, mid) => `<div class="fnode${mid ? ' mid' : ''}">${mid ? '<video class="logoanim" src="/img/logo-animated.mp4" autoplay muted loop playsinline preload="metadata" aria-label="PulseCover logo animation"></video>' : `<div class="ico" data-ic="${ic}"></div>`}<h3 ${D('flow.' + n + '.h')}></h3><p ${D('flow.' + n + '.p')}></p></div>`;
   const flow = `<div class="flow">${node('watch', 1)}${arrow}${node('badge', 2, true)}${arrow}${node('shield', 3)}</div><p class="center" style="color:var(--mute);max-width:640px;margin:14px auto 0" ${D('flow.note')}></p>`;
   const pills = '<div class="pills"><span class="pv"><i></i>Google Health Connect</span><span class="pv"><i></i>Fitbit</span><span class="pv"><i></i>Garmin</span><span class="pv"><i></i>Whoop</span></div>';
-  const BANDS = [['Ap', 'A+', '90 - 100', '-12% to -15%'], ['A', 'A', '75 - 89', '-7.5% to -11.7%'], ['B', 'B', '60 - 74', '-3% to -7.2%'], ['C', 'C', '40 - 59', '-2.7% to +3%'], ['D', 'D', '25 - 39', '+3.3% to +7.5%'], ['E', 'E', '0 - 24', '+7.8% to +15%']];
+  const BANDS = [['Ap', 'A+', '90–100', '−12% to −15%'], ['A', 'A', '75–89', '−7.5% to −11.7%'], ['B', 'B', '60–74', '−3% to −7.2%'], ['C', 'C', '40–59', '−2.7% to +3%'], ['D', 'D', '25–39', '+3.3% to +7.5%'], ['E', 'E', '0–24', '+7.8% to +15%']];
   const bands = `<div class="scroll"><table class="tbl"><thead><tr><th ${D('rate.grade')}></th><th ${D('rate.score')}></th><th ${D('rate.meaning')}></th><th ${D('rate.effect')}></th></tr></thead><tbody>${BANDS.map(([c, g, s, e]) => `<tr><td><span class="gr ${c}">${g}</span></td><td>${s}</td><td ${D('grade.' + g)}></td><td>${e}</td></tr>`).join('')}</tbody></table></div>`;
   const vsRows = [1, 2, 3, 4, 5, 6].map((i) => `<tr><td ${D('vs.r' + i)}></td><td class="tr" ${D('vs.r' + i + '.t')}></td><td class="pc" ${D('vs.r' + i + '.p')}></td></tr>`).join('');
   const vs = `<div class="scroll"><table class="vs"><thead><tr><th></th><th ${D('vs.col.trad')}></th><th class="pc" ${D('vs.col.pc')}></th></tr></thead><tbody>${vsRows}</tbody></table></div>`;
 
+const ages = `<section class="sec alt"><div class="wrap"><div class="center"><h2 ${D('home.who.h')}></h2><p class="lead" ${D('home.who.p')}></p></div><div class="cards c2" style="margin-top:28px"><figure class="fig"><img class="photo" src="/img/senior-walk.jpg" alt="A man in his sixties walking on a jogging track at sunrise wearing a fitness band" width="1200" height="896" loading="lazy"><figcaption ${D('ages.1')}></figcaption></figure><figure class="fig"><img class="photo" src="/img/teen-guardian.jpg" alt="A mother and her teenage son looking at a phone together at the kitchen table" width="1200" height="896" loading="lazy"><figcaption ${D('ages.2')}></figcaption></figure></div></div></section>\n\n`;
   // ---------------- HOME ----------------
   let [it, id, ib, ij] = pages['index'];
   const heroCta = '<div class="cta"><a class="btn" href="/connect" data-i18n="home.cta1"></a><a class="btn ghost" href="/how-pricing-works" data-i18n="home.cta2"></a></div>';
@@ -23,6 +24,7 @@ module.exports = (pages, D) => {
 `);
   // remove the old 4-step "how it works" section (replaced by the flow)
   ib = ib.replace(/<section class="sec alt"><div class="wrap"><h2 class="center" data-i18n="home\.steps\.h">[\s\S]*?<\/section>\n\n/, '');
+  ib = ib.replace('<section class="sec dark">', ages + '<section class="sec dark">');
   pages['index'] = [it, id, ib, ij];
 
   // ---------------- CONNECT ----------------
@@ -30,7 +32,7 @@ module.exports = (pages, D) => {
 <main>
 <section class="sec" style="padding:48px 0 24px"><div class="wrap"><div class="cards c2" style="align-items:center;gap:40px"><div><span class="kicker" ${D('nav.connect')}></span><h1 ${D('connect.h1')}></h1><p class="lead" ${D('connect.sub')}></p>
 <div class="devrow" id="devrow"></div><div id="cres"></div><div class="msg" id="cmsg"></div></div>
-<div class="imgslot" style="min-height:340px">PHOTO: close-up of a wrist wearing a generic smartwatch (no brand logo) with a phone beside it showing a clean rating app screen (no readable text). Real photo, landscape, min 1200x900.</div></div></div></section>
+<img class="photo" src="/img/connect-wrist.jpg" alt="A wrist wearing a plain smartwatch beside a phone showing a ring graphic" width="1200" height="896"></div></div></section>
 <section class="sec alt"><div class="wrap"><div class="cards c3">${[1, 2, 3].map((i) => `<div class="card"><div class="ico">${i}</div><h3 ${D('connect.s' + i)}></h3></div>`).join('')}</div></div></section>
 <section class="sec white"><div class="wrap"><div class="cards c2"><div class="card"><h3 ${D('connect.allow.h')}></h3><ul class="perm">${[1, 2, 3, 4].map((i) => `<li ${D('connect.a' + i)}></li>`).join('')}</ul></div><div class="card"><h3 ${D('connect.never.h')}></h3><ul class="perm no">${[1, 2, 3].map((i) => `<li ${D('connect.n' + i)}></li>`).join('')}</ul></div></div>
 <div class="card" style="margin-top:20px"><p ${D('connect.hc')}></p></div><p style="margin-top:16px;color:var(--mute);font-size:.88rem" ${D('connect.demo')}></p></div></section>
@@ -41,7 +43,7 @@ let conn=[];
 function row(){document.getElementById('devrow').innerHTML=Object.entries(PC.providers).map(([k,n])=>'<button class="devbtn'+(conn.includes(k)?' on':'')+'" data-p="'+k+'">'+n+'<small>'+(conn.includes(k)?PC.t('connect.connected'):PC.t('connect.cta'))+'</small></button>').join('');
  document.querySelectorAll('.devbtn').forEach(b=>b.onclick=async()=>{try{const r=await PC.connect(b.dataset.p);if(!conn.includes(b.dataset.p))conn.push(b.dataset.p);row();show(r)}catch(e){if(e.message!=='cancel')PC.msg(cmsg,e.message)}})}
 function show(r){const q=r.quote;document.getElementById('cres').innerHTML='<div class="card" style="margin-top:8px"><p style="margin:0 0 6px"><b>&#10003; '+PC.t('connect.connected')+' &middot; '+r.days+' '+PC.t('apply.connected.n')+'</b></p><p style="margin:0 0 10px">'+PC.t('rate.h')+': <span class="gr '+(q.grade==='A+'?'Ap':q.grade)+'">'+q.grade+'</span> &middot; '+PC.t('rate.score')+' '+q.score+'/100</p><a class="btn sm" href="/apply">'+PC.t('plan.apply')+' &rarr;</a></div>'}
-PC.ready.then(async()=>{if(!PC.user){document.getElementById('devrow').innerHTML='<p style="width:100%;color:var(--mute)">'+PC.t('connect.login')+'</p><a class="btn" href="/account?next=/connect">'+PC.t('nav.login')+'</a>';return}
+PC.ready.then(async()=>{if(!PC.user){document.getElementById('devrow').style.display='block';document.getElementById('devrow').innerHTML='<p style="width:100%;color:var(--mute)">'+PC.t('connect.login')+'</p><a class="btn" href="/account?next=/connect">'+PC.t('nav.login')+'</a>';return}
  try{const d=await PC.api('/dashboard');conn=d.connections.map(c=>c.provider)}catch(e){}row()});
 window.addEventListener('pc:lang',()=>{if(PC.user)row()});`];
 
@@ -150,4 +152,11 @@ sync.onclick=async()=>{try{await PC.api('/sync',{});PC.msg(sm,PC.t('dash.synced'
 pbtn.onclick=async()=>{try{await PC.api('/pause',{days:+pdays.value,reason:preason.value});PC.msg(pm,PC.t('dash.synced'),true);load()}catch(e){PC.msg(pm,e.message)}};
 copy.onclick=()=>{const u=location.origin+'/account?ref='+D.user.refcode;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).catch(()=>{}).finally(()=>{copy.textContent=PC.t('dash.ref.copied');setTimeout(()=>copy.textContent=PC.t('dash.ref.copy'),1500)})};
 lo.onclick=e=>{e.preventDefault();PC.logout()};`];
+
+  // ---------------- CLAIMS: photo banner ----------------
+  let [clt, cld, clb, clj] = pages['claims'];
+  clb = clb.replace('<h1 data-i18n="cl.h1"></h1><p class="lead" data-i18n="cl.sub"></p>', '<h1 data-i18n="cl.h1"></h1><p class="lead" data-i18n="cl.sub"></p><img class="photo banner" src="/img/claims-relief.jpg" alt="A man smiling with relief as he checks his phone at a home desk" width="1200" height="896" loading="lazy">');
+  clb = clb.replace('<h2 style="margin-top:36px" data-i18n="cl.track"></h2>', '<h2 id="trk" style="margin-top:36px;display:none" data-i18n="cl.track"></h2>');
+  clj = clj.replace("form.style.display='';load()", "form.style.display='';trk.style.display='';load()");
+  pages['claims'] = [clt, cld, clb, clj];
 };
