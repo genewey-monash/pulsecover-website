@@ -374,7 +374,6 @@ function serveStatic(req, res, pathname) {
     }
     const type = MIME[path.extname(file)] || 'application/octet-stream';
     const cache = rel.startsWith('/img/') ? { 'Cache-Control': 'public, max-age=86400' } : {};
-    const cors = rel.startsWith('/gs/') ? { 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' } : {}; // temporary install helper
     const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
     if (range && type.startsWith('video/')) { // byte-range support so video plays in Safari
       const start = range[1] ? parseInt(range[1], 10) : 0;
@@ -383,7 +382,7 @@ function serveStatic(req, res, pathname) {
       res.writeHead(206, { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Range': `bytes ${start}-${end}/${data.length}`, 'Content-Length': end - start + 1, ...cache, ...SEC });
       return res.end(data.subarray(start, end + 1));
     }
-    res.writeHead(200, { 'Content-Type': type, 'Accept-Ranges': 'bytes', ...cache, ...cors, ...SEC });
+    res.writeHead(200, { 'Content-Type': type, 'Accept-Ranges': 'bytes', ...cache, ...SEC });
     res.end(data);
   });
 }
