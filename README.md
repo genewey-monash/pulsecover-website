@@ -21,3 +21,14 @@ Ruby red + gold, Public Sans. Reference analysis of 5 Malaysian insurers: DESIGN
 - Plans A-D are placeholders (pricing.js PLANS); coverage items are "Example coverage A-F" (i18n2.js)
 - Image placeholders are grey boxes labelled IMAGE (class .imgslot) - replace in tools/pages2.js or in Canva
 - New tables: callbacks, feedback (read with any SQLite tool from data/pulsecover.db)
+
+## v6: accounts, Google Sheets and emails
+- Sign-up needs a valid email, a password (8+ characters) and a matching confirm-password. Passwords are stored hashed in the site's database and never leave it.
+- Every contact path logs to a Google Sheet and sends a no-reply confirmation email: sign-up (welcome), contact form, call-back, business enquiry, emailed quote, application, claim, waitlist.
+- Setup: see google-apps-script/SETUP.md. The site reads two environment variables (set them on Render > Environment):
+  - `SHEET_WEBHOOK_URL`  the Apps Script web app URL (ends in /exec)
+  - `SHEET_SECRET`       the same secret that is in Code.gs
+  If they are missing the site works normally and simply skips the Sheet and email step.
+- Light and dark mode (toggle in the header), hover menus, live search (press / anywhere), real social and app-store icons.
+- To change wording: public/js/i18n.js, i18n2.js, i18n3.js, i18n4.js (English, Chinese, Malay, Tamil), then run `node tools/build.js`.
+- English style: navigation, buttons, tabs and table headers use Title Case (public/js/ui.js); headings and body copy use sentence case.

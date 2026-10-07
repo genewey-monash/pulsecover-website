@@ -216,7 +216,7 @@
       const T = title.toLowerCase(), D2 = desc.toLowerCase(), K = (kw + ' ' + en).toLowerCase();
       let score = 0;
       for (const t of tokens) {
-        if (T.startsWith(t)) score += 6; else if (T.includes(' ' + t)) score += 5; else if (T.includes(t)) score += 4;
+        if (T === t) score += 9; else if (T.startsWith(t)) score += 6; else if (T.includes(' ' + t)) score += 5; else if (T.includes(t)) score += 4;
         else if (K.includes(t)) score += 3; else if (D2.includes(t)) score += 1; else return null;
       }
       return { h, title, desc, g, score };
@@ -225,7 +225,8 @@
       box.innerHTML = `<p class="snone">${PC.t('search.none')}</p><div class="sgrp">${PC.t('search.popular')}</div><div class="spop">${POPULAR.map(([h, k]) => `<a class="si pop" href="${h}">${PC.esc(PC.t(k))}</a>`).join('')}</div>`;
       return;
     }
-    const order = ['page', 'tool', 'plan', 'faq']; let html = '';
+    // groups ordered by their best match, so the most relevant result is always first and highlighted
+    const order = ['page', 'tool', 'plan', 'faq'].map((g) => ({ g, best: Math.max(0, ...rows.filter((r) => r.g === g).map((r) => r.score)) })).filter((x) => x.best > 0).sort((x, y) => y.best - x.best).map((x) => x.g); let html = '';
     for (const g of order) {
       const list = rows.filter((r) => r.g === g); if (!list.length) continue;
       html += `<div class="sgrp">${PC.t(GROUPS[g])}</div>` + list.map((r) => `<a class="si" role="option" href="${r.h}"><span class="sti">${hl(r.title, tokens)}</span><span class="sde">${hl(r.desc.length > 110 ? r.desc.slice(0, 107) + '...' : r.desc, tokens)}</span></a>`).join('');
