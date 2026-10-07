@@ -77,4 +77,9 @@ PC.emailQuote(document.getElementById('eqhost'),()=>vals());`;
   let [lt, ld, lb, lj] = pages['claims'];
   lj = lj.replace("PC.t('cl.done')+' '+r.number,true)", "PC.t('cl.done')+' '+r.number+'. '+PC.t('cl.email'),true)");
   pages['claims'] = [lt, ld, lb, lj];
+
+  // ---------------- BUSINESS: team photo ----------------
+  let [bt, bd, bb, bj] = pages['business'];
+  bb = bb.replace('<p class="lead" data-i18n="sme.sub"></p>', '<p class="lead" data-i18n="sme.sub"></p><img class="photo banner" src="/img/team-meeting.jpg" alt="Three colleagues of different ages in a friendly discussion at a meeting table" width="1376" height="768" loading="lazy">');
+  pages['business'] = [bt, bd, bb, bj];
 };
