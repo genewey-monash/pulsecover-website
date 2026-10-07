@@ -1,7 +1,7 @@
 // v3 overrides: wearable-first / risk-rating positioning. Runs after pages2.js.
 module.exports = (pages, D) => {
   const arrow = '<div class="farrow"><svg viewBox="0 0 46 24" width="46" height="24"><path d="M2 12h38M31 4l9 8-9 8" fill="none" stroke="#B71234" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
-  const node = (ic, n, mid) => `<div class="fnode${mid ? ' mid' : ''}"><div class="ico" data-ic="${ic}"></div><h3 ${D('flow.' + n + '.h')}></h3><p ${D('flow.' + n + '.p')}></p></div>`;
+  const node = (ic, n, mid) => `<div class="fnode${mid ? ' mid' : ''}">${mid ? '<video class="logoanim" src="/img/logo-animated.mp4" autoplay muted loop playsinline preload="metadata" aria-label="PulseCover logo animation"></video>' : `<div class="ico" data-ic="${ic}"></div>`}<h3 ${D('flow.' + n + '.h')}></h3><p ${D('flow.' + n + '.p')}></p></div>`;
   const flow = `<div class="flow">${node('watch', 1)}${arrow}${node('badge', 2, true)}${arrow}${node('shield', 3)}</div><p class="center" style="color:var(--mute);max-width:640px;margin:14px auto 0" ${D('flow.note')}></p>`;
   const pills = '<div class="pills"><span class="pv"><i></i>Google Health Connect</span><span class="pv"><i></i>Fitbit</span><span class="pv"><i></i>Garmin</span><span class="pv"><i></i>Whoop</span></div>';
   const BANDS = [['Ap', 'A+', '90 - 100', '-12% to -15%'], ['A', 'A', '75 - 89', '-7.5% to -11.7%'], ['B', 'B', '60 - 74', '-3% to -7.2%'], ['C', 'C', '40 - 59', '-2.7% to +3%'], ['D', 'D', '25 - 39', '+3.3% to +7.5%'], ['E', 'E', '0 - 24', '+7.8% to +15%']];

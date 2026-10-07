@@ -8,7 +8,7 @@ function covs(p){return 'ABCDEF'.slice(0,{A:3,B:4,C:5,D:6}[p.id]||3).split('')}`
   pages['index'] = ['Wearable-based life & health insurance', 'Insurance priced on how you live. Link your wearable, get a fair premium.', `
 <main>
 <section class="hero"><div class="wrap" style="padding:0"><div class="grid">
- <div class="imgslot pic">HERO PHOTO: a multi-generation Malaysian family (grandparent, parents, teen) walking in a park, each wearing a fitness tracker, warm natural light. Landscape, min 1400x1000.</div>
+ <img class="pic" src="/img/hero-family.jpg" alt="A multi-generation Malaysian family walking together in a park, wearing fitness trackers" width="1376" height="768">
  <div class="copy"><span class="eyebrow" ${D('home.eyebrow')}></span><h1 ${D('home.h1')}></h1><p class="lead" ${D('home.sub')}></p>
  <div class="cta"><a class="btn" href="/calculator" ${D('home.cta1')}></a><a class="btn ghost" href="/how-pricing-works" ${D('home.cta2')}></a></div></div></div></div></section>
 <div class="wrap"><div class="stats">

@@ -73,7 +73,7 @@
     const megaHtml = Object.entries(MEGA).map(([k, m]) => `<div class="mega" id="mega-${k}"><div class="wrap"><div class="mgrid" style="grid-template-columns:repeat(${m.cols.length},1fr)">${m.cols.map(([h, items]) => `<div><h4 data-i18n="${h}"></h4>${items.map((i) => mi(i[0], i[1], i[2])).join('')}</div>`).join('')}</div>${m.links.length ? `<div class="mlinks">${m.links.map((l) => `<a href="${l[0]}"><span data-i18n="${l[1]}"></span><small data-i18n="${l[2]}"></small></a>`).join('')}</div>` : ''}</div></div>`).join('');
     hdr.innerHTML = `${promoOn ? `<div class="promo" id="promo"><div class="wrap"><span><b data-i18n="promo.b"></b> <span data-i18n="promo.t"></span></span> <a href="/dashboard" data-i18n="promo.l"></a><button id="promox" aria-label="Close">&times;</button></div></div>` : ''}
     <div style="position:relative"><div class="wrap bar">
-      <a class="brand" href="/"><span class="logo-slot" data-i18n="logo.placeholder"></span><span class="name">PulseCover</span></a>
+      <a class="brand" href="/"><img class="logo-img" src="/img/logo-mark.png" alt="PulseCover logo" width="46" height="46"><span class="name">PulseCover</span></a>
       <nav class="main" id="mainnav" aria-label="Main">${nav}</nav>
       <div class="tools">
         <button class="ibtn" id="sbtn" aria-label="Search">${PC.icon('search')}</button>
@@ -97,7 +97,7 @@
     // footer
     const ft = document.createElement('footer'); ft.className = 'foot';
     ft.innerHTML = `<div class="wrap"><div class="fgrid">
-      <div><div class="brand" style="color:#fff"><span class="logo-slot" data-i18n="logo.placeholder"></span><span class="name">PulseCover</span></div><p style="margin-top:12px" data-i18n="footer.tag"></p>
+      <div><div class="brand" style="color:#fff"><img class="logo-img" src="/img/logo-mark.png" alt="PulseCover logo" width="46" height="46"><span class="name">PulseCover</span></div><p style="margin-top:12px" data-i18n="footer.tag"></p>
         <p style="margin:6px 0"><b style="color:#fff">1300-00-0000</b><br>hello@pulsecover.example</p>
         <div class="soc"><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="Instagram">ig</a><a href="#" aria-label="TikTok">tt</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="YouTube">yt</a></div>
         <div class="badges"><span>App Store</span><span>Google Play</span></div></div>

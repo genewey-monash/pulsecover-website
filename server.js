@@ -321,7 +321,7 @@ route('POST', '/api/waitlist', (req, res, b) => {
 });
 
 // ---- static files ----
-const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.woff2': 'font/woff2' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.webm': 'video/webm', '.webp': 'image/webp', '.jpeg': 'image/jpeg' };
 const SEC = { 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Referrer-Policy': 'same-origin' };
 
 function serveStatic(req, res, pathname) {
@@ -334,7 +334,17 @@ function serveStatic(req, res, pathname) {
       res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', ...SEC });
       return fs.readFile(path.join(PUBLIC, '404.html'), (e, d) => res.end(e ? 'Not found' : d));
     }
-    res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream', ...SEC });
+    const type = MIME[path.extname(file)] || 'application/octet-stream';
+    const cache = rel.startsWith('/img/') ? { 'Cache-Control': 'public, max-age=86400' } : {};
+    const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+    if (range && type.startsWith('video/')) { // byte-range support so video plays in Safari
+      const start = range[1] ? parseInt(range[1], 10) : 0;
+      const end = range[2] ? Math.min(parseInt(range[2], 10), data.length - 1) : data.length - 1;
+      if (start > end || start >= data.length) { res.writeHead(416, { 'Content-Range': `bytes */${data.length}` }); return res.end(); }
+      res.writeHead(206, { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Range': `bytes ${start}-${end}/${data.length}`, 'Content-Length': end - start + 1, ...cache, ...SEC });
+      return res.end(data.subarray(start, end + 1));
+    }
+    res.writeHead(200, { 'Content-Type': type, 'Accept-Ranges': 'bytes', ...cache, ...SEC });
     res.end(data);
   });
 }

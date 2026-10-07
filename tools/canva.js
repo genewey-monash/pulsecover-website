@@ -19,6 +19,8 @@ const main = (f) => {
     .replace(/\sdata-i18n-ph="([^"]+)"/g, (m, k) => ` placeholder="${t(k)}"`)
     .replace(/<option([^>]*?)\sdata-i18n-opt="([^"]+)"([^>]*)><\/option>/g, (m, a, k, b) => `<option${a}${b}>${t(k)}</option>`)
     .replace(/<div class="ico" data-ic="(\w+)"><\/div>/g, (m, n) => `<div class="ico">${svgIcon(n)}</div>`)
+    .replace(/<video[^>]*class="logoanim"[^>]*><\/video>/g, '<img class="logoanim" src="https://pulsecover-website.onrender.com/img/logo-mark.png" alt="PulseCover logo" width="96" height="96">')
+    .replace(/src="\/img\//g, 'src="https://pulsecover-website.onrender.com/img/')
     .replace(/<script[\s\S]*?<\/script>/g, '');
 };
 const covs = (p) => 'ABCDEF'.slice(0, { A: 3, B: 4, C: 5, D: 6 }[p.id]).split('');
@@ -26,8 +28,8 @@ const planCard = (p) => `<div class="card" style="display:flex;flex-direction:co
 const plans = Object.values(P.PLANS);
 const fin = P.financials();
 const nav = ['nav.products', 'nav.pricing', 'nav.calc', 'nav.sme', 'nav.help'].map((k) => `<a>${t(k)}</a>`).join('');
-const header = `<div class="promo"><div class="wrap"><b>${t('promo.b')}</b> ${t('promo.t')} <a>${t('promo.l')}</a></div></div><header class="top"><div class="wrap bar"><span class="brand"><span class="logo-slot" style="background:#fff">LOGO</span>PulseCover</span><nav class="main">${nav}</nav><div class="tools"><span class="lang">English</span><a class="btn ghost sm">${t('nav.login')}</a><a class="btn sm">${t('nav.connect')}</a></div></div></header>`;
-const footer = `<footer class="foot"><div class="wrap"><div class="fgrid"><div><div class="brand" style="color:#fff">PulseCover</div><p>${t('footer.tag')}</p></div><div><h4>${t('footer.product')}</h4><a>${t('nav.plans')}</a><a>${t('nav.calc')}</a><a>${t('nav.compare')}</a></div><div><h4>${t('footer.support')}</h4><a>${t('nav.claims')}</a><a>${t('nav.faq')}</a><a>${t('nav.contact')}</a></div><div><h4>${t('footer.company')}</h4><a>${t('nav.how')}</a><a>${t('nav.investors')}</a><a>${t('footer.privacy')}</a></div><div></div></div><div class="reg">${t('footer.reg.p')}</div><div class="fbot"><span>${t('footer.group')}</span></div></div></footer>`;
+const header = `<div class="promo"><div class="wrap"><b>${t('promo.b')}</b> ${t('promo.t')} <a>${t('promo.l')}</a></div></div><header class="top"><div class="wrap bar"><span class="brand"><img class="logo-img" src="https://pulsecover-website.onrender.com/img/logo-mark.png" alt="PulseCover logo" width="46" height="46">PulseCover</span><nav class="main">${nav}</nav><div class="tools"><span class="lang">English</span><a class="btn ghost sm">${t('nav.login')}</a><a class="btn sm">${t('nav.connect')}</a></div></div></header>`;
+const footer = `<footer class="foot"><div class="wrap"><div class="fgrid"><div><div class="brand" style="color:#fff"><img class="logo-img" src="https://pulsecover-website.onrender.com/img/logo-mark.png" alt="PulseCover logo" width="46" height="46">PulseCover</div><p>${t('footer.tag')}</p></div><div><h4>${t('footer.product')}</h4><a>${t('nav.plans')}</a><a>${t('nav.calc')}</a><a>${t('nav.compare')}</a></div><div><h4>${t('footer.support')}</h4><a>${t('nav.claims')}</a><a>${t('nav.faq')}</a><a>${t('nav.contact')}</a></div><div><h4>${t('footer.company')}</h4><a>${t('nav.how')}</a><a>${t('nav.investors')}</a><a>${t('footer.privacy')}</a></div><div></div></div><div class="reg">${t('footer.reg.p')}</div><div class="fbot"><span>${t('footer.group')}</span></div></div></footer>`;
 
 const page = (label, body) => `<div class="cpage" data-document-role="page" data-label="${label}">${header}${body}${footer}</div>`;
 const pages = [];
@@ -65,7 +67,8 @@ pages.push(page('Investors', inv));
 
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>PulseCover website (Canva pages)</title><style>${css}
 .cpage{width:1440px;overflow:hidden;background:#fff;margin:0}.promo,.cpage header.top{position:static}.cpage .wrap{max-width:1180px}.cpage .sec{padding:56px 0}
-.fpill,.fbtab,.cookie,.modal,.cmpbar{display:none!important}</style></head><body>${pages.join('\n')}</body></html>`;
+.fpill,.fbtab,.cookie,.modal,.cmpbar{display:none!important}
+h1{line-height:58px;letter-spacing:0}h2{line-height:44px;letter-spacing:0}h3{line-height:30px}p,.lead{line-height:28px}li{line-height:28px;padding:6px 0}.btn{white-space:nowrap}</style></head><body>${pages.join('\n')}</body></html>`;
 fs.mkdirSync(path.join(root, 'public/canva'), { recursive: true });
 fs.writeFileSync(path.join(root, 'public/canva/site.html'), html);
 console.log('canva pages:', pages.length, 'size', (html.length / 1024).toFixed(0) + ' KB');
