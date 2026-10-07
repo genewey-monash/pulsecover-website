@@ -336,3 +336,9 @@ html[data-theme="dark"] .pwtog{color:#FF7C95}
 html[data-theme="dark"] .fpill{background:var(--red-d)}
 
 .soc{gap:10px;margin-top:16px}.fgrid>div:first-child{min-width:0}
+
+/* v6b: in compact header mode the menu panels must not reserve space when closed */
+html.navb .mega,.mega.inflow{display:none;position:static;transform:none;opacity:1;visibility:visible;box-shadow:none;border-top:1px solid var(--line)}
+html.navb .mega.open{display:block}
+@media(max-width:1060px){.mega{display:none;position:static;transform:none;opacity:1;visibility:visible;box-shadow:none}.mega.open{display:block}.spanel{position:absolute}}
+.eqrow{align-items:center}.eqrow input{height:46px}
