@@ -22,25 +22,7 @@
   PC.msg = (el, text, ok) => { el.className = 'msg ' + (ok ? 'ok' : 'err'); el.textContent = text; };
 
   /* ---- icons (inline SVG, brand-coloured via currentColor) ---- */
-  const I = {
-    heart: '<path d="M12 21s-7-4.6-9.3-9A5.4 5.4 0 0 1 12 6.4 5.4 5.4 0 0 1 21.3 12C19 16.4 12 21 12 21z"/>',
-    shield: '<path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z"/><path d="M8.5 12l2.5 2.5L16 9.5"/>',
-    family: '<circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M2.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6M14.5 20c0-2.6 1.4-4.5 3.5-4.5s3.5 1.9 3.5 4.5"/>',
-    users: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.6 2.7-6 6-6s6 2.4 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5.6M18 14.5c2 .6 3.5 2.5 3.5 5.5"/>',
-    calc: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0"/>',
-    chart: '<path d="M4 20V4M4 20h16"/><path d="M8 16l4-5 3 3 5-7"/>',
-    scale: '<path d="M12 4v16M6 20h12M4 8h16"/><path d="M4 8l-2 6a3 3 0 0 0 6 0L6 8M20 8l-2 6a3 3 0 0 0 6 0l-2-6" transform="translate(-1 0)"/>',
-    watch: '<rect x="7" y="6" width="10" height="12" rx="3"/><path d="M9 6l1-3h4l1 3M9 18l1 3h4l1-3M12 10v2.5l1.5 1"/>',
-    file: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9.5 13h5M9.5 17h5"/>',
-    phone: '<path d="M6 3h4l1.6 4.5-2.2 1.4a11 11 0 0 0 5.7 5.7l1.4-2.2L21 14v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/>',
-    lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
-    pause: '<circle cx="12" cy="12" r="9"/><path d="M10 8.5v7M14 8.5v7"/>',
-    gift: '<rect x="3" y="9" width="18" height="12" rx="1"/><path d="M3 13h18M12 9v12M12 9C9 9 7 7.5 8 5.8s3.8-.2 4 3.2c.2-3.4 3-5 4-3.2s-1 3.2-4 3.2z"/>',
-    star: '<path d="M12 3.5l2.6 5.5 6 .8-4.4 4.1 1.1 6L12 17l-5.3 2.9 1.1-6L3.4 9.8l6-.8z"/>',
-    search: '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>',
-    book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5z"/><path d="M4 19a2 2 0 0 1 2-2h13"/>',
-    cash: '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.8"/>'
-  };
+  const I = window.PC_ICON_PATHS;
   PC.icon = (n, cls = '') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n] || ''}</svg>`;
   window.PC_ICON = PC.icon;
   const chev = '<svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>';
@@ -52,7 +34,7 @@
         ['mega.individual', [['/plans#A', 'heart', 'A'], ['/plans#B', 'shield', 'B']]],
         ['mega.family', [['/plans#C', 'family', 'C'], ['/plans#D', 'family', 'D']]],
         ['mega.business', [['/business', 'users', 'nav.sme'], ['/business#enquiry', 'chart', 'mega.hr']]],
-        ['mega.tools', [['/calculator', 'calc', 'nav.calc'], ['/compare', 'scale', 'nav.compare'], ['/how-pricing-works', 'watch', 'nav.how']]]
+        ['mega.tools', [['/connect', 'plug', 'nav.connect'], ['/calculator', 'calc', 'nav.calc'], ['/compare', 'scale', 'nav.compare'], ['/how-pricing-works', 'watch', 'nav.how']]]
       ], links: [['/plans', 'mega.browse', 'mega.browse.d'], ['/how-pricing-works', 'mega.rules', 'mega.rules.d'], ['/claims', 'nav.claims', 'mega.claims.d'], ['/privacy', 'footer.privacy', 'mega.priv.d']]
     },
     help: {
@@ -64,9 +46,9 @@
     }
   };
   const TOP = [['mega:products'], ['/how-pricing-works', 'nav.pricing'], ['/calculator', 'nav.calc'], ['/business', 'nav.sme'], ['mega:help']];
-  const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/calculator': 'nav.calc', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/claims': 'nav.claims' };
+  const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/claims': 'nav.claims' };
   const SEARCH = [
-    ['/', 'nav.home', 'footer.tag'], ['/plans', 'nav.plans', 'plans.sub'], ['/calculator', 'nav.calc', 'calc.sub'], ['/how-pricing-works', 'nav.how', 'how.sub'],
+    ['/', 'nav.home', 'footer.tag'], ['/plans', 'nav.plans', 'plans.sub'], ['/connect', 'nav.connect', 'connect.sub'], ['/calculator', 'nav.calc', 'calc.sub'], ['/how-pricing-works', 'nav.how', 'how.sub'],
     ['/compare', 'nav.compare', 'cmp.sub'], ['/business', 'nav.sme', 'sme.sub'], ['/investors', 'nav.investors', 'inv.sub'], ['/privacy', 'footer.privacy', 'prv.sub'],
     ['/claims', 'nav.claims', 'cl.sub'], ['/apply', 'nav.apply', 'apply.sub'], ['/contact', 'nav.contact', 'ct.sub'], ['/dashboard', 'nav.dashboard', 'dash.nopolicy']
   ].concat([1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => ['/faq', 'faq.q' + i, 'faq.a' + i]));
@@ -80,8 +62,8 @@
   function chrome() {
     const here = path();
     // skip link + promo banner
-    const skip = document.createElement('a'); skip.className = 'skip'; skip.href = '#main'; skip.setAttribute('data-i18n', 'nav.skip'); document.body.prepend(skip);
-    const main = document.querySelector('main'); if (main) main.id = 'main';
+    const skip = document.createElement('a'); skip.className = 'skip'; skip.href = '#content'; skip.setAttribute('data-i18n', 'nav.skip'); document.body.prepend(skip);
+    const main = document.querySelector('main'); if (main) main.id = 'content';
     const hdr = document.createElement('header'); hdr.className = 'top';
     const promoOn = store.get('pc_promo') !== '1';
     const nav = TOP.map((t) => {
@@ -97,7 +79,7 @@
         <button class="ibtn" id="sbtn" aria-label="Search">${PC.icon('search')}</button>
         <select class="lang" id="langsel" aria-label="Language">${LANGS.map((l) => `<option value="${l.code}">${l.label}</option>`).join('')}</select>
         <a class="btn ghost sm" id="authbtn" href="/account"></a>
-        <a class="btn sm" href="/apply" data-i18n="nav.apply"></a>
+        <a class="btn sm" href="/connect" data-i18n="nav.connect"></a>
         <button class="burger" id="burger" aria-label="Menu">&#9776;</button>
       </div></div>
       ${megaHtml}
@@ -179,6 +161,27 @@
     box.innerHTML = hit.length ? hit.slice(0, 10).map((r) => `<a href="${r.h}">${PC.esc(r.title)}<small>${PC.esc(r.desc.slice(0, 90))}</small></a>`).join('') : `<p style="color:var(--mute)">${PC.t('search.none')}</p>`;
   }
 
+  /* ---- wearable connect (consent modal -> /api/connect). Simulated: real vendor OAuth needs partner credentials. ---- */
+  PC.providers = { healthconnect: 'Google Health Connect', fitbit: 'Fitbit', garmin: 'Garmin', whoop: 'Whoop' };
+  PC.connect = (provider, plan) => new Promise((resolve, reject) => {
+    if (!PC.user) { location.href = '/account?next=' + encodeURIComponent(location.pathname + location.search); return; }
+    document.getElementById('cnmodal')?.remove();
+    const m = document.createElement('div'); m.className = 'modal open'; m.id = 'cnmodal';
+    m.innerHTML = `<div class="mbox"><button class="x" data-close aria-label="Close">&times;</button><div class="ico" style="margin-bottom:10px">${PC.icon('plug')}</div><h3 data-i18n="connect.modal.h"></h3><p style="margin:0 0 6px"><b>${PC.providers[provider]}</b></p>
+      <ul class="perm"><li data-i18n="connect.a1"></li><li data-i18n="connect.a2"></li><li data-i18n="connect.a3"></li><li data-i18n="connect.a4"></li></ul>
+      <p style="color:var(--mute);font-size:.88rem" data-i18n="connect.modal.p"></p><div class="msg"></div>
+      <div class="cta"><button class="btn" id="cnok" data-i18n="connect.allow"></button><button class="btn ghost" id="cnno" data-i18n="connect.cancel"></button></div></div>`;
+    document.body.append(m); PC.apply(m);
+    const close = () => m.remove();
+    m.querySelector('#cnno').onclick = () => { close(); reject(new Error('cancel')); };
+    m.addEventListener('click', (e) => { if (e.target === m || e.target.hasAttribute('data-close')) { close(); reject(new Error('cancel')); } });
+    m.querySelector('#cnok').onclick = async () => {
+      const b = m.querySelector('#cnok'); b.disabled = true;
+      try { const r = await PC.api('/connect', { provider, consent: true, plan }); close(); resolve(r); }
+      catch (e) { PC.msg(m.querySelector('.msg'), e.message); b.disabled = false; }
+    };
+  });
+
   /* ---- reusable "talk to an advisor" form ---- */
   const STATES = ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka', 'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Putrajaya', 'Sabah', 'Sarawak', 'Selangor', 'Terengganu'];
   PC.callbackForm = (host, id) => {
@@ -223,7 +226,7 @@
     root.querySelectorAll('[data-plan]').forEach((e) => { e.textContent = PC.planName(e.dataset.plan); });
     if (scope) return;
     const ab = document.getElementById('authbtn');
-    if (ab) { ab.textContent = PC.user ? PC.t('nav.dashboard') : PC.t('nav.login'); ab.href = PC.user ? '/dashboard' : '/account'; }
+    if (ab) { ab.textContent = PC.user ? PC.t('nav.dash') : PC.t('nav.login'); ab.href = PC.user ? '/dashboard' : '/account'; }
     document.querySelectorAll('#flangs button').forEach((b) => b.classList.toggle('on', b.dataset.l === lang));
     document.querySelectorAll('.modal input[name=clang]').forEach((r) => { r.checked = r.value === lang; });
     if (document.getElementById('spanel') && document.getElementById('spanel').classList.contains('open')) runSearch();

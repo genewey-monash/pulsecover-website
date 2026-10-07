@@ -1,44 +1,42 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Get covered | PulseCover</title><meta name="description" content="Apply for PulseCover in four steps.">
+<title>Get covered | PulseCover</title><meta name="description" content="Connect your wearable, get your Risk Rating and a quote, then apply.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css"></head><body>
-<main><section class="sec"><div class="wrap" style="max-width:820px"><h1 data-i18n="apply.h1"></h1><p class="lead" data-i18n="apply.sub"></p>
+<main><section class="sec"><div class="wrap" style="max-width:860px"><h1 data-i18n="apply.h1"></h1><p class="lead" data-i18n="apply.sub"></p>
 <div id="gate" class="card" style="display:none"><p data-i18n="apply.login.first"></p><a class="btn" href="/account?next=/apply" data-i18n="nav.login"></a></div>
 <div id="have" class="card" style="display:none"><p data-i18n="apply.have"></p><a class="btn" href="/dashboard" data-i18n="apply.done.go"></a></div>
 <div id="flow" style="display:none"><div class="steps" id="stepbar"><span data-i18n="apply.step1"></span><span data-i18n="apply.step2"></span><span data-i18n="apply.step3"></span><span data-i18n="apply.step4"></span></div>
-<div class="card" id="s1"><h3 data-i18n="apply.plan"></h3><div class="devs planpick" id="plansel"></div><h3 style="margin-top:22px" data-i18n="apply.dev"></h3><div class="devs" id="devs"></div><p style="color:var(--mute);font-size:.9rem;margin-top:14px" data-i18n="apply.dev.note"></p>
- <div class="rowf"><div><label data-i18n="calc.steps"></label><input type="number" id="a_steps" value="7500" min="0" max="100000"></div><div><label data-i18n="calc.exercise"></label><input type="number" id="a_ex" value="100" min="0" max="3000"></div>
- <div><label data-i18n="calc.sleep"></label><input type="number" id="a_sl" value="7.5" step="0.25" min="0" max="24"></div><div><label data-i18n="calc.hr"></label><input type="number" id="a_hr" value="66" min="30" max="200"></div></div>
- <label class="check"><input type="checkbox" id="a_sub"><span data-i18n="calc.sub.opt"></span></label>
- <div class="msg" id="m1"></div><div class="cta"><button class="btn" id="n1" data-i18n="apply.next"></button></div></div>
-<div class="card" id="s2" style="display:none"><div style="text-align:center"><div class="ring" id="a_ring" style="--p:0"><i><span id="a_score">0</span><small data-i18n="calc.score"></small></i></div>
- <div class="row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span data-i18n="calc.base"></span><b id="a_base"></b></div>
+<div class="card" id="s1"><h3 data-i18n="apply.plan"></h3><div class="devs planpick" id="plansel"></div>
+ <h3 style="margin-top:24px" data-i18n="apply.connect.h"></h3><p style="color:var(--mute)" data-i18n="apply.connect.p"></p><div class="devrow" id="devrow"></div><div id="cstate"></div>
+ <details style="margin-top:16px"><summary data-i18n="apply.manual.h"></summary><div class="rowf"><div><label data-i18n="calc.steps"></label><input type="number" id="a_steps" value="7500" min="0" max="100000"></div><div><label data-i18n="calc.exercise"></label><input type="number" id="a_ex" value="100" min="0" max="3000"></div><div><label data-i18n="calc.sleep"></label><input type="number" id="a_sl" value="7.5" step="0.25" min="0" max="24"></div><div><label data-i18n="calc.hr"></label><input type="number" id="a_hr" value="66" min="30" max="200"></div></div></details>
+ <label class="check"><input type="checkbox" id="a_sub"><span data-i18n="calc.sub.opt"></span></label><div class="msg" id="m1"></div><div class="cta"><button class="btn" id="n1" data-i18n="apply.next"></button></div></div>
+<div class="card" id="s2" style="display:none"><div style="text-align:center"><p style="margin:0;color:var(--mute)" data-i18n="apply.quote.rating"></p><div class="ring" id="a_ring" style="--p:0"><i><span id="a_score">0</span><small id="a_grade"></small></i></div></div>
+ <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span data-i18n="calc.base"></span><b id="a_base"></b></div>
  <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span data-i18n="calc.adj"></span><b id="a_adj"></b></div>
- <div style="display:flex;justify-content:space-between;padding:8px 0"><span data-i18n="calc.yours"></span><b id="a_tot" style="font-size:1.4rem;color:var(--navy)"></b></div></div>
- <p style="font-size:.85rem;color:var(--mute)" data-i18n="calc.note"></p><div class="cta"><button class="btn ghost" data-back="1" data-i18n="apply.back"></button><button class="btn" id="n2" data-i18n="apply.next"></button></div></div>
-<div class="card" id="s3" style="display:none">
- <label data-i18n="apply.ben"></label><input id="a_ben" maxlength="100"><label data-i18n="apply.guardian"></label><input id="a_guard" maxlength="100"><div class="msg" id="m3"></div><div class="cta"><button class="btn ghost" data-back="2" data-i18n="apply.back"></button><button class="btn" id="n3" data-i18n="apply.next"></button></div></div>
-<div class="card" id="s4" style="display:none"><label class="check"><input type="checkbox" id="c1"><span data-i18n="apply.consent1"></span></label><label class="check"><input type="checkbox" id="c2"><span data-i18n="apply.consent2"></span></label>
- <div class="msg" id="m4"></div><div class="cta"><button class="btn ghost" data-back="3" data-i18n="apply.back"></button><button class="btn" id="n4" data-i18n="apply.confirm"></button></div></div>
-<div class="card" id="done" style="display:none;text-align:center"><div class="ico" style="margin:0 auto 14px">&#10003;</div><h2 data-i18n="apply.done.h"></h2><p><span data-i18n="apply.done.p"></span> <b id="polno"></b></p><a class="btn" href="/dashboard" data-i18n="apply.done.go"></a></div></div></div></section></main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/app.js"></script><script>
-const DEV=[['fitbit','Fitbit'],['garmin','Garmin'],['whoop','Whoop'],['healthconnect',null,'apply.dev.hc'],['manual',null,'apply.dev.manual']];let PLANS=[],plan=new URLSearchParams(location.search).get('plan')||'A';
-let device='healthconnect',step=1,quote=null;
-function drawPlansel(){document.getElementById('plansel').innerHTML=PLANS.map(p=>'<div class="dev '+(p.id===plan?'sel':'')+'" data-p="'+p.id+'">'+PC.planName(p.id)+'<br><small style="font-weight:400">RM '+p.base+PC.t('common.year')+'</small></div>').join('');document.querySelectorAll('[data-p]').forEach(e=>e.onclick=()=>{plan=e.dataset.p;drawPlansel()})}
-function drawDevs(){document.getElementById('devs').innerHTML=DEV.map(d=>'<div class="dev '+(d[0]===device?'sel':'')+'" data-d="'+d[0]+'">'+(d[1]||PC.t(d[2]))+'</div>').join('');document.querySelectorAll('.dev').forEach(e=>e.onclick=()=>{device=e.dataset.d;drawDevs()})}
+ <div style="display:flex;justify-content:space-between;padding:8px 0"><span data-i18n="calc.yours"></span><b id="a_tot" style="font-size:1.4rem"></b></div>
+ <div class="card" style="background:var(--gold-t);border-color:#f2dca6;margin-top:10px"><p style="color:var(--ink);margin:0" data-i18n="apply.sendins"></p></div>
+ <div class="cta"><button class="btn ghost" data-back="1" data-i18n="apply.back"></button><button class="btn" id="n2" data-i18n="apply.next"></button></div></div>
+<div class="card" id="s3" style="display:none"><label data-i18n="apply.ben"></label><input id="a_ben" maxlength="100"><label data-i18n="apply.guardian"></label><input id="a_guard" maxlength="100"><div class="msg" id="m3"></div><div class="cta"><button class="btn ghost" data-back="2" data-i18n="apply.back"></button><button class="btn" id="n3" data-i18n="apply.next"></button></div></div>
+<div class="card" id="s4" style="display:none"><label class="check"><input type="checkbox" id="c1"><span data-i18n="apply.consent1"></span></label><label class="check"><input type="checkbox" id="c2"><span data-i18n="apply.consent2"></span></label><div class="msg" id="m4"></div><div class="cta"><button class="btn ghost" data-back="3" data-i18n="apply.back"></button><button class="btn" id="n4" data-i18n="apply.confirm"></button></div></div>
+<div class="card" id="done" style="display:none;text-align:center"><div class="ico" style="margin:0 auto 14px">&#10003;</div><h2 data-i18n="apply.done.h"></h2><p><span data-i18n="apply.done.p"></span> <b id="polno"></b></p><a class="btn" href="/dashboard" data-i18n="apply.done.go"></a></div></div></div></section></main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script>
+let PLANS=[],plan=new URLSearchParams(location.search).get('plan')||'A',conn=[],days=0,quote=null,step=1;
+function drawPlansel(){document.getElementById('plansel').innerHTML=PLANS.map(p=>'<div class="dev '+(p.id===plan?'sel':'')+'" data-p="'+p.id+'">'+PC.planName(p.id)+'<br><small style="font-weight:400">RM '+p.base+PC.t('common.year')+'</small></div>').join('');document.querySelectorAll('#plansel [data-p]').forEach(e=>e.onclick=()=>{plan=e.dataset.p;drawPlansel()})}
+function drawDevs(){document.getElementById('devrow').innerHTML=Object.entries(PC.providers).map(([k,n])=>'<button class="devbtn'+(conn.includes(k)?' on':'')+'" data-d="'+k+'">'+n+'<small>'+(conn.includes(k)?PC.t('connect.connected'):PC.t('connect.cta'))+'</small></button>').join('');
+ document.querySelectorAll('[data-d]').forEach(b=>b.onclick=async()=>{try{const r=await PC.connect(b.dataset.d,plan);if(!conn.includes(b.dataset.d))conn.push(b.dataset.d);days=r.days;drawDevs();cs()}catch(e){if(e.message!=='cancel')PC.msg(m1,e.message)}})}
+function cs(){document.getElementById('cstate').innerHTML=days?'<p class="msg ok" style="display:block">&#10003; '+days+' '+PC.t('apply.connected.n')+'</p>':''}
 function go(n){step=n;[1,2,3,4].forEach(i=>document.getElementById('s'+i).style.display=i===n?'':'none');document.querySelectorAll('#stepbar span').forEach((s,i)=>s.className=i+1===n?'on':i+1<n?'done':'');scrollTo({top:0,behavior:'smooth'})}
 const mets=()=>({steps:+a_steps.value,exerciseMin:+a_ex.value,sleepHours:+a_sl.value,restingHr:+a_hr.value,appSubscription:a_sub.checked,plan});
-const p=new URLSearchParams(location.search);if(p.get('steps')){a_steps.value=p.get('steps');a_ex.value=p.get('ex');a_sl.value=p.get('sl');a_hr.value=p.get('hr')}
-function showQuote(){const q=quote;a_score.textContent=q.score;a_ring.style.setProperty('--p',q.score);a_base.textContent='RM '+PC.fmt(q.base);a_adj.textContent=(q.adjustmentPct>0?'+':'')+q.adjustmentPct+'%';a_tot.textContent='RM '+PC.fmt(q.totalAnnual)+PC.t('common.year')}
-PC.ready.then(async()=>{PLANS=await PC.api('/plans');if(!PLANS.find(p=>p.id===plan))plan='A';drawPlansel();drawDevs();if(!PC.user){gate.style.display='';return}
- try{const d=await PC.api('/dashboard');if(d.policy){have.style.display='';return}}catch(e){}
- flow.style.display='';go(1)});
-window.addEventListener('pc:lang',()=>{drawPlansel();drawDevs();if(quote)showQuote()});
-n1.onclick=async()=>{try{quote=await PC.api('/quote',mets());showQuote();go(2)}catch(e){PC.msg(m1,e.message)}};
+function showQuote(){const q=quote;a_score.textContent=q.score;a_grade.textContent=PC.t('rate.grade')+' '+q.grade+' - '+PC.t('grade.'+q.grade);a_ring.style.setProperty('--p',q.score);a_base.textContent='RM '+PC.fmt(q.base);a_adj.textContent=(q.adjustmentPct>0?'+':'')+q.adjustmentPct+'%';a_tot.textContent='RM '+PC.fmt(q.totalAnnual)+PC.t('common.year')}
+PC.ready.then(async()=>{PLANS=await PC.api('/plans');if(!PLANS.find(p=>p.id===plan))plan='A';drawPlansel();if(!PC.user){gate.style.display='';return}
+ try{const d=await PC.api('/dashboard');if(d.policy){have.style.display='';return}conn=d.connections.map(c=>c.provider);days=d.metrics.length}catch(e){}
+ drawDevs();cs();flow.style.display='';go(1)});
+window.addEventListener('pc:lang',()=>{if(PLANS.length){drawPlansel();drawDevs();cs();if(quote)showQuote()}});
+n1.onclick=async()=>{try{quote=days>=7?(await PC.api('/my-quote',{plan,appSubscription:a_sub.checked})).quote:await PC.api('/quote',mets());showQuote();go(2)}catch(e){PC.msg(m1,e.message)}};
 n2.onclick=()=>go(3);document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>go(+b.dataset.back));
 n3.onclick=()=>{if(a_ben.value.trim().length<2)return PC.msg(m3,PC.t('common.required')+': '+PC.t('apply.ben'));go(4)};
 n4.onclick=async()=>{if(!c1.checked||!c2.checked)return PC.msg(m4,PC.t('common.required'));n4.disabled=true;
- try{const r=await PC.api('/apply',{...mets(),device,plan,beneficiary:a_ben.value,guardian:a_guard.value,consentData:true,consentTerms:true});
+ try{const r=await PC.api('/apply',{...mets(),device:conn[0]||'manual',beneficiary:a_ben.value,guardian:a_guard.value,consentData:true,consentTerms:true});
   [1,2,3,4].forEach(i=>document.getElementById('s'+i).style.display='none');stepbar.style.display='none';polno.textContent=r.number;done.style.display=''}
  catch(e){PC.msg(m4,e.message);n4.disabled=false}};</script></body></html>

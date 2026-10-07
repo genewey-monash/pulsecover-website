@@ -5,6 +5,9 @@ const root = path.join(__dirname, '..');
 global.window = {};
 eval(fs.readFileSync(path.join(root, 'public/js/i18n.js'), 'utf8'));
 eval(fs.readFileSync(path.join(root, 'public/js/i18n2.js'), 'utf8'));
+eval(fs.readFileSync(path.join(root, 'public/js/i18n3.js'), 'utf8'));
+eval(fs.readFileSync(path.join(root, 'public/js/icons.js'), 'utf8'));
+const svgIcon = (n, color = '#B71234') => `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${window.PC_ICON_PATHS[n] || ''}</svg>`;
 const D = window.PC_I18N, t = (k) => (D[k] ? D[k][0] : k);
 const P = require('../pricing');
 const css = fs.readFileSync(path.join(root, 'public/css/style.css'), 'utf8');
@@ -15,6 +18,7 @@ const main = (f) => {
   return h.replace(/<(\w+)([^>]*?)\sdata-i18n="([^"]+)"([^>]*)>([^<]*)<\/\1>/g, (m, tag, a, key, b) => `<${tag}${a}${b}>${t(key)}</${tag}>`)
     .replace(/\sdata-i18n-ph="([^"]+)"/g, (m, k) => ` placeholder="${t(k)}"`)
     .replace(/<option([^>]*?)\sdata-i18n-opt="([^"]+)"([^>]*)><\/option>/g, (m, a, k, b) => `<option${a}${b}>${t(k)}</option>`)
+    .replace(/<div class="ico" data-ic="(\w+)"><\/div>/g, (m, n) => `<div class="ico">${svgIcon(n)}</div>`)
     .replace(/<script[\s\S]*?<\/script>/g, '');
 };
 const covs = (p) => 'ABCDEF'.slice(0, { A: 3, B: 4, C: 5, D: 6 }[p.id]).split('');
@@ -22,7 +26,7 @@ const planCard = (p) => `<div class="card" style="display:flex;flex-direction:co
 const plans = Object.values(P.PLANS);
 const fin = P.financials();
 const nav = ['nav.products', 'nav.pricing', 'nav.calc', 'nav.sme', 'nav.help'].map((k) => `<a>${t(k)}</a>`).join('');
-const header = `<div class="promo"><div class="wrap"><b>${t('promo.b')}</b> ${t('promo.t')} <a>${t('promo.l')}</a></div></div><header class="top"><div class="wrap bar"><span class="brand"><span class="logo-slot" style="background:#fff">LOGO</span>PulseCover</span><nav class="main">${nav}</nav><div class="tools"><span class="lang">English</span><a class="btn ghost sm">${t('nav.login')}</a><a class="btn sm">${t('nav.apply')}</a></div></div></header>`;
+const header = `<div class="promo"><div class="wrap"><b>${t('promo.b')}</b> ${t('promo.t')} <a>${t('promo.l')}</a></div></div><header class="top"><div class="wrap bar"><span class="brand"><span class="logo-slot" style="background:#fff">LOGO</span>PulseCover</span><nav class="main">${nav}</nav><div class="tools"><span class="lang">English</span><a class="btn ghost sm">${t('nav.login')}</a><a class="btn sm">${t('nav.connect')}</a></div></div></header>`;
 const footer = `<footer class="foot"><div class="wrap"><div class="fgrid"><div><div class="brand" style="color:#fff">PulseCover</div><p>${t('footer.tag')}</p></div><div><h4>${t('footer.product')}</h4><a>${t('nav.plans')}</a><a>${t('nav.calc')}</a><a>${t('nav.compare')}</a></div><div><h4>${t('footer.support')}</h4><a>${t('nav.claims')}</a><a>${t('nav.faq')}</a><a>${t('nav.contact')}</a></div><div><h4>${t('footer.company')}</h4><a>${t('nav.how')}</a><a>${t('nav.investors')}</a><a>${t('footer.privacy')}</a></div><div></div></div><div class="reg">${t('footer.reg.p')}</div><div class="fbot"><span>${t('footer.group')}</span></div></div></footer>`;
 
 const page = (label, body) => `<div class="cpage" data-document-role="page" data-label="${label}">${header}${body}${footer}</div>`;
@@ -32,6 +36,10 @@ let home = main('index');
 home = home.replace('<div class="cards c4" id="plancards"></div>', `<div class="cards c4">${plans.map(planCard).join('')}</div>`)
   .replace(/<div class="formcard"><div id="homecb"><\/div><\/div>/, `<div class="formcard"><h3>${t('cb.h')}</h3><label>${t('field.name')}</label><input><label>${t('cb.phone')}</label><input><label>${t('cb.state')}</label><select><option>Selangor</option></select><br><br><a class="btn">${t('cb.submit')}</a></div>`);
 pages.push(page('Home', home));
+
+let cn = main('connect');
+cn = cn.replace('<div class="devrow" id="devrow"></div><div id="cres"></div><div class="msg" id="cmsg"></div>', `<div class="devrow">${['Google Health Connect', 'Fitbit', 'Garmin', 'Whoop'].map((n) => `<span class="devbtn">${n}<small>${t('connect.cta')}</small></span>`).join('')}</div>`);
+pages.push(page('Connect wearable', cn));
 
 let pl = main('plans');
 pl = pl.replace('<div class="plist" id="plist"></div>', `<div class="plist">${plans.map((p) => `<div class="plan">${p.isNew ? '<span class="rib">NEW</span>' : ''}<div><span class="cat">${t('plan.cat')}</span><h3>${t('plan.word')} ${p.id}</h3><ul>${covs(p).map((c) => `<li>${t('cov.' + c)}</li>`).join('')}<li>${t('plan.wear')}</li></ul></div><div class="side"><div class="price"><small>${t('plan.from')}</small><br><b>RM ${p.base.toLocaleString()}</b><small>${t('common.year')}</small></div><a class="btn sm">${t('plan.apply')}</a></div></div>`).join('')}</div>`)

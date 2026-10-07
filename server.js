@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS claims(id INTEGER PRIMARY KEY, user_id INTEGER, polic
 CREATE TABLE IF NOT EXISTS claim_events(id INTEGER PRIMARY KEY, claim_id INTEGER, status TEXT, note TEXT, created TEXT);
 CREATE TABLE IF NOT EXISTS sme(id INTEGER PRIMARY KEY, company TEXT, contact TEXT, email TEXT, phone TEXT, employees INTEGER, message TEXT, quote TEXT, created TEXT);
 CREATE TABLE IF NOT EXISTS contact(id INTEGER PRIMARY KEY, name TEXT, email TEXT, topic TEXT, message TEXT, created TEXT);
+CREATE TABLE IF NOT EXISTS connections(id INTEGER PRIMARY KEY, user_id INTEGER, provider TEXT, connected_at TEXT, last_sync TEXT, UNIQUE(user_id, provider));
 CREATE TABLE IF NOT EXISTS callbacks(id INTEGER PRIMARY KEY, name TEXT, phone TEXT, email TEXT, state TEXT, need TEXT, lang TEXT, time_pref TEXT, created TEXT);
 CREATE TABLE IF NOT EXISTS feedback(id INTEGER PRIMARY KEY, rating INTEGER, purpose TEXT, comment TEXT, page TEXT, created TEXT);
 CREATE TABLE IF NOT EXISTS waitlist(id INTEGER PRIMARY KEY, email TEXT UNIQUE, created TEXT);
@@ -140,13 +141,15 @@ route('POST', '/api/apply', (req, res, b) => {
   const cover = plan.cover;
   const beneficiary = str(b.beneficiary, 100);
   if (beneficiary.length < 2) bad('Please add a beneficiary.');
-  const q = P.quote(metricsOf(b), { appSubscription: !!b.appSubscription, plan: plan.id });
+  const hist28 = userMetrics(u.id, 28);
+  const mm = hist28.length >= 7 ? P.averageMetrics(hist28) : metricsOf(b);
+  const q = P.quote(mm, { appSubscription: !!b.appSubscription, plan: plan.id });
   const number = 'PC-' + new Date().getFullYear() + '-' + rid(3);
   // First year: indicative premium from the quote metrics; repricing at renewal from 12-month average.
   db.prepare('INSERT INTO policies(user_id,plan,number,status,device,cover,base,premium,app_sub,guardian,beneficiary,start_date,renewal_date,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
     .run(u.id, plan.id, number, 'active', b.device, cover, q.base, q.annualPremium, b.appSubscription ? 1 : 0, guardian, beneficiary, today(), addDays(today(), 365), now());
-  db.prepare('INSERT OR REPLACE INTO metrics(user_id,day,steps,exercise_min,sleep_hours,resting_hr,source) VALUES(?,?,?,?,?,?,?)')
-    .run(u.id, today(), metricsOf(b).steps, metricsOf(b).exerciseMin, metricsOf(b).sleepHours, metricsOf(b).restingHr, b.device);
+  if (!hist28.length) db.prepare('INSERT OR REPLACE INTO metrics(user_id,day,steps,exercise_min,sleep_hours,resting_hr,source) VALUES(?,?,?,?,?,?,?)')
+    .run(u.id, today(), metricsOf(b).steps, metricsOf(b).exerciseMin / 7, metricsOf(b).sleepHours, metricsOf(b).restingHr, b.device);
   return { number, quote: q };
 });
 
@@ -164,7 +167,66 @@ route('GET', '/api/dashboard', (req) => {
     .map((r) => ({ name: r.name.split(' ')[0] + ' ' + (r.name.split(' ')[1] ? r.name.split(' ')[1][0] + '.' : ''), count: r.c }));
   const paused = pol && pol.paused_until && pol.paused_until >= today() ? pol.paused_until : null;
   const withScore = ms.map((m) => ({ ...m, score: P.score(m).score })).reverse();
-  return { user: publicUser(u), policy: pol || null, metrics: withScore, projected: current, score30: ms.length ? P.score(avg).score : null, paused, claims, referrals, ranking };
+  const weekly = weeklySummary(u.id);
+  const connections = db.prepare('SELECT provider, connected_at, last_sync FROM connections WHERE user_id=?').all(u.id);
+  return { user: publicUser(u), policy: pol || null, metrics: withScore, projected: current, score30: ms.length ? P.score(avg).score : null, grade: ms.length ? P.gradeOf(P.score(avg).score) : null, weekly, connections, paused, claims, referrals, ranking };
+});
+
+const PROVIDERS = ['healthconnect', 'fitbit', 'garmin', 'whoop'];
+// Real Fitbit/Garmin/Whoop/Google Health Connect OAuth needs vendor partner credentials. This stores the consent and backfills
+// 28 days of simulated readings through the same pipeline a real connector would feed.
+function backfill(uid, provider) {
+  const have = db.prepare('SELECT COUNT(*) c FROM metrics WHERE user_id=?').get(uid).c;
+  if (have >= 14) return 0;
+  const seed = crypto.createHash('sha256').update('profile' + uid).digest();
+  const base = { steps: 5500 + (seed[0] / 255) * 5500, ex: 60 + (seed[1] / 255) * 110, sl: 6.2 + (seed[2] / 255) * 2, hr: 54 + (seed[3] / 255) * 18 };
+  const ins = db.prepare('INSERT OR IGNORE INTO metrics(user_id,day,steps,exercise_min,sleep_hours,resting_hr,source) VALUES(?,?,?,?,?,?,?)');
+  let n = 0;
+  for (let i = 27; i >= 0; i--) {
+    const day = addDays(today(), -i);
+    const r = crypto.createHash('sha256').update(uid + day).digest();
+    const wk = new Date(day).getDay() % 6 === 0 ? 0.85 : 1.05;
+    ins.run(uid, day, Math.round(base.steps * wk * (0.75 + (r[0] / 255) * 0.5)), Math.round((base.ex / 7) * wk * (0.6 + (r[1] / 255) * 0.9)),
+      Math.round((base.sl + (r[2] / 255 - 0.5)) * 10) / 10, Math.round(base.hr + (r[3] / 255 - 0.5) * 6), provider + '-sync');
+    n++;
+  }
+  return n;
+}
+function weeklySummary(uid) {
+  const rows = userMetrics(uid, 70).reverse();
+  const weeks = new Map();
+  for (const m of rows) {
+    const d = new Date(m.day); const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - dow);
+    const k = d.toISOString().slice(0, 10); if (!weeks.has(k)) weeks.set(k, []); weeks.get(k).push(m);
+  }
+  return [...weeks.entries()].slice(-8).map(([start, list]) => {
+    const avg = P.averageMetrics(list); const sc = P.score(avg).score;
+    return { start, days: list.length, steps: Math.round(avg.steps), exerciseMin: Math.round(avg.exerciseMin), sleepHours: Math.round(avg.sleepHours * 10) / 10, restingHr: Math.round(avg.restingHr), score: sc, grade: P.gradeOf(sc) };
+  });
+}
+
+route('POST', '/api/connect', (req, res, b) => {
+  const u = needUser(req);
+  const provider = PROVIDERS.includes(b.provider) ? b.provider : bad('Choose a wearable to connect.');
+  if (!b.consent) bad('Please approve the data permissions to connect.');
+  db.prepare('INSERT OR REPLACE INTO connections(user_id,provider,connected_at,last_sync) VALUES(?,?,?,?)').run(u.id, provider, now(), now());
+  const added = backfill(u.id, provider);
+  const hist = userMetrics(u.id, 28);
+  const q = P.quote(P.averageMetrics(hist), { plan: b.plan });
+  return { provider, days: hist.length, added, quote: q };
+});
+
+route('POST', '/api/disconnect', (req, res, b) => {
+  const u = needUser(req);
+  db.prepare('DELETE FROM connections WHERE user_id=? AND provider=?').run(u.id, String(b.provider || ''));
+  return { ok: true };
+});
+
+route('POST', '/api/my-quote', (req, res, b) => {
+  const u = needUser(req);
+  const hist = userMetrics(u.id, 28);
+  if (hist.length < 7) bad('Connect a wearable first so we can build your rating.');
+  return { days: hist.length, quote: P.quote(P.averageMetrics(hist), { plan: b.plan, appSubscription: !!b.appSubscription }) };
 });
 
 // Wearable sync. Real Fitbit/Garmin/Whoop OAuth needs vendor partner credentials, so this ingests either manual entries

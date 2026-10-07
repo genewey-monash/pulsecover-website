@@ -40,6 +40,12 @@ function adjustment(sc) {
   return clamp(-((sc - 50) / 50) * BAND, -BAND, BAND);
 }
 
+// CTOS-style grade bands for the PulseCover Risk Rating (score 0-100 -> grade).
+const GRADES = [
+  { g: 'A+', min: 90 }, { g: 'A', min: 75 }, { g: 'B', min: 60 }, { g: 'C', min: 40 }, { g: 'D', min: 25 }, { g: 'E', min: 0 }
+];
+const gradeOf = (sc) => (GRADES.find((x) => sc >= x.min) || GRADES[GRADES.length - 1]).g;
+
 function quote(m, opts = {}) {
   const { score: sc, components: comp } = score(m);
   const adj = adjustment(sc);
@@ -47,7 +53,7 @@ function quote(m, opts = {}) {
   const premium = Math.round(base * (1 + adj) * 100) / 100;
   const sub = opts.appSubscription ? APP_SUB_MONTHLY * 12 : 0;
   return {
-    base, band: BAND, score: sc, components: comp, adjustmentPct: Math.round(adj * 1000) / 10,
+    base, band: BAND, score: sc, grade: gradeOf(sc), components: comp, adjustmentPct: Math.round(adj * 1000) / 10,
     annualPremium: premium, monthlyPremium: Math.round((premium / 12) * 100) / 100,
     savings: Math.round((base - premium) * 100) / 100, appSubscriptionAnnual: sub,
     totalAnnual: Math.round((premium + sub) * 100) / 100
@@ -62,7 +68,8 @@ function averageMetrics(list) {
     sleepHours: a.sleepHours + num(m.sleepHours, 0), restingHr: a.restingHr + num(m.restingHr, 70)
   }), { steps: 0, exerciseMin: 0, sleepHours: 0, restingHr: 0 });
   const n = list.length;
-  return { steps: sum.steps / n, exerciseMin: sum.exerciseMin / n, sleepHours: sum.sleepHours / n, restingHr: sum.restingHr / n };
+  // Stored days hold daily exercise minutes; scoring uses weekly minutes (150/week target), so convert here.
+  return { steps: sum.steps / n, exerciseMin: (sum.exerciseMin / n) * 7, sleepHours: sum.sleepHours / n, restingHr: sum.restingHr / n };
 }
 
 // SME group: per-employee base, discount tied to aggregate activity score (max 15% like individuals)
@@ -95,4 +102,4 @@ function financials() {
   };
 }
 
-module.exports = { PLANS, planOf, BASE_PREMIUM, BAND, COMMISSION, APP_SUB_MONTHLY, score, adjustment, quote, averageMetrics, smeQuote, financials, clamp, num };
+module.exports = { GRADES, gradeOf, PLANS, planOf, BASE_PREMIUM, BAND, COMMISSION, APP_SUB_MONTHLY, score, adjustment, quote, averageMetrics, smeQuote, financials, clamp, num };

@@ -7,7 +7,7 @@ const head = (title, desc) => `<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css"></head><body>`;
-const tail = (js = '') => `<script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/app.js"></script>${js ? `<script>${js}</script>` : ''}</body></html>`;
+const tail = (js = '') => `<script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script>${js ? `<script>${js}</script>` : ''}</body></html>`;
 const pages = {};
 const D = (k) => `data-i18n="${k}"`;
 
@@ -232,6 +232,7 @@ cf.onsubmit=async e=>{e.preventDefault();try{await PC.api('/contact',{name:c_n.v
 pages['404'] = [`Not found`, `Page not found`, `<main><section class="sec"><div class="wrap center"><h1 ${D('nf.h')}></h1><p class="lead" ${D('nf.p')}></p><a class="btn" href="/" ${D('nav.home')}></a></div></section></main>`, ''];
 
 require('./pages2')(pages, D);
+require('./pages3')(pages, D);
 for (const [name, [title, desc, body, js]] of Object.entries(pages))
   fs.writeFileSync(path.join(out, name + '.html'), head(title, desc) + body + tail(js));
 console.log('built', Object.keys(pages).length, 'pages');
