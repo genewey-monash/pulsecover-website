@@ -63,7 +63,8 @@
     ['/claims', 'nav.claims', 'cl.sub', 'tool', 'claim claims file submit track hospital accident'],
     ['/apply', 'nav.apply', 'apply.sub', 'tool', 'apply get covered buy join sign up policy'],
     ['/account', 'nav.login', 'acc.sub', 'tool', 'login log in register sign up account password'],
-    ['/dashboard', 'nav.dashboard', 'dash.summ.note', 'tool', 'dashboard policy weekly summary devices pause referral'],
+    ['/dashboard', 'nav.dashboard', 'dash.summ.note', 'tool', 'dashboard policy weekly summary devices'],
+    ['#theme', 'theme.dark', 'theme.light', 'tool', 'dark mode light mode theme night appearance'],
     ['/dashboard', 'dash.ref.h', 'dash.ref.p', 'tool', 'referral refer friend code credit leaderboard'],
     ['/dashboard', 'dash.pause.h', 'dash.pause.p', 'tool', 'pause tracking illness injury travel pregnancy'],
     ['/contact', 'nav.contact', 'ct.sub', 'page', 'contact email phone address message help'],
@@ -199,9 +200,9 @@
   }
 
   function hl(text, tokens) {
-    let out = PC.esc(text);
-    tokens.filter(Boolean).forEach((t) => { out = out.replace(new RegExp('(' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'), '<mark>$1</mark>'); });
-    return out;
+    const toks = tokens.filter(Boolean).sort((x, y) => y.length - x.length).map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    if (!toks.length) return PC.esc(text);
+    return text.split(new RegExp('(' + toks.join('|') + ')', 'ig')).map((p, i) => (i % 2 ? '<mark>' + PC.esc(p) + '</mark>' : PC.esc(p))).join('');
   }
   function runSearch() {
     const q = document.getElementById('sq').value.trim().toLowerCase(), box = document.getElementById('sres');
@@ -237,6 +238,7 @@
   document.addEventListener('click', (e) => {
     const s = e.target.closest('#sres a.si'); if (!s) return;
     if (s.getAttribute('href') === '#callback') { e.preventDefault(); PC.closeSearch(); document.getElementById('cbmodal').classList.add('open'); }
+    else if (s.getAttribute('href') === '#theme') { e.preventDefault(); PC.closeSearch(); document.getElementById('themebtn').click(); }
     else if (s.getAttribute('href').split('#')[0] === location.pathname.replace(/\.html$/, '') || (s.getAttribute('href').startsWith('#'))) { PC.closeSearch(); }
   });
 
