@@ -82,4 +82,9 @@ PC.emailQuote(document.getElementById('eqhost'),()=>vals());`;
   let [bt, bd, bb, bj] = pages['business'];
   bb = bb.replace('<p class="lead" data-i18n="sme.sub"></p>', '<p class="lead" data-i18n="sme.sub"></p><img class="photo banner" src="/img/team-meeting.jpg" alt="Three colleagues of different ages in a friendly discussion at a meeting table" width="1376" height="768" loading="lazy">');
   pages['business'] = [bt, bd, bb, bj];
+
+  // ---------------- CALCULATOR: photo banner ----------------
+  let [ct2, cd2, cb2, cj2] = pages['calculator'];
+  cb2 = cb2.replace('<p class="lead" data-i18n="calc.sub"></p>', '<p class="lead" data-i18n="calc.sub"></p><img class="photo banner" style="object-position:30% 30%" src="/img/cafe-phone.jpg" alt="A man smiling as he checks his phone at a cafe table" width="1376" height="768" loading="lazy">');
+  pages['calculator'] = [ct2, cd2, cb2, cj2];
 };
