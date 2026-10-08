@@ -14,7 +14,7 @@ module.exports = (pages, D) => {
   <div class="msg" id="pm1"></div><button class="btn" style="margin-top:20px" ${D('pf.save')}></button></form></div>
  <div>
   <div class="card" id="plcard"><h3 ${D('pf.plan.h')}></h3>
-   <div id="nopol" style="display:none"><p ${D('pf.plan.none')}></p><a class="btn" href="/apply" ${D('nav.apply')}></a></div>
+   <div id="nopol" class="emptyrow" style="display:none"><p ${D('pf.plan.none')}></p><a class="btn" href="/apply" ${D('nav.apply')}></a></div>
    <div id="haspol" style="display:none">
     <dl class="kv"><div><dt ${D('pf.policyno')}></dt><dd id="v_no"></dd></div><div><dt ${D('pf.cover')}></dt><dd id="v_cov"></dd></div><div><dt ${D('pf.prem')}></dt><dd id="v_prem"></dd></div><div><dt ${D('pf.renew')}></dt><dd id="v_ren"></dd></div></dl>
     <h4 style="margin:22px 0 12px" ${D('pf.choose')}></h4><div class="plansel" id="psel"></div>
@@ -24,6 +24,7 @@ module.exports = (pages, D) => {
   <div class="card" style="margin-top:24px"><h3 ${D('pf.pw.h')}></h3><form id="pwf" novalidate>
    ${pw('w_c', 'pf.pw.cur', 'current-password')}${pw('w_n', 'pf.pw.new', 'new-password')}${pw('w_n2', 'field.password2', 'new-password')}
    <div class="msg" id="pm3"></div><button class="btn" style="margin-top:20px" ${D('pf.pw.btn')}></button></form></div>
+  <div class="card" style="margin-top:24px"><h3 ${D('pf.session.h')}></h3><p class="sesmail"><span ${D('pf.session')}></span> <b id="ses_em"></b></p><p class="fnote" ${D('pf.idle')}></p><button class="btn ghost" id="pf_out" style="margin-top:18px" ${D('nav.logout')}></button></div>
  </div></div></div></section></main>`, `
 let U,POL,PREV=[],plan='A';
 function bad(id,key){const i=document.getElementById(id),h=document.getElementById(id+'_e');if(key){i.classList.add('fld-err');h.textContent=PC.t(key);h.classList.add('on')}else{i.classList.remove('fld-err');h.classList.remove('on')}return !key}
@@ -31,7 +32,8 @@ const age=d=>{const t=new Date(),b=new Date(d);if(isNaN(b))return -1;let a=t.get
 document.querySelectorAll('.pwtog').forEach(b=>b.onclick=()=>{const i=document.getElementById(b.dataset.for);const s=i.type==='password';i.type=s?'text':'password';b.textContent=PC.t(s?'acc.hide':'acc.show')});
 window.addEventListener('pc:lang',()=>{document.querySelectorAll('.pwtog').forEach(b=>b.textContent=PC.t(document.getElementById(b.dataset.for).type==='password'?'acc.show':'acc.hide'));drawPlans();drawPolicy()});
 p_d.max=new Date().toISOString().slice(0,10);
-function fillUser(){p_n.value=U.name;p_e.value=U.email;p_p.value=U.phone||'';p_d.value=U.dob||'';p_a.value=U.address||'';p_l.value=U.lang||'en'}
+pf_out.onclick=()=>PC.logout();
+function fillUser(){ses_em.textContent=U.email;p_n.value=U.name;p_e.value=U.email;p_p.value=U.phone||'';p_d.value=U.dob||'';p_a.value=U.address||'';p_l.value=U.lang||'en'}
 function drawPolicy(){if(!U)return;const has=!!POL;nopol.style.display=has?'none':'';haspol.style.display=has?'':'none';if(!has)return;
  v_no.textContent=POL.number;v_cov.textContent='RM '+PC.fmt(POL.cover,0);v_prem.textContent='RM '+PC.fmt(POL.premium)+PC.t('common.year');v_ren.textContent=POL.renewal_date;if(document.activeElement!==p_b)p_b.value=POL.beneficiary||''}
 function drawPlans(){if(!POL||!PREV.length)return;psel.innerHTML=PREV.map(p=>'<button type="button" class="pchoice '+(p.id===plan?'sel':'')+'" data-p="'+p.id+'" aria-pressed="'+(p.id===plan)+'"><b>'+PC.planName(p.id)+'</b><span>RM '+PC.fmt(p.premium,0)+PC.t('common.year')+'</span><small>'+PC.t('pf.cover')+' RM '+PC.fmt(p.cover,0)+'</small>'+(p.id===POL.plan?'<em>'+PC.t('pf.current')+'</em>':'')+'</button>').join('');
@@ -67,4 +69,21 @@ function paint(){ty_h.textContent=PC.t('ty.h.'+kind);
  [1,2,3].forEach(i=>document.getElementById('ty_'+i).textContent=PC.t('ty.'+kind+'.'+i));
  if(T.email){ty_mail.style.display='';ty_em.textContent=T.email}if(T.ref){ty_ref.style.display='';ty_refv.textContent=T.ref}document.title=PC.t('ty.title')+' | PulseCover'}
 PC.ready.then(paint);window.addEventListener('pc:lang',paint);`];
+};
+
+module.exports.dashboard = (pages, D) => {
+  const quick = (href, icon, t, p) => `<a class="qcard" href="${href}"><span class="qico" data-icon="${icon}"></span><b ${D(t)}></b><span ${D(p)}></span></a>`;
+  let [t, d, b, j] = pages['dashboard'];
+  const start = `<div id="nop" style="display:none">
+ <div class="card startcard"><h3 ${D('ds.h')}></h3><p class="startp" ${D('ds.p')}></p>
+  <ol class="startsteps"><li class="done" id="st1"><span class="stn">&#10003;</span><span ${D('ds.s1')}></span></li><li id="st2"><span class="stn">2</span><span ${D('ds.s2')}></span></li><li id="st3"><span class="stn">3</span><span ${D('ds.s3')}></span></li></ol>
+  <div class="cta"><a class="btn" href="/connect" ${D('nav.connect')}></a><a class="btn ghost" href="/apply" ${D('nav.apply')}></a></div></div>
+ <h3 class="qh" ${D('ds.q.h')}></h3>
+ <div class="quick">${quick('/connect', 'plug', 'nav.connect', 'ds.q1.p')}${quick('/calculator', 'calc', 'nav.calc', 'ds.q2.p')}${quick('/compare', 'scale', 'nav.compare', 'ds.q3.p')}${quick('/contact', 'phone', 'nav.talk', 'ds.q4.p')}${quick('/profile', 'user', 'nav.profile', 'ds.q5.p')}${quick('/claims', 'file', 'nav.claims', 'ds.q6.p')}</div>
+ <div class="card tipcard"><h3 ${D('ds.tip.h')}></h3><p ${D('ds.tip.p')}></p></div></div>`;
+  b = b.replace(/<div id="nop" class="card"[^]*?<\/div>\n/, start + '\n');
+  b = b.replace('<div class="card" style="margin-bottom:20px"><h3 ' + D('dash.pipe.h'), `<div class="quick quick4">${quick('/profile', 'user', 'nav.profile', 'ds.q5.p')}${quick('/claims', 'file', 'nav.claims', 'ds.q6.p')}${quick('/calculator', 'calc', 'nav.calc', 'ds.q2.p')}${quick('/contact', 'phone', 'nav.talk', 'ds.q4.p')}</div>\n<div class="card" style="margin-bottom:20px"><h3 ` + D('dash.pipe.h'));
+  j = j.replace("if(!p){nop.style.display='';main.style.display='none';return}", "if(!p){nop.style.display='';main.style.display='none';st2.classList.toggle('done',(D.connections||[]).length>0);st2.firstChild.innerHTML=(D.connections||[]).length?'&#10003;':'2';document.querySelectorAll('.qico[data-icon]').forEach(e=>{if(!e.innerHTML)e.innerHTML=PC.icon(e.dataset.icon)});return}");
+  j += "\nPC.ready.then(()=>document.querySelectorAll('.qico[data-icon]').forEach(e=>{e.innerHTML=PC.icon(e.dataset.icon)}));";
+  pages['dashboard'] = [t, d, b, j];
 };

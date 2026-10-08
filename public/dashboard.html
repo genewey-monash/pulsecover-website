@@ -5,10 +5,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
 <script>(function(){try{var th=localStorage.getItem('pc_theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=th}catch(e){document.documentElement.dataset.theme='light'}})()</script><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
 <main><section class="sec"><div class="wrap"><h1><span data-i18n="dash.h1"></span>, <span id="who"></span></h1>
-<div id="nop" class="card" style="display:none"><p data-i18n="dash.nopolicy"></p><a class="btn" href="/connect" data-i18n="nav.connect"></a> <a class="btn ghost" href="/apply" data-i18n="nav.apply"></a></div>
+<div id="nop" style="display:none">
+ <div class="card startcard"><h3 data-i18n="ds.h"></h3><p class="startp" data-i18n="ds.p"></p>
+  <ol class="startsteps"><li class="done" id="st1"><span class="stn">&#10003;</span><span data-i18n="ds.s1"></span></li><li id="st2"><span class="stn">2</span><span data-i18n="ds.s2"></span></li><li id="st3"><span class="stn">3</span><span data-i18n="ds.s3"></span></li></ol>
+  <div class="cta"><a class="btn" href="/connect" data-i18n="nav.connect"></a><a class="btn ghost" href="/apply" data-i18n="nav.apply"></a></div></div>
+ <h3 class="qh" data-i18n="ds.q.h"></h3>
+ <div class="quick"><a class="qcard" href="/connect"><span class="qico" data-icon="plug"></span><b data-i18n="nav.connect"></b><span data-i18n="ds.q1.p"></span></a><a class="qcard" href="/calculator"><span class="qico" data-icon="calc"></span><b data-i18n="nav.calc"></b><span data-i18n="ds.q2.p"></span></a><a class="qcard" href="/compare"><span class="qico" data-icon="scale"></span><b data-i18n="nav.compare"></b><span data-i18n="ds.q3.p"></span></a><a class="qcard" href="/contact"><span class="qico" data-icon="phone"></span><b data-i18n="nav.talk"></b><span data-i18n="ds.q4.p"></span></a><a class="qcard" href="/profile"><span class="qico" data-icon="user"></span><b data-i18n="nav.profile"></b><span data-i18n="ds.q5.p"></span></a><a class="qcard" href="/claims"><span class="qico" data-icon="file"></span><b data-i18n="nav.claims"></b><span data-i18n="ds.q6.p"></span></a></div>
+ <div class="card tipcard"><h3 data-i18n="ds.tip.h"></h3><p data-i18n="ds.tip.p"></p></div></div>
 <div id="main" style="display:none"><div class="kpi">
  <div class="card"><span data-i18n="dash.policy"></span><b id="k_pol" style="font-size:1.1rem"></b></div><div class="card"><span data-i18n="dash.premium"></span><b id="k_prem"></b></div>
  <div class="card"><span data-i18n="dash.rating"></span><b id="k_score"></b></div><div class="card"><span data-i18n="dash.projected"></span><b id="k_proj"></b></div></div>
+<div class="quick quick4"><a class="qcard" href="/profile"><span class="qico" data-icon="user"></span><b data-i18n="nav.profile"></b><span data-i18n="ds.q5.p"></span></a><a class="qcard" href="/claims"><span class="qico" data-icon="file"></span><b data-i18n="nav.claims"></b><span data-i18n="ds.q6.p"></span></a><a class="qcard" href="/calculator"><span class="qico" data-icon="calc"></span><b data-i18n="nav.calc"></b><span data-i18n="ds.q2.p"></span></a><a class="qcard" href="/contact"><span class="qico" data-icon="phone"></span><b data-i18n="nav.talk"></b><span data-i18n="ds.q4.p"></span></a></div>
 <div class="card" style="margin-bottom:20px"><h3 data-i18n="dash.pipe.h"></h3><div class="pipe" id="pipe"></div></div>
 <div class="dgrid"><div>
  <div class="card"><h3 data-i18n="dash.devices"></h3><div id="devs"></div><div class="devrow" id="devrow" style="margin-top:10px"></div><div class="msg" id="sm"></div></div>
@@ -34,7 +41,7 @@ function devs(){const have=(D.connections||[]).map(c=>c.provider);
  document.getElementById('devrow').innerHTML=Object.entries(PC.providers).filter(([k])=>!have.includes(k)).map(([k,n])=>'<button class="devbtn" data-c="'+k+'">'+n+'<small>'+PC.t('dash.connect')+'</small></button>').join('');
  document.querySelectorAll('[data-c]').forEach(b=>b.onclick=async()=>{try{await PC.connect(b.dataset.c);load()}catch(e){if(e.message!=='cancel')PC.msg(sm,e.message)}});
  document.querySelectorAll('[data-x]').forEach(b=>b.onclick=async()=>{await PC.api('/disconnect',{provider:b.dataset.x});load()})}
-function paint(){if(!D)return;const p=D.policy;who.textContent=D.user.name.split(' ')[0];if(!p){nop.style.display='';main.style.display='none';return}
+function paint(){if(!D)return;const p=D.policy;who.textContent=D.user.name.split(' ')[0];if(!p){nop.style.display='';main.style.display='none';st2.classList.toggle('done',(D.connections||[]).length>0);st2.firstChild.innerHTML=(D.connections||[]).length?'&#10003;':'2';document.querySelectorAll('.qico[data-icon]').forEach(e=>{if(!e.innerHTML)e.innerHTML=PC.icon(e.dataset.icon)});return}
  nop.style.display='none';main.style.display='';k_pol.textContent=PC.planName(p.plan||'A')+' \u00b7 '+p.number;k_prem.textContent='RM '+PC.fmt(p.premium)+PC.t('common.year');
  k_score.innerHTML=D.score30==null?'-':'<span class="gr '+gc(D.grade)+'">'+D.grade+'</span> '+D.score30+'/100';
  k_proj.textContent='RM '+PC.fmt(D.projected.annualPremium)+' ('+(D.projected.adjustmentPct>0?'+':'')+D.projected.adjustmentPct+'%)';
@@ -49,4 +56,5 @@ PC.ready.then(load);window.addEventListener('pc:lang',paint);
 sync.onclick=async()=>{try{await PC.api('/sync',{});PC.msg(sm,PC.t('dash.synced'),true);load()}catch(e){PC.msg(sm,e.message)}};
 pbtn.onclick=async()=>{try{await PC.api('/pause',{days:+pdays.value,reason:preason.value});PC.msg(pm,PC.t('dash.synced'),true);load()}catch(e){PC.msg(pm,e.message)}};
 copy.onclick=()=>{const u=location.origin+'/account?ref='+D.user.refcode;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).catch(()=>{}).finally(()=>{copy.textContent=PC.t('dash.ref.copied');setTimeout(()=>copy.textContent=PC.t('dash.ref.copy'),1500)})};
-lo.onclick=e=>{e.preventDefault();PC.logout()};</script></body></html>
+lo.onclick=e=>{e.preventDefault();PC.logout()};
+PC.ready.then(()=>document.querySelectorAll('.qico[data-icon]').forEach(e=>{e.innerHTML=PC.icon(e.dataset.icon)}));</script></body></html>

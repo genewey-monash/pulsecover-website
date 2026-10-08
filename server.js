@@ -66,19 +66,22 @@ function readBody(req) {
     req.on('end', () => { if (!chunks.length) return resolve({}); try { resolve(JSON.parse(Buffer.concat(chunks).toString())); } catch { reject(new HttpError(400, 'Invalid JSON')); } });
   });
 }
+const ipOf = (req) => String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
 function cookies(req) { return Object.fromEntries((req.headers.cookie || '').split(';').map((c) => c.trim().split('=')).filter((x) => x[0])); }
 function userFrom(req) {
   const tok = cookies(req).pc_session; if (!tok) return null;
   const s = db.prepare('SELECT * FROM sessions WHERE token=? AND expires>?').get(tok, Date.now());
   return s ? db.prepare('SELECT * FROM users WHERE id=?').get(s.user_id) : null;
 }
+const IDLE_MS = 30 * 60 * 1000; // logged out after 30 minutes without activity; renewed on every API call
+const sessionCookie = (token) => `pc_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${IDLE_MS / 1000}${process.env.RENDER ? '; Secure' : ''}`;
 const needUser = (req) => userFrom(req) || bad('Please log in first.', 401);
 const publicUser = (u) => ({ id: u.id, name: u.name, email: u.email, dob: u.dob, lang: u.lang, refcode: u.refcode, phone: u.phone || '', address: u.address || '' });
 
 function startSession(res, userId) {
   const token = crypto.randomBytes(32).toString('hex');
-  db.prepare('INSERT INTO sessions VALUES(?,?,?)').run(token, userId, Date.now() + 7 * 864e5);
-  res.setHeader('Set-Cookie', `pc_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${7 * 86400}`);
+  db.prepare('INSERT INTO sessions VALUES(?,?,?)').run(token, userId, Date.now() + IDLE_MS);
+  res.setHeader('Set-Cookie', sessionCookie(token));
 }
 
 function metricsOf(m) {
@@ -96,7 +99,7 @@ const routes = {};
 const route = (method, p, fn) => { routes[`${method} ${p}`] = fn; };
 
 route('POST', '/api/register', (req, res, b) => {
-  limit('auth:' + req.socket.remoteAddress, 10, 600000);
+  limit('auth:' + ipOf(req), 10, 600000);
   const name = str(b.name, 100), email = str(b.email, 254).toLowerCase(), pw = typeof b.password === 'string' ? b.password : '';
   if (name.length < 2) bad('Please enter your full name.');
   if (!emailOk(email)) bad('Invalid email address.');
@@ -116,11 +119,12 @@ route('POST', '/api/register', (req, res, b) => {
 });
 
 route('POST', '/api/login', (req, res, b) => {
-  limit('auth:' + req.socket.remoteAddress, 10, 600000);
+  limit('auth:' + ipOf(req), 10, 600000);
   const loginEmail = str(b.email, 254).toLowerCase();
   if (!emailOk(loginEmail)) bad('Invalid email address.');
   const u = db.prepare('SELECT * FROM users WHERE email=?').get(loginEmail);
-  if (!u || !crypto.timingSafeEqual(Buffer.from(hash(String(b.password || ''), u.salt)), Buffer.from(u.pass))) bad('Incorrect email or password.', 401);
+  if (!u) bad('No account found with this email. Please register first.', 401);
+  if (!crypto.timingSafeEqual(Buffer.from(hash(String(b.password || ''), u.salt)), Buffer.from(u.pass))) bad('Incorrect email or password.', 401);
   startSession(res, u.id);
   return publicUser(u);
 });
@@ -144,7 +148,7 @@ route('POST', '/api/profile', (req, res, b) => {
 });
 
 route('POST', '/api/password', (req, res, b) => {
-  limit('auth:' + req.socket.remoteAddress, 10, 600000);
+  limit('auth:' + ipOf(req), 10, 600000);
   const u = needUser(req);
   const cur = String(b.current || ''), pw = typeof b.password === 'string' ? b.password : '';
   if (!crypto.timingSafeEqual(Buffer.from(hash(cur, u.salt)), Buffer.from(u.pass))) bad('Incorrect email or password.', 401);
@@ -355,7 +359,7 @@ route('POST', '/api/sme/enquiry', (req, res, b) => {
 });
 
 route('POST', '/api/contact', (req, res, b) => {
-  limit('contact:' + req.socket.remoteAddress, 5, 600000);
+  limit('contact:' + ipOf(req), 5, 600000);
   const name = str(b.name, 100), email = str(b.email, 254), msg = str(b.message, 2000);
   if (name.length < 2) bad('Please enter your name.');
   if (!emailOk(email)) bad('Invalid email address.');
@@ -367,7 +371,7 @@ route('POST', '/api/contact', (req, res, b) => {
 
 const STATES = ['Johor','Kedah','Kelantan','Kuala Lumpur','Labuan','Melaka','Negeri Sembilan','Pahang','Perak','Perlis','Pulau Pinang','Putrajaya','Sabah','Sarawak','Selangor','Terengganu'];
 route('POST', '/api/callback', (req, res, b) => {
-  limit('cb:' + req.socket.remoteAddress, 5, 600000);
+  limit('cb:' + ipOf(req), 5, 600000);
   const name = str(b.name, 100), phone = str(b.phone, 30).replace(/[^\d+ -]/g, ''), email = str(b.email, 254);
   if (name.length < 2) bad('Please enter your name.');
   if (phone.replace(/\D/g, '').length < 8) bad('Please enter a valid phone number.');
@@ -381,7 +385,7 @@ route('POST', '/api/callback', (req, res, b) => {
 });
 
 route('POST', '/api/feedback', (req, res, b) => {
-  limit('fb:' + req.socket.remoteAddress, 8, 600000);
+  limit('fb:' + ipOf(req), 8, 600000);
   const rating = P.clamp(Math.round(P.num(b.rating, 0)), 1, 5);
   db.prepare('INSERT INTO feedback(rating,purpose,comment,page,created) VALUES(?,?,?,?,?)').run(rating, str(b.purpose, 60), str(b.comment, 1000), str(b.page, 100), now());
   notify('feedback', { rating, purpose: str(b.purpose, 60), comment: str(b.comment, 1000), page: str(b.page, 100), created: now() });
@@ -389,7 +393,7 @@ route('POST', '/api/feedback', (req, res, b) => {
 });
 
 route('POST', '/api/email-quote', (req, res, b) => {
-  limit('eq:' + req.socket.remoteAddress, 6, 600000);
+  limit('eq:' + ipOf(req), 6, 600000);
   const u = userFrom(req);
   const email = str(b.email, 254).toLowerCase(); if (!emailOk(email)) bad('Invalid email address.');
   const plan = P.planOf(b.plan);
@@ -441,11 +445,13 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   if (url.pathname.startsWith('/api/')) {
     try {
-      limit('api:' + req.socket.remoteAddress, 120, 60000);
+      limit('api:' + ipOf(req), 120, 60000);
       const fn = routes[`${req.method} ${url.pathname}`];
       if (!fn) bad('Not found', 404);
       const body = req.method === 'POST' ? await readBody(req) : {};
+      const tok = cookies(req).pc_session, who = tok ? userFrom(req) : null;
       const out = fn(req, res, body);
+      if (who && !res.getHeader('Set-Cookie')) { db.prepare('UPDATE sessions SET expires=? WHERE token=?').run(Date.now() + IDLE_MS, tok); res.setHeader('Set-Cookie', sessionCookie(tok)); }
       res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...SEC, ...(res.getHeader('Set-Cookie') ? { 'Set-Cookie': res.getHeader('Set-Cookie') } : {}) });
       res.end(JSON.stringify(out));
     } catch (e) {

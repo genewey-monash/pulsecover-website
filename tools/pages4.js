@@ -35,8 +35,8 @@ rp.oninput=()=>{const s=strength(rp.value),m=document.getElementById('rmeter');m
 rp.onblur=()=>rp.value&&bad('rp',rp.value.length>=8?null:'acc.err.pwlen');
 rp2.oninput=()=>bad('rp2',rp.value===rp2.value?null:'acc.err.match');
 re.onblur=()=>re.value&&bad('re',EMAIL.test(re.value.trim())?null:'acc.err.email');le.onblur=()=>le.value&&bad('le',EMAIL.test(le.value.trim())?null:'acc.err.email');
-PC.ready.then(()=>{if(PC.user)location.href=next});
-function srv(m){m=m||'';if(/already exists/i.test(m))return PC.t('acc.err.exists');if(/incorrect/i.test(m))return PC.t('acc.err.login');if(/invalid email/i.test(m))return PC.t('acc.err.email');if(/do not match/i.test(m))return PC.t('acc.err.match');if(/at least 16/i.test(m))return PC.t('acc.err.dob');return m}
+PC.ready.then(()=>{if(PC.user)location.href=next;if(q.get('expired')){const m=document.getElementById('lm');PC.msg(m,PC.t('idle.out'));window.addEventListener('pc:lang',()=>PC.msg(m,PC.t('idle.out')))}});
+function srv(m){m=m||'';if(/no account found/i.test(m))return PC.t('acc.err.noacct');if(/already exists/i.test(m))return PC.t('acc.err.exists');if(/incorrect/i.test(m))return PC.t('acc.err.login');if(/invalid email/i.test(m))return PC.t('acc.err.email');if(/do not match/i.test(m))return PC.t('acc.err.match');if(/at least 16/i.test(m))return PC.t('acc.err.dob');return m}
 document.getElementById('lf').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('lm');m.className='msg';
  const ok=bad('le',EMAIL.test(le.value.trim())?null:'acc.err.email')&bad('lp',lp.value?null:'acc.err.pwlen');if(!ok){const f=document.querySelector('#lf .fld-err');if(f)f.focus();const h=document.querySelector('#lf .fhelp.on');if(h)PC.msg(m,h.textContent);return}
  try{await PC.api('/login',{email:le.value.trim(),password:lp.value});location.href=next}catch(x){PC.msg(m,srv(x.message))}};

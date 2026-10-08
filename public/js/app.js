@@ -384,9 +384,29 @@
   PC.ready = (async function () {
     chrome();
     try { PC.user = (await PC.api('/me')).user; } catch (e) {}
+    idleGuard();
     if (PC.user && store.get('pc_lang') === null && idx[PC.user.lang] !== undefined) lang = PC.user.lang;
     PC.apply();
   })();
+  /* auto log out after 30 minutes of inactivity (warns at 28) */
+  function idleGuard() {
+    if (!PC.user || PC.idleOn) return; PC.idleOn = true;
+    const LIMIT = 30 * 60e3, WARN = 28 * 60e3; let last = Date.now(), pinged = Date.now(), box = null;
+    const bump = () => { if (box) return; last = Date.now(); if (Date.now() - pinged > 4 * 60e3) { pinged = Date.now(); PC.api('/me').catch(() => {}); } };
+    ['mousemove', 'keydown', 'scroll', 'touchstart', 'click'].forEach((ev) => window.addEventListener(ev, bump, { passive: true }));
+    const out = async () => { try { await PC.api('/logout', {}); } catch (e) {} location.href = '/account?expired=1'; };
+    setInterval(() => {
+      const idle = Date.now() - last;
+      if (idle >= LIMIT) return out();
+      if (idle >= WARN && !box) {
+        box = document.createElement('div'); box.className = 'modal open'; box.id = 'idlebox';
+        box.innerHTML = `<div class="mbox" style="max-width:420px;text-align:center"><h3 data-i18n="idle.title"></h3><p style="color:var(--mute)" data-i18n="idle.p"></p><div class="cta" style="justify-content:center"><button class="btn" id="idlestay" data-i18n="idle.stay"></button><button class="btn ghost" id="idleout" data-i18n="nav.logout"></button></div></div>`;
+        document.body.append(box); PC.apply(box);
+        document.getElementById('idlestay').onclick = () => { box.remove(); box = null; last = Date.now(); pinged = Date.now(); PC.api('/me').catch(() => {}); };
+        document.getElementById('idleout').onclick = out;
+      }
+    }, 15000);
+  }
   PC.logout = async () => { await PC.api('/logout', {}); location.href = '/'; };
   window.PC = PC;
 })();

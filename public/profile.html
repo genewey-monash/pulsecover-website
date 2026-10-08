@@ -16,7 +16,7 @@
   <div class="msg" id="pm1"></div><button class="btn" style="margin-top:20px" data-i18n="pf.save"></button></form></div>
  <div>
   <div class="card" id="plcard"><h3 data-i18n="pf.plan.h"></h3>
-   <div id="nopol" style="display:none"><p data-i18n="pf.plan.none"></p><a class="btn" href="/apply" data-i18n="nav.apply"></a></div>
+   <div id="nopol" class="emptyrow" style="display:none"><p data-i18n="pf.plan.none"></p><a class="btn" href="/apply" data-i18n="nav.apply"></a></div>
    <div id="haspol" style="display:none">
     <dl class="kv"><div><dt data-i18n="pf.policyno"></dt><dd id="v_no"></dd></div><div><dt data-i18n="pf.cover"></dt><dd id="v_cov"></dd></div><div><dt data-i18n="pf.prem"></dt><dd id="v_prem"></dd></div><div><dt data-i18n="pf.renew"></dt><dd id="v_ren"></dd></div></dl>
     <h4 style="margin:22px 0 12px" data-i18n="pf.choose"></h4><div class="plansel" id="psel"></div>
@@ -26,6 +26,7 @@
   <div class="card" style="margin-top:24px"><h3 data-i18n="pf.pw.h"></h3><form id="pwf" novalidate>
    <label data-i18n="pf.pw.cur" for="w_c"></label><div class="pwwrap"><input type="password" id="w_c" autocomplete="current-password"><button type="button" class="pwtog" data-for="w_c" data-i18n="acc.show"></button></div><p class="fhelp" id="w_c_e"></p><label data-i18n="pf.pw.new" for="w_n"></label><div class="pwwrap"><input type="password" id="w_n" autocomplete="new-password"><button type="button" class="pwtog" data-for="w_n" data-i18n="acc.show"></button></div><p class="fhelp" id="w_n_e"></p><label data-i18n="field.password2" for="w_n2"></label><div class="pwwrap"><input type="password" id="w_n2" autocomplete="new-password"><button type="button" class="pwtog" data-for="w_n2" data-i18n="acc.show"></button></div><p class="fhelp" id="w_n2_e"></p>
    <div class="msg" id="pm3"></div><button class="btn" style="margin-top:20px" data-i18n="pf.pw.btn"></button></form></div>
+  <div class="card" style="margin-top:24px"><h3 data-i18n="pf.session.h"></h3><p class="sesmail"><span data-i18n="pf.session"></span> <b id="ses_em"></b></p><p class="fnote" data-i18n="pf.idle"></p><button class="btn ghost" id="pf_out" style="margin-top:18px" data-i18n="nav.logout"></button></div>
  </div></div></div></section></main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/i18n5.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script><script>
 let U,POL,PREV=[],plan='A';
 function bad(id,key){const i=document.getElementById(id),h=document.getElementById(id+'_e');if(key){i.classList.add('fld-err');h.textContent=PC.t(key);h.classList.add('on')}else{i.classList.remove('fld-err');h.classList.remove('on')}return !key}
@@ -33,7 +34,8 @@ const age=d=>{const t=new Date(),b=new Date(d);if(isNaN(b))return -1;let a=t.get
 document.querySelectorAll('.pwtog').forEach(b=>b.onclick=()=>{const i=document.getElementById(b.dataset.for);const s=i.type==='password';i.type=s?'text':'password';b.textContent=PC.t(s?'acc.hide':'acc.show')});
 window.addEventListener('pc:lang',()=>{document.querySelectorAll('.pwtog').forEach(b=>b.textContent=PC.t(document.getElementById(b.dataset.for).type==='password'?'acc.show':'acc.hide'));drawPlans();drawPolicy()});
 p_d.max=new Date().toISOString().slice(0,10);
-function fillUser(){p_n.value=U.name;p_e.value=U.email;p_p.value=U.phone||'';p_d.value=U.dob||'';p_a.value=U.address||'';p_l.value=U.lang||'en'}
+pf_out.onclick=()=>PC.logout();
+function fillUser(){ses_em.textContent=U.email;p_n.value=U.name;p_e.value=U.email;p_p.value=U.phone||'';p_d.value=U.dob||'';p_a.value=U.address||'';p_l.value=U.lang||'en'}
 function drawPolicy(){if(!U)return;const has=!!POL;nopol.style.display=has?'none':'';haspol.style.display=has?'':'none';if(!has)return;
  v_no.textContent=POL.number;v_cov.textContent='RM '+PC.fmt(POL.cover,0);v_prem.textContent='RM '+PC.fmt(POL.premium)+PC.t('common.year');v_ren.textContent=POL.renewal_date;if(document.activeElement!==p_b)p_b.value=POL.beneficiary||''}
 function drawPlans(){if(!POL||!PREV.length)return;psel.innerHTML=PREV.map(p=>'<button type="button" class="pchoice '+(p.id===plan?'sel':'')+'" data-p="'+p.id+'" aria-pressed="'+(p.id===plan)+'"><b>'+PC.planName(p.id)+'</b><span>RM '+PC.fmt(p.premium,0)+PC.t('common.year')+'</span><small>'+PC.t('pf.cover')+' RM '+PC.fmt(p.cover,0)+'</small>'+(p.id===POL.plan?'<em>'+PC.t('pf.current')+'</em>':'')+'</button>').join('');

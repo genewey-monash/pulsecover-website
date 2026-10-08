@@ -22,7 +22,7 @@
   const SEL = [
     'nav.main > a', 'nav.main > button.nv > span', '.mega h4', '.mi > span', '.mlinks a > span:first-child',
     '.btn', 'button.tab', '.subnav a', '.subnav strong', 'footer.foot h4', 'footer.foot .fgrid a', '.crumb a', '.crumb b',
-    'th', '.steps span', '.pipe span', '.devbtn', '.devbtn small', '.chip', '.si.pop', '.promo a', '.promo b', '.promo strong', '.fpill .t', '.fbtab', '.stat > span', '.navacct a', '.navacct button', '.amenu span[data-i18n]'
+    'th', '.steps span', '.pipe span', '.devbtn', '.devbtn small', '.chip', '.si.pop', '.promo a', '.promo b', '.promo strong', '.fpill .t', '.fbtab', '.stat > span', '.qcard b', '.navacct a', '.navacct button', '.amenu span[data-i18n]'
   ].join(',');
   const HEAD = 'h1,h2,h3,h4,summary,.sech,.card > b,.cardh';
   const SKIP = '.price,.langs,.lsw,[data-notc],.badge-app,.soc';
