@@ -215,6 +215,8 @@ route('POST', '/api/policy/preview', (req, res, b) => {
   return Object.values(P.PLANS).map((pl) => ({ id: pl.id, cover: pl.cover, base: pl.base, premium: P.quote(mm, { appSubscription: !!(pol && pol.app_sub), plan: pl.id }).annualPremium }));
 });
 
+route('GET', '/api/health', () => ({ ok: true, uptimeSeconds: Math.round(process.uptime()), accounts: db.prepare('SELECT COUNT(*) c FROM users').get().c, backupEnabled: !!HOOK, restored: restoreOk }));
+
 route('GET', '/api/me', (req) => { const u = userFrom(req); return { user: u ? publicUser(u) : null }; });
 
 route('POST', '/api/lang', (req, res, b) => {
