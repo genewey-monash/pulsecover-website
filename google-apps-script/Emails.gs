@@ -83,3 +83,27 @@ function buildEmail2(a, d, ref) {
   const html = layout(title, inner, lang);
   return { subject: subject, html: html, text: strip(html) };
 }
+
+/**
+ * Account data backup. The PulseCover server saves its accounts here (hidden tab "_Backup", one previous copy in "_Backup_prev")
+ * and reads them back when Render restarts, because Render's free disk is wiped on every restart.
+ * Chunks start with the letter J so Sheets never treats them as a formula or a number.
+ */
+function handleBackup(a, d) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName('_Backup') || ss.insertSheet('_Backup');
+  if (a === 'restore') {
+    const n = sh.getLastRow();
+    const vals = n ? sh.getRange(1, 1, n, 1).getValues().map(function (r) { return r[0]; }).filter(function (x) { return x !== ''; }) : [];
+    return { ok: true, chunks: vals };
+  }
+  const prev = ss.getSheetByName('_Backup_prev') || ss.insertSheet('_Backup_prev');
+  const last = sh.getLastRow();
+  prev.clearContents();
+  if (last) prev.getRange(1, 1, last, 1).setValues(sh.getRange(1, 1, last, 1).getValues());
+  sh.clearContents();
+  const ch = (d && d.chunks) || [];
+  if (ch.length) sh.getRange(1, 1, ch.length, 1).setValues(ch.map(function (c) { return [String(c)]; }));
+  [sh, prev].forEach(function (x) { try { x.hideSheet(); } catch (e) { /* needs at least one visible sheet */ } });
+  return { ok: true, chunks: ch.length };
+}

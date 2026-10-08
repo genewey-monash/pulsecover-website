@@ -30,6 +30,7 @@ function doPost(e) {
     const body = JSON.parse(e.postData.contents);
     if (body.secret !== SECRET) return json({ ok: false, error: 'unauthorized' });
     const a = String(body.action || ''), d = body.data || {};
+    if (a === 'backup' || a === 'restore') return json(handleBackup(a, d));  // handleBackup lives in Emails.gs
     if (!SHEETS[a]) return json({ ok: false, error: 'unknown action' });
     const ref = (a === 'contact') ? 'CT-' + Utilities.formatDate(new Date(), 'Asia/Kuala_Lumpur', 'yyMMddHHmmss') : '';
     appendRow(a, d, ref);

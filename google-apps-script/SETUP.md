@@ -38,3 +38,6 @@ Passwords are never sent to the Sheet. They stay hashed in the website's own dat
 
 ## Two files
 The script has two files: `Code.gs` (Sheet logging, register and contact emails) and `Emails.gs` (call back, business, quote, application, claim and waitlist emails in English, Chinese, Malay and Tamil). Add both to the same Apps Script project, then deploy a new version (Deploy > Manage deployments > edit > New version).
+
+## Account backup
+Render's free disk is wiped whenever the site sleeps or redeploys, so the website saves its accounts to a hidden `_Backup` tab in this Sheet (one older copy in `_Backup_prev`) and reloads them at start-up. The tab holds account details and scrambled password hashes. Do not share the Sheet widely, and do not delete those tabs.

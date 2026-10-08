@@ -46,6 +46,37 @@ function notify(action, data) {
   fetch(HOOK, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ secret: HOOK_SECRET, action, data }), redirect: 'follow', signal: AbortSignal.timeout(25000) })
     .then((r) => r.text()).then((t) => console.log('[sheet-webhook]', action, t.slice(0, 120))).catch((e) => console.error('[sheet-webhook failed]', action, e.message));
 }
+// ---- persistence ----
+// Render's free disk is wiped whenever the server sleeps or redeploys. Account data is therefore mirrored to the owner's private
+// Google Sheet (hidden tab "_Backup") a few seconds after every change, and restored at start-up before the site accepts traffic.
+const BACKUP_TABLES = ['users', 'policies', 'metrics', 'claims', 'claim_events', 'connections'];
+let backupTimer = null, restoreOk = !HOOK; // never back up while a restore is still pending, or an empty database could overwrite the saved copy
+const callHook = (action, data, ms = 30000) => fetch(HOOK, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ secret: HOOK_SECRET, action, data }), redirect: 'follow', signal: AbortSignal.timeout(ms) }).then((r) => r.json());
+function scheduleBackup() { if (!HOOK || !restoreOk) return; clearTimeout(backupTimer); backupTimer = setTimeout(doBackup, 4000); }
+async function doBackup() {
+  const snap = {}; for (const t of BACKUP_TABLES) snap[t] = db.prepare(`SELECT * FROM ${t}`).all();
+  const j = JSON.stringify(snap), chunks = []; for (let i = 0; i < j.length; i += 40000) chunks.push('J' + j.slice(i, i + 40000));
+  try { const r = await callHook('backup', { chunks, users: snap.users.length }); if (!r.ok) throw new Error(JSON.stringify(r).slice(0, 100)); console.log('[backup] ok, users:', snap.users.length); }
+  catch (e) { console.error('[backup failed]', e.message); backupTimer = setTimeout(doBackup, 30000); }
+}
+async function restoreFromSheet() {
+  if (!HOOK) return true;
+  try {
+    const r = await callHook('restore', {}, 25000); if (!r.ok) throw new Error('restore refused');
+    if (!r.chunks || !r.chunks.length) { console.log('[restore] nothing saved yet'); return true; }
+    const snap = JSON.parse(r.chunks.map((c) => String(c).slice(1)).join('')); let n = 0;
+    db.exec('BEGIN');
+    for (const t of BACKUP_TABLES) for (const row of snap[t] || []) { const cols = Object.keys(row); db.prepare(`INSERT OR IGNORE INTO ${t}(${cols.join(',')}) VALUES(${cols.map(() => '?').join(',')})`).run(...cols.map((c) => row[c])); if (t === 'users') n++; }
+    db.exec('COMMIT'); console.log('[restore] users restored:', n); return true;
+  } catch (e) { try { db.exec('ROLLBACK'); } catch { /* no open transaction */ } console.error('[restore failed]', e.message); return false; }
+}
+async function startRestore() {
+  for (let i = 0; i < 4 && !restoreOk; i++) { restoreOk = await restoreFromSheet(); if (!restoreOk) await new Promise((r) => setTimeout(r, 3000)); }
+  if (!restoreOk) { // keep trying in the background; backups stay paused until it works
+    const iv = setInterval(async () => { if (await restoreFromSheet()) { restoreOk = true; clearInterval(iv); scheduleBackup(); } }, 20000);
+  }
+}
+
 const str = (v, max = 500) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 
 class HttpError extends Error { constructor(code, msg) { super(msg); this.code = code; } }
@@ -451,6 +482,7 @@ const server = http.createServer(async (req, res) => {
       const body = req.method === 'POST' ? await readBody(req) : {};
       const tok = cookies(req).pc_session, who = tok ? userFrom(req) : null;
       const out = fn(req, res, body);
+      if (req.method === 'POST' && /^\/api\/(register|profile|password|policy|apply|connect|disconnect|my-quote|sync|pause|claims)$/.test(url.pathname)) scheduleBackup();
       if (who && !res.getHeader('Set-Cookie')) { db.prepare('UPDATE sessions SET expires=? WHERE token=?').run(Date.now() + IDLE_MS, tok); res.setHeader('Set-Cookie', sessionCookie(tok)); }
       res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...SEC, ...(res.getHeader('Set-Cookie') ? { 'Set-Cookie': res.getHeader('Set-Cookie') } : {}) });
       res.end(JSON.stringify(out));
@@ -466,4 +498,4 @@ const server = http.createServer(async (req, res) => {
   serveStatic(req, res, url.pathname);
 });
 
-server.listen(PORT, () => console.log(`PulseCover running at http://localhost:${PORT}`));
+startRestore().finally(() => server.listen(PORT, () => console.log(`PulseCover running at http://localhost:${PORT}`)));
