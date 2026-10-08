@@ -33,7 +33,7 @@ function doPost(e) {
     if (!SHEETS[a]) return json({ ok: false, error: 'unknown action' });
     const ref = (a === 'contact') ? 'CT-' + Utilities.formatDate(new Date(), 'Asia/Kuala_Lumpur', 'yyMMddHHmmss') : '';
     appendRow(a, d, ref);
-    const mail = buildEmail(a, d, ref);
+    const mail = buildEmail2(a, d, ref);  // buildEmail2 lives in Emails.gs
     if (mail && validEmail(d.email)) {
       MailApp.sendEmail({ to: d.email, subject: mail.subject, htmlBody: mail.html, body: mail.text, name: BRAND_NAME, noReply: true });
     }

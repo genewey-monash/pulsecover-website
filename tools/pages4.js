@@ -31,18 +31,19 @@ document.getElementById('rd').max=new Date().toISOString().slice(0,10);
 document.querySelectorAll('.pwtog').forEach(b=>b.onclick=()=>{const i=document.getElementById(b.dataset.for);const s=i.type==='password';i.type=s?'text':'password';b.textContent=PC.t(s?'acc.hide':'acc.show')});
 window.addEventListener('pc:lang',()=>document.querySelectorAll('.pwtog').forEach(b=>b.textContent=PC.t(document.getElementById(b.dataset.for).type==='password'?'acc.show':'acc.hide')));
 function strength(v){let s=0;if(v.length>=8)s++;if(/[A-Z]/.test(v)&&/[a-z]/.test(v))s++;if(/\\d/.test(v))s++;if(/[^A-Za-z0-9]/.test(v)||v.length>=14)s++;return v.length<8?0:Math.max(1,s)}
-rp.oninput=()=>{const s=strength(rp.value),m=document.getElementById('rmeter');m.style.width=(rp.value?[12,30,55,80,100][s]:0)+'%';m.style.background=['#c92a2a','#e8590c','#d99a06','#2b9348','#1c7a3c'][s];document.getElementById('rstrength').textContent=rp.value?PC.t('acc.pw.'+s):'';if(rp2.value)bad('rp2',rp.value===rp2.value?null:'acc.err.match')};
+rp.oninput=()=>{const s=strength(rp.value),m=document.getElementById('rmeter');m.style.width=(rp.value?[12,30,55,80,100][s]:0)+'%';m.style.background=['#c92a2a','#e8590c','#d99a06','#2b9348','#1c7a3c'][s];document.getElementById('rstrength').textContent=rp.value?PC.t('acc.pw.'+s):'';document.getElementById('rstrength').style.color=['#C92A2A','#C2410C','#9A6B00','#2B9348','#1C7A3C'][s];if(rp.value.length>=8&&document.getElementById('rp_e').classList.contains('on'))bad('rp',null);if(rp2.value)bad('rp2',rp.value===rp2.value?null:'acc.err.match')};
+rp.onblur=()=>rp.value&&bad('rp',rp.value.length>=8?null:'acc.err.pwlen');
 rp2.oninput=()=>bad('rp2',rp.value===rp2.value?null:'acc.err.match');
 re.onblur=()=>re.value&&bad('re',EMAIL.test(re.value.trim())?null:'acc.err.email');le.onblur=()=>le.value&&bad('le',EMAIL.test(le.value.trim())?null:'acc.err.email');
 PC.ready.then(()=>{if(PC.user)location.href=next});
 function srv(m){m=m||'';if(/already exists/i.test(m))return PC.t('acc.err.exists');if(/incorrect/i.test(m))return PC.t('acc.err.login');if(/invalid email/i.test(m))return PC.t('acc.err.email');if(/do not match/i.test(m))return PC.t('acc.err.match');if(/at least 16/i.test(m))return PC.t('acc.err.dob');return m}
 document.getElementById('lf').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('lm');m.className='msg';
- const ok=bad('le',EMAIL.test(le.value.trim())?null:'acc.err.email')&bad('lp',lp.value?null:'acc.err.pwlen');if(!ok)return;
+ const ok=bad('le',EMAIL.test(le.value.trim())?null:'acc.err.email')&bad('lp',lp.value?null:'acc.err.pwlen');if(!ok){const f=document.querySelector('#lf .fld-err');if(f)f.focus();const h=document.querySelector('#lf .fhelp.on');if(h)PC.msg(m,h.textContent);return}
  try{await PC.api('/login',{email:le.value.trim(),password:lp.value});location.href=next}catch(x){PC.msg(m,srv(x.message))}};
 document.getElementById('rf').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('rm');m.className='msg';
  const age=(d=>{const t=new Date(),b=new Date(d);let a=t.getFullYear()-b.getFullYear();const md=t.getMonth()-b.getMonth();if(md<0||(md===0&&t.getDate()<b.getDate()))a--;return a})(rd.value);
  const ok=[bad('rn',rn.value.trim().length>=2?null:'acc.err.name'),bad('re',EMAIL.test(re.value.trim())?null:'acc.err.email'),bad('rd',rd.value&&age>=16?null:'acc.err.dob'),bad('rp',rp.value.length>=8?null:'acc.err.pwlen'),bad('rp2',rp.value===rp2.value?null:'acc.err.match')].every(Boolean);
- if(!ok){if(rp.value!==rp2.value){rp2.value='';rp2.focus()}return}
+ if(!ok){if(rp.value!==rp2.value)rp2.value='';const f=document.querySelector('#rf .fld-err');if(f){f.scrollIntoView({block:'center',behavior:'smooth'});f.focus({preventScroll:true})}const h=document.querySelector('#rf .fhelp.on');if(h)PC.msg(m,h.textContent);return}
  const b=e.target.querySelector('button.btn');b.disabled=true;
  try{await PC.api('/register',{name:rn.value.trim(),email:re.value.trim(),dob:rd.value,password:rp.value,password2:rp2.value,referral:rr.value,lang:PC.lang});
   document.getElementById('regbox').style.display='none';document.getElementById('okbox').style.display='';document.getElementById('okmail').textContent=PC.t('acc.created.p')+' '+re.value.trim();setTimeout(()=>location.href=next,2600)}

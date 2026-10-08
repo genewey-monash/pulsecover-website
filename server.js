@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS callbacks(id INTEGER PRIMARY KEY, name TEXT, phone TE
 CREATE TABLE IF NOT EXISTS feedback(id INTEGER PRIMARY KEY, rating INTEGER, purpose TEXT, comment TEXT, page TEXT, created TEXT);
 CREATE TABLE IF NOT EXISTS waitlist(id INTEGER PRIMARY KEY, email TEXT UNIQUE, created TEXT);
 `);
+for (const col of ['phone', 'address']) { try { db.exec(`ALTER TABLE users ADD COLUMN ${col} TEXT`); } catch { /* column already exists */ } }
 
 const now = () => new Date().toISOString();
 const today = () => new Date().toISOString().slice(0, 10);
@@ -72,7 +73,7 @@ function userFrom(req) {
   return s ? db.prepare('SELECT * FROM users WHERE id=?').get(s.user_id) : null;
 }
 const needUser = (req) => userFrom(req) || bad('Please log in first.', 401);
-const publicUser = (u) => ({ id: u.id, name: u.name, email: u.email, dob: u.dob, lang: u.lang, refcode: u.refcode });
+const publicUser = (u) => ({ id: u.id, name: u.name, email: u.email, dob: u.dob, lang: u.lang, refcode: u.refcode, phone: u.phone || '', address: u.address || '' });
 
 function startSession(res, userId) {
   const token = crypto.randomBytes(32).toString('hex');
@@ -130,6 +131,55 @@ route('POST', '/api/logout', (req, res) => {
   return { ok: true };
 });
 
+
+route('POST', '/api/profile', (req, res, b) => {
+  const u = needUser(req);
+  const name = str(b.name, 100), phone = str(b.phone, 20), address = str(b.address, 200), dob = typeof b.dob === 'string' ? b.dob : u.dob;
+  const lang = ['en', 'zh', 'ms', 'ta'].includes(b.lang) ? b.lang : u.lang;
+  if (name.length < 2) bad('Please enter your full name.');
+  if (phone && !/^\+?[0-9][0-9 \-]{6,18}$/.test(phone)) bad('Invalid phone number.');
+  if (age(dob) < 16) bad('You must be at least 16 to register. (Guardian consent applies for ages 16-17 when applying.)');
+  db.prepare('UPDATE users SET name=?, phone=?, address=?, dob=?, lang=? WHERE id=?').run(name, phone, address, dob, lang, u.id);
+  return publicUser(db.prepare('SELECT * FROM users WHERE id=?').get(u.id));
+});
+
+route('POST', '/api/password', (req, res, b) => {
+  limit('auth:' + req.socket.remoteAddress, 10, 600000);
+  const u = needUser(req);
+  const cur = String(b.current || ''), pw = typeof b.password === 'string' ? b.password : '';
+  if (!crypto.timingSafeEqual(Buffer.from(hash(cur, u.salt)), Buffer.from(u.pass))) bad('Incorrect email or password.', 401);
+  if (pw.length < 8) bad('Password must be at least 8 characters.');
+  if (b.password2 !== pw) bad('The passwords do not match. Please enter them again.');
+  const salt = rid(16);
+  db.prepare('UPDATE users SET pass=?, salt=? WHERE id=?').run(hash(pw, salt), salt, u.id);
+  const tok = cookies(req).pc_session;
+  db.prepare('DELETE FROM sessions WHERE user_id=? AND token<>?').run(u.id, tok || '');
+  return { ok: true };
+});
+
+route('POST', '/api/policy', (req, res, b) => {
+  const u = needUser(req);
+  const pol = policyOf(u.id); if (!pol) bad('You do not have a policy yet.', 404);
+  let plan = pol.plan, beneficiary = pol.beneficiary, guardian = pol.guardian, appSub = pol.app_sub;
+  if (b.plan !== undefined) { if (!P.PLANS[b.plan]) bad('Choose a plan.'); plan = b.plan; }
+  if (b.beneficiary !== undefined) { beneficiary = str(b.beneficiary, 100); if (beneficiary.length < 2) bad('Please add a beneficiary.'); }
+  if (b.appSubscription !== undefined) appSub = b.appSubscription ? 1 : 0;
+  const hist = userMetrics(u.id, 28);
+  const mm = hist.length >= 7 ? P.averageMetrics(hist) : { steps: 7500, exerciseMin: 100, sleepHours: 7.5, restingHr: 66 };
+  const q = P.quote(mm, { appSubscription: !!appSub, plan });
+  const pl = P.planOf(plan);
+  db.prepare('UPDATE policies SET plan=?, cover=?, base=?, premium=?, app_sub=?, beneficiary=?, guardian=? WHERE id=?').run(plan, pl.cover, q.base, q.annualPremium, appSub, beneficiary, guardian, pol.id);
+  return { policy: policyOf(u.id) };
+});
+
+route('POST', '/api/policy/preview', (req, res, b) => {
+  const u = needUser(req);
+  const pol = policyOf(u.id);
+  const hist = userMetrics(u.id, 28);
+  const mm = hist.length >= 7 ? P.averageMetrics(hist) : { steps: 7500, exerciseMin: 100, sleepHours: 7.5, restingHr: 66 };
+  return Object.values(P.PLANS).map((pl) => ({ id: pl.id, cover: pl.cover, base: pl.base, premium: P.quote(mm, { appSubscription: !!(pol && pol.app_sub), plan: pl.id }).annualPremium }));
+});
+
 route('GET', '/api/me', (req) => { const u = userFrom(req); return { user: u ? publicUser(u) : null }; });
 
 route('POST', '/api/lang', (req, res, b) => {
@@ -166,7 +216,7 @@ route('POST', '/api/apply', (req, res, b) => {
     .run(u.id, plan.id, number, 'active', b.device, cover, q.base, q.annualPremium, b.appSubscription ? 1 : 0, guardian, beneficiary, today(), addDays(today(), 365), now());
   if (!hist28.length) db.prepare('INSERT OR REPLACE INTO metrics(user_id,day,steps,exercise_min,sleep_hours,resting_hr,source) VALUES(?,?,?,?,?,?,?)')
     .run(u.id, today(), metricsOf(b).steps, metricsOf(b).exerciseMin / 7, metricsOf(b).sleepHours, metricsOf(b).restingHr, b.device);
-  notify('application', { name: u.name, email: u.email, number, plan: plan.id, cover, premium: q.annualPremium, grade: q.grade, score: q.score, device: b.device, beneficiary, guardian, lang: u.lang, created: now() });
+  notify('application', { name: u.name, email: u.email, number, plan: plan.id, cover, premium: q.annualPremium, grade: q.grade, score: q.score, device: b.device, beneficiary, guardian, lang: langOf(b.lang || u.lang), created: now() });
   return { number, quote: q };
 });
 
@@ -282,7 +332,7 @@ route('POST', '/api/claims', (req, res, b) => {
   const info = db.prepare('INSERT INTO claims(user_id,policy_id,number,type,amount,description,incident_date,status,created) VALUES(?,?,?,?,?,?,?,?,?)')
     .run(u.id, pol.id, number, type, amount, description, incident, 'received', now());
   db.prepare('INSERT INTO claim_events(claim_id,status,note,created) VALUES(?,?,?,?)').run(info.lastInsertRowid, 'received', 'Claim received', now());
-  notify('claim', { name: u.name, email: u.email, number, type, amount, incident, description, lang: u.lang, created: now() });
+  notify('claim', { name: u.name, email: u.email, number, type, amount, incident, description, lang: langOf(b.lang || u.lang), created: now() });
   return { number };
 });
 

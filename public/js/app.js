@@ -14,11 +14,12 @@
   PC.esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   PC.planName = (id) => PC.t('plan.word') + ' ' + id;
   PC.api = async (path, body) => {
-    const r = await fetch('/api' + path, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const r = await fetch('/api' + path, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ lang }, body)) });
     let j = {}; try { j = await r.json(); } catch (e) {}
     if (!r.ok) { const err = new Error(j.error || PC.t('common.error')); err.status = r.status; throw err; }
     return j;
   };
+  PC.thanks = (kind, info) => { try { sessionStorage.setItem('pc_ty', JSON.stringify(Object.assign({ t: kind }, info))); } catch (e) {} location.href = '/thank-you?t=' + kind; };
   PC.msg = (el, text, ok) => { el.className = 'msg ' + (ok ? 'ok' : 'err'); el.textContent = text; };
 
   /* ---- icons (inline SVG, brand-coloured via currentColor) ---- */
@@ -40,13 +41,13 @@
     help: {
       key: 'nav.help', cols: [
         ['mega.support', [['/contact', 'phone', 'nav.contact'], ['/faq', 'book', 'nav.faq'], ['/claims', 'file', 'nav.claims']]],
-        ['mega.account', [['/account', 'lock', 'nav.login'], ['/dashboard', 'chart', 'nav.dashboard']]],
+        ['mega.account', [['/account', 'lock', 'nav.login'], ['/dashboard', 'chart', 'nav.dashboard'], ['/profile', 'user', 'nav.profile']]],
         ['mega.learn', [['/investors', 'cash', 'nav.investors'], ['/privacy', 'shield', 'footer.privacy']]]
       ], links: []
     }
   };
   const TOP = [['mega:products'], ['/how-pricing-works', 'nav.pricing'], ['/calculator', 'nav.calc'], ['/business', 'nav.sme'], ['mega:help']];
-  const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/claims': 'nav.claims' };
+  const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/profile': 'nav.profile', '/claims': 'nav.claims' };
   // Search index: [href, titleKey, descKey, group, extra English keywords]. Matches the current language AND English keywords.
   const SEARCH = [
     ['/', 'nav.home', 'footer.tag', 'page', 'home start welcome'],
@@ -64,6 +65,7 @@
     ['/apply', 'nav.apply', 'apply.sub', 'tool', 'apply get covered buy join sign up policy'],
     ['/account', 'nav.login', 'acc.sub', 'tool', 'login log in register sign up account password'],
     ['/dashboard', 'nav.dashboard', 'dash.summ.note', 'tool', 'dashboard policy weekly summary devices'],
+    ['/profile', 'nav.profile', 'pf.sub', 'tool', 'profile account personal details update plan change password phone address name logout log out sign out'],
     ['#theme', 'theme.dark', 'theme.light', 'tool', 'dark mode light mode theme night appearance'],
     ['/dashboard', 'dash.ref.h', 'dash.ref.p', 'tool', 'referral refer friend code credit leaderboard'],
     ['/dashboard', 'dash.pause.h', 'dash.pause.p', 'tool', 'pause tracking illness injury travel pregnancy'],
@@ -99,12 +101,18 @@
     hdr.innerHTML = `${promoOn ? `<div class="promo" id="promo"><div class="wrap"><span><b data-i18n="promo.b"></b> <span data-i18n="promo.t"></span></span> <a href="/dashboard" data-i18n="promo.l"></a><button id="promox" aria-label="Close">&times;</button></div></div>` : ''}
     <div style="position:relative"><div class="wrap bar">
       <a class="brand" href="/"><img class="logo-img" src="/img/logo-mark.png" alt="PulseCover logo" width="46" height="46"><span class="name">PulseCover</span></a>
-      <nav class="main" id="mainnav" aria-label="Main">${nav}</nav>
+      <nav class="main" id="mainnav" aria-label="Main">${nav}<div class="navacct" id="navacct"></div></nav>
       <div class="tools">
         <button class="ibtn" id="sbtn" aria-label="Search">${PC.icon('search')}</button>
         <button class="ibtn" id="themebtn" aria-label="Theme" aria-pressed="false"></button>
-        <select class="lang" id="langsel" aria-label="Language">${LANGS.map((l) => `<option value="${l.code}">${l.label}</option>`).join('')}</select>
+        <div class="dd lsw" id="lsw"><button class="lbtn" id="langbtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Language"><span id="langlabel"></span>${PC.icon('chev', 'chev')}</button>
+          <ul class="dmenu lmenu" id="langmenu" role="listbox" aria-label="Language">${LANGS.map((l) => `<li role="option" tabindex="-1" data-l="${l.code}"><span>${l.label}</span>${PC.icon('check', 'tick')}</li>`).join('')}</ul></div>
         <a class="btn ghost sm" id="authbtn" href="/account"></a>
+        <div class="dd asw" id="asw" hidden><button class="abtn" id="acctbtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="My account"><span class="av" id="av"></span>${PC.icon('chev', 'chev')}</button>
+          <div class="dmenu amenu" id="acctmenu" role="menu"><div class="ahead"><span class="av lg" id="avl"></span><div><b id="an"></b><small id="ae"></small></div></div>
+            <a role="menuitem" href="/dashboard">${PC.icon('grid')}<span data-i18n="nav.dash"></span></a>
+            <a role="menuitem" href="/profile">${PC.icon('user')}<span data-i18n="nav.profile"></span></a>
+            <hr><button role="menuitem" type="button" id="logoutbtn" class="out">${PC.icon('logout')}<span data-i18n="nav.logout"></span></button></div></div>
         <a class="btn sm" href="/connect" data-i18n="nav.connect"></a>
         <button class="burger" id="burger" aria-label="Menu">&#9776;</button>
       </div></div>
@@ -141,7 +149,7 @@
     const fb = document.createElement('button'); fb.className = 'fbtab'; fb.id = 'fbtab'; fb.setAttribute('data-i18n', 'fb.tab'); document.body.append(fb);
     const ck = document.createElement('div'); ck.className = 'cookie' + (store.get('pc_cookie') ? '' : ' open'); ck.id = 'cookie';
     ck.innerHTML = `<div class="wrap"><p><span data-i18n="cookie.t"></span> <a href="/privacy" data-i18n="footer.privacy"></a></p><button class="btn light sm" id="ckok" data-i18n="cookie.ok"></button><button class="btn outl-w sm" id="ckno" data-i18n="cookie.no"></button></div>`;
-    document.body.append(ck);
+    document.body.append(ck); document.body.classList.toggle('ckopen', ck.classList.contains('open'));
     const cm = document.createElement('div'); cm.className = 'modal'; cm.id = 'cbmodal';
     cm.innerHTML = `<div class="mbox"><button class="x" data-close aria-label="Close">&times;</button><h3 data-i18n="cb.h"></h3><p style="color:var(--mute)" data-i18n="cb.sub"></p><div id="cbform"></div></div>`; document.body.append(cm);
     const fm = document.createElement('div'); fm.className = 'modal'; fm.id = 'fbmodal';
@@ -153,12 +161,29 @@
   }
 
   function wire(hdr, ft, ck, cm, fm) {
-    const sel = document.getElementById('langsel'); sel.value = lang; sel.onchange = () => PC.setLang(sel.value);
+    // animated dropdowns (language + account)
+    const dds = [...document.querySelectorAll('.dd')];
+    const closeDD = (except) => dds.forEach((d) => { if (d !== except && d.classList.contains('open')) { d.classList.remove('open'); d.querySelector('button').setAttribute('aria-expanded', 'false'); } });
+    PC.closeDD = closeDD;
+    dds.forEach((d) => {
+      const btn = d.querySelector('button'), menu = d.querySelector('.dmenu');
+      btn.addEventListener('click', (e) => { e.stopPropagation(); menu.style.top = window.innerWidth <= 620 ? btn.getBoundingClientRect().bottom + 8 + 'px' : ''; const o = !d.classList.contains('open'); closeDD(d); d.classList.toggle('open', o); btn.setAttribute('aria-expanded', String(o)); if (o) { document.querySelectorAll('.mega.open').forEach((m) => m.classList.remove('open')); PC.closeSearch && PC.closeSearch(); const cur = menu.querySelector('li.on, a'); if (cur) cur.focus({ preventScroll: true }); } });
+      menu.addEventListener('keydown', (e) => {
+        const items = [...menu.querySelectorAll('li,a,button')], i = items.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+        if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+        if (e.key === 'Enter' && document.activeElement.tagName === 'LI') { e.preventDefault(); document.activeElement.click(); }
+      });
+    });
+    document.addEventListener('click', () => closeDD());
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { const o = dds.find((d) => d.classList.contains('open')); closeDD(); if (o) o.querySelector('button').focus(); } });
+    document.querySelectorAll('#langmenu li').forEach((li) => li.addEventListener('click', () => { PC.setLang(li.dataset.l); closeDD(); document.getElementById('langbtn').focus(); }));
+    document.getElementById('logoutbtn').onclick = () => PC.logout();
     ft.querySelectorAll('#flangs button').forEach((b) => (b.onclick = () => PC.setLang(b.dataset.l)));
     document.getElementById('burger').onclick = () => document.getElementById('mainnav').classList.toggle('open');
     const px = document.getElementById('promox'); if (px) px.onclick = () => { store.set('pc_promo', '1'); const pr = document.getElementById('promo'); pr.classList.add('gone'); setTimeout(() => pr.remove(), 380); };
-    document.getElementById('ckok').onclick = () => { store.set('pc_cookie', 'all'); ck.classList.remove('open'); };
-    document.getElementById('ckno').onclick = () => { store.set('pc_cookie', 'essential'); ck.classList.remove('open'); };
+    document.getElementById('ckok').onclick = () => { store.set('pc_cookie', 'all'); ck.classList.remove('open'); document.body.classList.remove('ckopen'); };
+    document.getElementById('ckno').onclick = () => { store.set('pc_cookie', 'essential'); ck.classList.remove('open'); document.body.classList.remove('ckopen'); };
     // light / dark mode (remembered per visitor)
     const tb = document.getElementById('themebtn');
     const paintTheme = () => { const dark = document.documentElement.dataset.theme === 'dark'; tb.innerHTML = PC.icon(dark ? 'sun' : 'moon'); tb.title = tb.ariaLabel = PC.t(dark ? 'theme.light' : 'theme.dark'); tb.setAttribute('aria-pressed', dark ? 'true' : 'false'); };
@@ -286,12 +311,28 @@
       <label class="check"><input type="checkbox" name="consent"><span data-i18n="cb.consent"></span></label>
       <div class="msg"></div><button class="btn" style="margin-top:8px" data-i18n="cb.submit"></button></form>`;
     const f = host.querySelector('form'), m = host.querySelector('.msg');
+    const EM = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[A-Za-z]{2,}$/;
+    const flag = (el, key) => { // red inline error under the field
+      let h = el.closest('div,label') && el.parentElement.querySelector(':scope > .ferr');
+      if (!h) { h = document.createElement('p'); h.className = 'fhelp ferr'; (el.type === 'checkbox' ? el.closest('label') : el).after(h); }
+      el.classList.toggle('fld-err', !!key); h.classList.toggle('on', !!key); h.textContent = key ? PC.t(key) : ''; h.dataset.key = key || ''; return !key;
+    };
+    f.querySelectorAll('input,select').forEach((el) => el.addEventListener('input', () => { if (el.classList.contains('fld-err')) el.classList.remove('fld-err'); const h = el.parentElement.querySelector(':scope > .ferr'); if (h) h.classList.remove('on'); }));
     f.onsubmit = async (e) => {
-      e.preventDefault(); const d = new FormData(f);
+      e.preventDefault(); const d = new FormData(f); m.className = 'msg';
+      const ok = [
+        flag(f.name, String(d.get('name')).trim().length >= 2 ? '' : 'acc.err.name'),
+        flag(f.phone, String(d.get('phone')).replace(/\D/g, '').length >= 8 ? '' : 'cb.err.phone'),
+        flag(f.email, EM.test(String(d.get('email')).trim()) ? '' : 'acc.err.email'),
+        flag(f.state, d.get('state') ? '' : 'cb.err.state'),
+        flag(f.consent, d.get('consent') ? '' : 'cb.err.consent')
+      ].every(Boolean);
+      if (!ok) { const first = f.querySelector('.fld-err'); if (first) { first.scrollIntoView({ block: 'center', behavior: 'smooth' }); first.focus({ preventScroll: true }); } PC.msg(m, PC.t('pf.fix')); return; }
+      const btn = f.querySelector('button.btn'); btn.disabled = true;
       try {
-        await PC.api('/callback', { name: d.get('name'), phone: d.get('phone'), email: d.get('email'), state: d.get('state'), need: d.get('need'), time: d.get('time'), lang: d.get('clang'), consent: !!d.get('consent') });
-        PC.msg(m, PC.t('cb.ok'), true); f.reset();
-      } catch (x) { PC.msg(m, x.message); }
+        await PC.api('/callback', { name: String(d.get('name')).trim(), phone: d.get('phone'), email: String(d.get('email')).trim(), state: d.get('state'), need: d.get('need'), time: d.get('time'), lang: d.get('clang'), consent: !!d.get('consent') });
+        PC.thanks('cb', { name: String(d.get('name')).trim(), email: String(d.get('email')).trim() }); return;
+      } catch (x) { PC.msg(m, /email/i.test(x.message) ? PC.t('acc.err.email') : /try again|too many/i.test(x.message) ? PC.t('cb.err.many') : x.message); btn.disabled = false; }
     };
     PC.apply(host);
   };
@@ -308,6 +349,19 @@
     };
   }
 
+  function paintLangUI() {
+    const cur = LANGS.find((l) => l.code === lang) || LANGS[0], lb = document.getElementById('langlabel'); if (lb) lb.textContent = cur.label;
+    document.querySelectorAll('#langmenu li').forEach((li) => { const on = li.dataset.l === lang; li.classList.toggle('on', on); li.setAttribute('aria-selected', String(on)); });
+  }
+  function paintAcct() {
+    const ab = document.getElementById('authbtn'), asw = document.getElementById('asw'); if (!ab || !asw) return;
+    const u = PC.user, ini = u ? ((u.name || '?').trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '?') : '';
+    ab.textContent = PC.t('nav.login'); ab.href = '/account'; ab.hidden = !!u; asw.hidden = !u;
+    if (u) { document.getElementById('av').textContent = ini; document.getElementById('avl').textContent = ini; document.getElementById('an').textContent = u.name; document.getElementById('ae').textContent = u.email; }
+    const na = document.getElementById('navacct');
+    if (na) na.innerHTML = u ? `<a href="/dashboard">${PC.t('nav.dash')}</a><a href="/profile">${PC.t('nav.profile')}</a><button type="button" class="out" id="navout">${PC.t('nav.logout')}</button>` : `<a href="/account">${PC.t('nav.login')}</a>`;
+    const no = document.getElementById('navout'); if (no) no.onclick = () => PC.logout();
+  }
   PC.apply = (scope) => {
     const root = scope || document;
     if (!scope) document.documentElement.lang = { en: 'en', zh: 'zh-Hans', ms: 'ms', ta: 'ta' }[lang];
@@ -316,8 +370,7 @@
     root.querySelectorAll('[data-i18n-opt]').forEach((e) => { e.textContent = PC.t(e.dataset.i18nOpt); });
     root.querySelectorAll('[data-plan]').forEach((e) => { e.textContent = PC.planName(e.dataset.plan); });
     if (scope) return;
-    const ab = document.getElementById('authbtn');
-    if (ab) { ab.textContent = PC.user ? PC.t('nav.dash') : PC.t('nav.login'); ab.href = PC.user ? '/dashboard' : '/account'; }
+    paintLangUI(); paintAcct();
     document.querySelectorAll('#flangs button').forEach((b) => b.classList.toggle('on', b.dataset.l === lang));
     document.querySelectorAll('.modal input[name=clang]').forEach((r) => { r.checked = r.value === lang; });
     if (PC.paintTheme) PC.paintTheme();
@@ -326,14 +379,12 @@
   };
   PC.setLang = (l) => {
     lang = l; store.set('pc_lang', l);
-    const sel = document.getElementById('langsel'); if (sel) sel.value = l;
     PC.apply(); if (PC.user) PC.api('/lang', { lang: l }).catch(() => {});
   };
   PC.ready = (async function () {
     chrome();
     try { PC.user = (await PC.api('/me')).user; } catch (e) {}
     if (PC.user && store.get('pc_lang') === null && idx[PC.user.lang] !== undefined) lang = PC.user.lang;
-    const sel = document.getElementById('langsel'); if (sel) sel.value = lang;
     PC.apply();
   })();
   PC.logout = async () => { await PC.api('/logout', {}); location.href = '/'; };

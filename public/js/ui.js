@@ -22,10 +22,10 @@
   const SEL = [
     'nav.main > a', 'nav.main > button.nv > span', '.mega h4', '.mi > span', '.mlinks a > span:first-child',
     '.btn', 'button.tab', '.subnav a', '.subnav strong', 'footer.foot h4', 'footer.foot .fgrid a', '.crumb a', '.crumb b',
-    'th', '.steps span', '.pipe span', '.devbtn', '.devbtn small', '.chip', '.si.pop', '.promo a', '.promo b', '.promo strong', '.fpill .t', '.fbtab', '.stat > span'
+    'th', '.steps span', '.pipe span', '.devbtn', '.devbtn small', '.chip', '.si.pop', '.promo a', '.promo b', '.promo strong', '.fpill .t', '.fbtab', '.stat > span', '.navacct a', '.navacct button', '.amenu span[data-i18n]'
   ].join(',');
   const HEAD = 'h1,h2,h3,h4,summary,.sech,.card > b,.cardh';
-  const SKIP = '.price,.langs,[data-notc],.badge-app,.soc';
+  const SKIP = '.price,.langs,.lsw,[data-notc],.badge-app,.soc';
   let busy = false;
   function polish() {
     if (document.documentElement.lang !== 'en') return;
@@ -51,16 +51,6 @@
   const schedule = () => { if (busy || raf) return; raf = requestAnimationFrame(() => { raf = 0; polish(); }); };
   new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
 
-  /* ---- language dropdown fitted to its selected text ---- */
-  const canvas = document.createElement('canvas').getContext('2d');
-  function fitLang() {
-    const sel = document.getElementById('langsel'); if (!sel) return;
-    const cs = getComputedStyle(sel); canvas.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-    const label = sel.options[sel.selectedIndex].text;
-    const w = Math.ceil(canvas.measureText(label).width);
-    sel.style.width = w + 'px'; // content-box: padding adds the arrow room
-    sel.style.paddingLeft = '16px'; sel.style.paddingRight = '34px';
-  }
   /* ---- switch to the menu button when this language does not fit ---- */
   function fitNav() {
     const root = document.documentElement, nav = document.getElementById('mainnav'); if (!nav) return;
@@ -69,7 +59,7 @@
     const bar = document.querySelector('.bar'); const need = [...nav.children].reduce((s, c) => s + c.getBoundingClientRect().width, 0);
     if (nav.scrollWidth > nav.clientWidth + 1 || need > nav.clientWidth + 1 || bar.scrollWidth > bar.clientWidth + 1) root.classList.add('navb');
   }
-  function fit() { fitLang(); fitNav(); }
+  function fit() { fitNav(); }
 
   /* ---- hover to open menus (desktop only) ---- */
   function hoverMenus() {

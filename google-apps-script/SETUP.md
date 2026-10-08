@@ -34,3 +34,7 @@ Passwords are never sent to the Sheet. They stay hashed in the website's own dat
 - A normal Gmail account can send about 100 emails a day, which is plenty for a demo.
 - If you change `Code.gs` later, use **Deploy > Manage deployments > Edit > New version** so the live URL updates.
 - Running `testWelcome` in the Apps Script editor sends a sample welcome email to yourself.
+
+
+## Two files
+The script has two files: `Code.gs` (Sheet logging, register and contact emails) and `Emails.gs` (call back, business, quote, application, claim and waitlist emails in English, Chinese, Malay and Tamil). Add both to the same Apps Script project, then deploy a new version (Deploy > Manage deployments > edit > New version).

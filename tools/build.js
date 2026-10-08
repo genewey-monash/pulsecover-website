@@ -7,7 +7,7 @@ const head = (title, desc) => `<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
 <script>try{var t=localStorage.getItem('pc_theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='light'}</script><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>`;
-const tail = (js = '') => `<script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script>${js ? `<script>${js}</script>` : ''}</body></html>`;
+const tail = (js = '') => `<script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/i18n5.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script>${js ? `<script>${js}</script>` : ''}</body></html>`;
 const pages = {};
 const D = (k) => `data-i18n="${k}"`;
 
@@ -165,7 +165,7 @@ function paint(){if(!D)return;const p=D.policy;who.textContent=D.user.name.split
  if(D.paused){pausedmsg.style.display='';pausedmsg.textContent=PC.t('dash.paused')+' '+D.paused}else pausedmsg.style.display='none';
  rcode.textContent=D.user.refcode;rcount.textContent=D.referrals;medal.textContent=D.referrals>=25?'\\u{1F947}':D.referrals>=10?'\\u{1F948}':D.referrals>=3?'\\u{1F949}':'';
  board.innerHTML=D.ranking.length?D.ranking.map((r,i)=>'<li><span>'+(i+1)+'. '+PC.esc(r.name)+'</span><b>'+r.count+'</b></li>').join(''):'<li style="color:var(--mute)">-</li>';
- cl.innerHTML=D.claims.length?D.claims.slice(0,3).map(c=>'<p><b>'+PC.esc(c.number)+'</b> &middot; RM '+PC.fmt(c.amount)+' &middot; <span class="pill">'+PC.t('cl.s.'+c.status)+'</span></p>').join(''):'<p style="color:var(--mute)">'+PC.t('cl.none')+'</p>';chart()}
+ cl.innerHTML=D.claims.length?D.claims.slice(0,3).map(c=>'<p><b>'+PC.esc(c.number)+'</b> &middot; RM '+PC.fmt(c.amount)+' &middot; <span class="pill">'+PC.t('cl.s.'+c.status)+'</span></p>').join(''):(form.style.display==='none'?'':'<div class="empty"><p>'+PC.t('cl.none')+'</p></div>');chart()}
 async function load(){try{D=await PC.api('/dashboard');paint()}catch(e){if(e.status===401)location.href='/account?next=/dashboard'}}
 PC.ready.then(load);window.addEventListener('pc:lang',paint);
 sync.onclick=async()=>{try{const r=await PC.api('/sync',{});PC.msg(sm,PC.t('dash.synced')+': '+r.steps+' / '+r.exerciseMin+' / '+r.sleepHours+' / '+r.restingHr,true);load()}catch(e){PC.msg(sm,e.message)}};
@@ -201,7 +201,7 @@ pages['business'] = [`For business`, `Group wearable-linked health and life bene
 let q,t;function paint(){if(!q)return;s_per.textContent='RM '+PC.fmt(q.perEmployeeAnnual);s_tot.textContent='RM '+PC.fmt(q.totalAnnual);s_adj.textContent=(q.adjustmentPct>0?'+':'')+q.adjustmentPct+'%';s_bulk.textContent=q.bulkDiscountPct+'%';s_sav.textContent='RM '+PC.fmt(q.savingsVsFlat)}
 async function run(){ve.textContent=emp.value;va.textContent=avg.value;try{q=await PC.api('/sme/quote',{employees:+emp.value,avgScore:+avg.value});paint()}catch(e){}}
 [emp,avg].forEach(e=>e.oninput=()=>{ve.textContent=emp.value;va.textContent=avg.value;clearTimeout(t);t=setTimeout(run,120)});run();window.addEventListener('pc:lang',paint);
-ef.onsubmit=async e=>{e.preventDefault();try{await PC.api('/sme/enquiry',{company:e_co.value,contact:e_ct.value,email:e_em.value,phone:e_ph.value,employees:+emp.value,avgScore:+avg.value,message:e_ms.value,lang:PC.lang});PC.msg(em,PC.t('sme.ok'),true);ef.reset()}catch(x){PC.msg(em,x.message)}}`];
+ef.onsubmit=async e=>{e.preventDefault();try{await PC.api('/sme/enquiry',{company:e_co.value,contact:e_ct.value,email:e_em.value,phone:e_ph.value,employees:+emp.value,avgScore:+avg.value,message:e_ms.value,lang:PC.lang});PC.thanks('sme',{name:e_ct.value,email:e_em.value})}catch(x){PC.msg(em,x.message)}}`];
 
 const fixed=[['CEO',8000],['CTO',9000],['Lead Software Engineer',9000],['Backend Developer',6000],['Frontend Developer',6000],['Customer Support Rep',3500],['Head of Marketing',6000],['Head of Compliance',7000],['Legal retainer',1500],['Office rent (KL)',4000],['Cloud services',3000],['Dev tools',800],['Security software',700],['Other SaaS',500],['Payment gateway (fixed)',300],['Regulatory costs',2000],['Branding & PR',3000]];
 pages['investors'] = [`Investors`, `Market evidence, business model and Year 1 financials for PulseCover.`, `
@@ -228,12 +228,13 @@ pages['faq'] = [`FAQ`, `Answers to common questions about PulseCover.`, `<main><
 pages['contact'] = [`Contact`, `Get in touch with the PulseCover team.`, `
 <main><section class="sec"><div class="wrap"><h1 ${D('ct.h1')}></h1><p class="lead" ${D('ct.sub')}></p><div class="calc" style="margin-top:28px"><div class="card"><form id="cf"><label ${D('field.name')}></label><input id="c_n" required><label ${D('field.email')}></label><input type="email" id="c_e" required><label ${D('ct.topic')}></label><select id="c_t"><option value="general" data-i18n-opt="ct.t1"></option><option value="claims" data-i18n-opt="ct.t2"></option><option value="business" data-i18n-opt="ct.t3"></option><option value="partnerships" data-i18n-opt="ct.t4"></option><option value="press" data-i18n-opt="ct.t5"></option></select><label ${D('field.message')}></label><textarea id="c_m" rows="5" required></textarea><div class="msg" id="cm"></div><button class="btn" style="margin-top:14px" ${D('ct.send')}></button></form></div>
 <div class="card"><h3 ${D('ct.details')}></h3><p>hello@pulsecover.example</p><p>+60 3-0000 0000</p><p ${D('ct.address')}></p><div class="soc dark"><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><img src="/img/social/facebook.svg" alt="" width="18" height="18"></a><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><img src="/img/social/instagram.svg" alt="" width="18" height="18"></a><a href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X" title="X"><img src="/img/social/x.svg" alt="" width="18" height="18"></a><a href="https://t.me/" target="_blank" rel="noopener noreferrer" aria-label="Telegram" title="Telegram"><img src="/img/social/telegram.svg" alt="" width="18" height="18"></a><a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><img src="/img/social/linkedin.svg" alt="" width="18" height="18"></a><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><img src="/img/social/youtube.svg" alt="" width="18" height="18"></a></div></div></div></div></section></main>`, `
-cf.onsubmit=async e=>{e.preventDefault();try{await PC.api('/contact',{name:c_n.value,email:c_e.value,topic:c_t.value,message:c_m.value,lang:PC.lang});PC.msg(cm,PC.t('ct.ok'),true);cf.reset()}catch(x){PC.msg(cm,x.message)}}`];
+cf.onsubmit=async e=>{e.preventDefault();try{await PC.api('/contact',{name:c_n.value,email:c_e.value,topic:c_t.value,message:c_m.value,lang:PC.lang});PC.thanks('ct',{name:c_n.value,email:c_e.value})}catch(x){PC.msg(cm,x.message)}}`];
 pages['404'] = [`Not found`, `Page not found`, `<main><section class="sec"><div class="wrap center"><h1 ${D('nf.h')}></h1><p class="lead" ${D('nf.p')}></p><a class="btn" href="/" ${D('nav.home')}></a></div></section></main>`, ''];
 
 require('./pages2')(pages, D);
 require('./pages3')(pages, D);
 require('./pages4')(pages, D);
+require('./pages5')(pages, D);
 for (const [name, [title, desc, body, js]] of Object.entries(pages))
   fs.writeFileSync(path.join(out, name + '.html'), head(title, desc) + body + tail(js));
 console.log('built', Object.keys(pages).length, 'pages');
