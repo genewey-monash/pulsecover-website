@@ -486,3 +486,10 @@ body.ckopen .fpill{opacity:0;pointer-events:none;transform:translateY(20px)}
 html[data-theme="dark"] .qcard,html[data-theme="dark"] .startsteps li{background:var(--surface)}html[data-theme="dark"] .tipcard{background:rgba(232,163,23,.12);border-color:rgba(232,163,23,.35)}html[data-theme="dark"] .qico{background:rgba(255,124,149,.14);color:#FF7C95}
 @media(max-width:900px){.quick,.quick4{grid-template-columns:repeat(2,1fr)}.startsteps{grid-template-columns:1fr}}
 @media(max-width:520px){.quick,.quick4{grid-template-columns:1fr}.startcard{padding:22px}}
+
+/* app download page */
+.dlgrid{display:grid;grid-template-columns:1fr 280px;gap:36px;align-items:start}
+.dlcard{margin-top:22px;padding:24px}.dlhead{display:flex;align-items:center;gap:16px;margin-bottom:18px}.dlhead img{border-radius:16px}.dlhead b{display:block;font-size:1.2rem}.dlhead small{color:var(--mute)}
+.dlcard .btn{width:100%;justify-content:center}.dlcard .fnote{margin-top:12px;text-align:center}
+.qrbox{padding:22px}.qrbox svg{width:100%;height:auto;display:block}
+@media(max-width:820px){.dlgrid{grid-template-columns:1fr}.qrbox{max-width:260px}}

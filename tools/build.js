@@ -236,6 +236,7 @@ require('./pages3')(pages, D);
 require('./pages4')(pages, D);
 require('./pages5')(pages, D);
 require('./pages5').dashboard(pages, D);
+require('./pages6')(pages, D);
 for (const [name, [title, desc, body, js]] of Object.entries(pages))
   fs.writeFileSync(path.join(out, name + '.html'), head(title, desc) + body + tail(js));
 console.log('built', Object.keys(pages).length, 'pages');

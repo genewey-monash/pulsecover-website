@@ -75,5 +75,20 @@ Object.assign(window.PC_I18N, {
   'ds.q5.p': ['Update your details, plan and password.', '更新您的资料、计划和密码。', 'Kemas kini butiran, pelan dan kata laluan anda.', 'உங்கள் விவரங்கள், திட்டம், கடவுச்சொல்லைப் புதுப்பியுங்கள்.'],
   'ds.q6.p': ['File a claim and follow each step online.', '在线提交理赔并追踪每个步骤。', 'Hantar tuntutan dan ikuti setiap langkah dalam talian.', 'கோரிக்கையைச் சமர்ப்பித்து ஒவ்வொரு படியையும் ஆன்லைனில் பின்தொடருங்கள்.'],
   'ds.tip.h': ['How your price works', '您的保费如何计算', 'Bagaimana harga anda ditentukan', 'உங்கள் விலை எப்படி அமைகிறது'],
-  'ds.tip.p': ['Your base premium moves up or down by at most 15%, based on your weekly wearable summary. We never use data 24/7.', '您的基本保费依据每周可穿戴设备摘要上下浮动，最多 15%。我们不会全天候使用数据。', 'Premium asas anda naik atau turun paling banyak 15% berdasarkan ringkasan mingguan peranti anda. Kami tidak menggunakan data 24/7.', 'வாராந்திர அணிகலன் சுருக்கத்தின் அடிப்படையில் அடிப்படைப் பிரீமியம் அதிகபட்சம் 15% மட்டுமே மாறும். 24/7 தரவை நாங்கள் பயன்படுத்துவதில்லை.']
+  'ds.tip.p': ['Your base premium moves up or down by at most 15%, based on your weekly wearable summary. We never use data 24/7.', '您的基本保费依据每周可穿戴设备摘要上下浮动，最多 15%。我们不会全天候使用数据。', 'Premium asas anda naik atau turun paling banyak 15% berdasarkan ringkasan mingguan peranti anda. Kami tidak menggunakan data 24/7.', 'வாராந்திர அணிகலன் சுருக்கத்தின் அடிப்படையில் அடிப்படைப் பிரீமியம் அதிகபட்சம் 15% மட்டுமே மாறும். 24/7 தரவை நாங்கள் பயன்படுத்துவதில்லை.'],
+  'nav.app': ['Get the app', '下载应用', 'Dapatkan app', 'செயலியைப் பெறுங்கள்'],
+  'dl.h1': ['Get the PulseCover app', '下载 PulseCover 应用', 'Dapatkan app PulseCover', 'PulseCover செயலியைப் பெறுங்கள்'],
+  'dl.sub': ['Your rating, policy, claims and wearable summary in your pocket. Same account as the website.', '您的评级、保单、理赔和设备摘要尽在掌中，与网站使用同一账户。', 'Penarafan, polisi, tuntutan dan ringkasan peranti anda dalam poket. Akaun sama seperti laman web.', 'உங்கள் மதிப்பீடு, பாலிசி, கோரிக்கைகள் மற்றும் சாதனச் சுருக்கம் உங்கள் கையில். இணையதளக் கணக்கே பயன்படும்.'],
+  'dl.btn': ['Download for Android', '下载安卓版', 'Muat turun untuk Android', 'Android-க்குப் பதிவிறக்கு'],
+  'dl.ver': ['Version', '版本', 'Versi', 'பதிப்பு'],
+  'dl.size': ['Size', '大小', 'Saiz', 'அளவு'],
+  'dl.req': ['Needs Android 7.0 or newer', '需要 Android 7.0 或更高版本', 'Memerlukan Android 7.0 atau lebih baharu', 'Android 7.0 அல்லது புதியது தேவை'],
+  'dl.steps': ['How to install', '安装方法', 'Cara memasang', 'நிறுவுவது எப்படி'],
+  'dl.s1': ['Tap Download for Android and open the file when it finishes.', '点击“下载安卓版”，下载完成后打开文件。', 'Ketik Muat turun untuk Android dan buka fail selepas selesai.', '“Android-க்குப் பதிவிறக்கு” என்பதைத் தட்டி, முடிந்ததும் கோப்பைத் திறக்கவும்.'],
+  'dl.s2': ['If your phone asks, allow installs from this browser (Settings, Install unknown apps).', '如手机提示，请允许此浏览器安装应用（设置，安装未知应用）。', 'Jika diminta, benarkan pemasangan daripada pelayar ini (Tetapan, Pasang app tidak diketahui).', 'தொலைபேசி கேட்டால், இந்த உலாவியிலிருந்து நிறுவ அனுமதிக்கவும் (அமைப்புகள், தெரியாத செயலிகளை நிறுவு).'],
+  'dl.s3': ['Tap Install, then open PulseCover and log in with your website account.', '点击“安装”，然后打开 PulseCover 并用网站账户登录。', 'Ketik Pasang, kemudian buka PulseCover dan log masuk dengan akaun laman web anda.', '“நிறுவு” என்பதைத் தட்டி, PulseCover-ஐத் திறந்து இணையதளக் கணக்கில் உள்நுழையவும்.'],
+  'dl.ios': ['iPhone and iPad', 'iPhone 和 iPad', 'iPhone dan iPad', 'iPhone மற்றும் iPad'],
+  'dl.ios.p': ['The iPhone version is built from the same code and is shared through Apple TestFlight. Ask the team for an invitation.', 'iPhone 版本使用同一套代码构建，通过 Apple TestFlight 分享，请向团队索取邀请。', 'Versi iPhone dibina daripada kod yang sama dan dikongsi melalui Apple TestFlight. Minta jemputan daripada pasukan.', 'iPhone பதிப்பு அதே குறியீட்டிலிருந்து உருவாக்கப்பட்டு Apple TestFlight வழியாகப் பகிரப்படும். அழைப்பைக் குழுவிடம் கேளுங்கள்.'],
+  'dl.scan': ['Scan with your phone camera', '用手机相机扫描', 'Imbas dengan kamera telefon anda', 'உங்கள் தொலைபேசி கேமராவால் ஸ்கேன் செய்யுங்கள்'],
+  'dl.none': ['The app file is being prepared. Please check back soon.', '应用文件正在准备中，请稍后再来。', 'Fail app sedang disediakan. Sila semak semula sebentar lagi.', 'செயலி கோப்பு தயாராகிறது. சிறிது நேரம் கழித்து வாருங்கள்.']
 });

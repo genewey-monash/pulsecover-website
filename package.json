@@ -1,10 +1,14 @@
 {
   "name": "pulsecover-website",
   "version": "1.0.0",
-  "description": "PulseCover - wearable-based dynamic pricing health & life insurance (Group 5, BFM3130)",
+  "description": "PulseCover server: website, JSON API for the website and the mobile app, and the app download page (Group 5, BFM3130)",
   "main": "server.js",
-  "scripts": { "start": "node server.js" },
-  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
   "license": "UNLICENSED",
   "private": true
 }

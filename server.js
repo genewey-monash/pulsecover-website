@@ -98,9 +98,10 @@ function readBody(req) {
   });
 }
 const ipOf = (req) => String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
+const tokenOf = (req) => { const a = String(req.headers.authorization || ''); return a.startsWith('Bearer ') ? a.slice(7).trim() : (cookies(req).pc_session || ''); };
 function cookies(req) { return Object.fromEntries((req.headers.cookie || '').split(';').map((c) => c.trim().split('=')).filter((x) => x[0])); }
 function userFrom(req) {
-  const tok = cookies(req).pc_session; if (!tok) return null;
+  const tok = tokenOf(req); if (!tok) return null;
   const s = db.prepare('SELECT * FROM sessions WHERE token=? AND expires>?').get(tok, Date.now());
   return s ? db.prepare('SELECT * FROM users WHERE id=?').get(s.user_id) : null;
 }
@@ -112,7 +113,7 @@ const publicUser = (u) => ({ id: u.id, name: u.name, email: u.email, dob: u.dob,
 function startSession(res, userId) {
   const token = crypto.randomBytes(32).toString('hex');
   db.prepare('INSERT INTO sessions VALUES(?,?,?)').run(token, userId, Date.now() + IDLE_MS);
-  res.setHeader('Set-Cookie', sessionCookie(token));
+  res.setHeader('Set-Cookie', sessionCookie(token)); res.pcToken = token;
 }
 
 function metricsOf(m) {
@@ -161,7 +162,7 @@ route('POST', '/api/login', (req, res, b) => {
 });
 
 route('POST', '/api/logout', (req, res) => {
-  const tok = cookies(req).pc_session; if (tok) db.prepare('DELETE FROM sessions WHERE token=?').run(tok);
+  const tok = tokenOf(req); if (tok) db.prepare('DELETE FROM sessions WHERE token=?').run(tok);
   res.setHeader('Set-Cookie', 'pc_session=; HttpOnly; Path=/; Max-Age=0');
   return { ok: true };
 });
@@ -187,7 +188,7 @@ route('POST', '/api/password', (req, res, b) => {
   if (b.password2 !== pw) bad('The passwords do not match. Please enter them again.');
   const salt = rid(16);
   db.prepare('UPDATE users SET pass=?, salt=? WHERE id=?').run(hash(pw, salt), salt, u.id);
-  const tok = cookies(req).pc_session;
+  const tok = tokenOf(req);
   db.prepare('DELETE FROM sessions WHERE user_id=? AND token<>?').run(u.id, tok || '');
   return { ok: true };
 });
@@ -446,7 +447,7 @@ route('POST', '/api/waitlist', (req, res, b) => {
 });
 
 // ---- static files ----
-const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.webm': 'video/webm', '.webp': 'image/webp', '.jpeg': 'image/jpeg' };
+const MIME = { '.apk': 'application/vnd.android.package-archive', '.ipa': 'application/octet-stream', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.webm': 'video/webm', '.webp': 'image/webp', '.jpeg': 'image/jpeg' };
 const SEC = { 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Referrer-Policy': 'same-origin' };
 
 function serveStatic(req, res, pathname) {
@@ -469,7 +470,8 @@ function serveStatic(req, res, pathname) {
       res.writeHead(206, { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Range': `bytes ${start}-${end}/${data.length}`, 'Content-Length': end - start + 1, ...cache, ...SEC });
       return res.end(data.subarray(start, end + 1));
     }
-    res.writeHead(200, { 'Content-Type': type, 'Accept-Ranges': 'bytes', ...cache, ...SEC });
+    const dl = /\.(apk|ipa)$/.test(file) ? { 'Content-Disposition': `attachment; filename="${path.basename(file)}"`, 'Cache-Control': 'no-cache' } : {};
+    res.writeHead(200, { 'Content-Type': type, 'Accept-Ranges': 'bytes', ...cache, ...dl, ...SEC });
     res.end(data);
   });
 }
@@ -482,10 +484,11 @@ const server = http.createServer(async (req, res) => {
       const fn = routes[`${req.method} ${url.pathname}`];
       if (!fn) bad('Not found', 404);
       const body = req.method === 'POST' ? await readBody(req) : {};
-      const tok = cookies(req).pc_session, who = tok ? userFrom(req) : null;
+      const tok = tokenOf(req), who = tok ? userFrom(req) : null;
       const out = fn(req, res, body);
+      if (req.headers['x-client'] === 'pulsecover-app' && res.pcToken && out && typeof out === 'object') out.token = res.pcToken;
       if (req.method === 'POST' && /^\/api\/(register|profile|password|policy|apply|connect|disconnect|my-quote|sync|pause|claims)$/.test(url.pathname)) scheduleBackup();
-      if (who && !res.getHeader('Set-Cookie')) { db.prepare('UPDATE sessions SET expires=? WHERE token=?').run(Date.now() + IDLE_MS, tok); res.setHeader('Set-Cookie', sessionCookie(tok)); }
+      if (who && !res.getHeader('Set-Cookie')) { db.prepare('UPDATE sessions SET expires=? WHERE token=?').run(Date.now() + IDLE_MS, tok); if (!req.headers.authorization) res.setHeader('Set-Cookie', sessionCookie(tok)); }
       res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...SEC, ...(res.getHeader('Set-Cookie') ? { 'Set-Cookie': res.getHeader('Set-Cookie') } : {}) });
       res.end(JSON.stringify(out));
     } catch (e) {
