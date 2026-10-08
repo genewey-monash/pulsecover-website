@@ -137,7 +137,7 @@ route('POST', '/api/register', (req, res, b) => {
   if (!emailOk(email)) bad('Invalid email address.');
   if (pw.length < 8) bad('Password must be at least 8 characters.');
   if (typeof b.password2 !== 'string' || b.password2 !== pw) bad('The passwords do not match. Please enter them again.');
-  if (age(b.dob) < 16) bad('You must be at least 16 to register. (Guardian consent applies for ages 16-17 when applying.)');
+  if (age(b.dob) < 18) bad('You must be at least 18 to register.');
   if (db.prepare('SELECT 1 FROM users WHERE email=?').get(email)) bad('An account with this email already exists.', 409);
   const salt = rid(16);
   let referred = null;
@@ -174,7 +174,7 @@ route('POST', '/api/profile', (req, res, b) => {
   const lang = ['en', 'zh', 'ms', 'ta'].includes(b.lang) ? b.lang : u.lang;
   if (name.length < 2) bad('Please enter your full name.');
   if (phone && !/^\+?[0-9][0-9 \-]{6,18}$/.test(phone)) bad('Invalid phone number.');
-  if (age(dob) < 16) bad('You must be at least 16 to register. (Guardian consent applies for ages 16-17 when applying.)');
+  if (age(dob) < 18) bad('You must be at least 18 to register.');
   db.prepare('UPDATE users SET name=?, phone=?, address=?, dob=?, lang=? WHERE id=?').run(name, phone, address, dob, lang, u.id);
   return publicUser(db.prepare('SELECT * FROM users WHERE id=?').get(u.id));
 });

@@ -66,7 +66,7 @@ Object.assign(window.PC_I18N, {
   'vs.r6.t': ['The insurer sells and underwrites directly', '保险公司直接销售并承保', 'Syarikat insurans menjual dan menjamin terus', 'காப்பீட்டாளர் நேரடியாக விற்று உறுதியளிக்கிறார்'],
   'vs.r6.p': ['PulseCover rates your risk; a licensed partner insurer underwrites', 'PulseCover 评估你的风险，持牌合作保险公司承保', 'PulseCover menilai risiko anda; syarikat insurans rakan berlesen menjamin', 'PulseCover உங்கள் இடரை மதிப்பிடுகிறது; உரிமம் பெற்ற கூட்டாளி காப்பீட்டாளர் உறுதியளிக்கிறார்'],
   'ages.1': ['Active at any age: a daily walk counts as much as a workout', '任何年龄都能保持活力：每天散步和锻炼同样算数', 'Aktif pada sebarang usia: berjalan setiap hari sama nilainya dengan bersenam', 'எந்த வயதிலும் சுறுசுறுப்பாக: தினசரி நடைப்பயிற்சியும் உடற்பயிற்சிக்கு இணையாகக் கணக்கிடப்படும்'],
-  'ages.2': ['Join from 16 with a parent or guardian', '16 岁起即可加入，由父母或监护人陪同', 'Sertai dari umur 16 tahun bersama ibu bapa atau penjaga', '16 வயது முதல் பெற்றோர் அல்லது பாதுகாவலருடன் சேரலாம்'],
+  'ages.2': ['Join from 18 and above', '18 岁及以上即可加入', 'Sertai dari umur 18 tahun ke atas', '18 வயது மற்றும் அதற்கு மேல் சேரலாம்'],
   'cmp.f8': ['Connects to your wearable', '连接你的可穿戴设备', 'Bersambung dengan peranti anda', 'உங்கள் சாதனத்துடன் இணைகிறது'],
   'cmp.f9': ['Risk rating you can see', '你能看到的风险评级', 'Penarafan risiko yang boleh anda lihat', 'நீங்கள் காணக்கூடிய இடர் மதிப்பீடு'],
   'cmp.pc.f8': ['Fitbit, Garmin, Whoop, Google Health Connect', 'Fitbit、Garmin、Whoop、Google Health Connect', 'Fitbit, Garmin, Whoop, Google Health Connect', 'Fitbit, Garmin, Whoop, Google Health Connect'],

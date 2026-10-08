@@ -24,7 +24,7 @@ pages['index'] = [`Wearable-based life & health insurance`, `Insurance priced on
  <p style="margin:14px 0 0;font-weight:700;color:var(--navy)"><span ${D('calc.yours')}></span>: RM 531.00</p></div></div></div></section>
 <div class="wrap"><div class="stats">
  <div class="stat"><b>RM600</b><span ${D('home.stat1')}></span></div><div class="stat"><b>±15%</b><span ${D('home.stat2')}></span></div>
- <div class="stat"><b>3</b><span ${D('home.stat3')}></span></div><div class="stat"><b>16+</b><span ${D('home.stat4')}></span></div></div></div>
+ <div class="stat"><b>3</b><span ${D('home.stat3')}></span></div><div class="stat"><b>18+</b><span ${D('home.stat4')}></span></div></div></div>
 <section class="sec"><div class="wrap center"><h2 ${D('home.problem.h')}></h2><p class="lead" ${D('home.problem.p')}></p></div></section>
 <section class="sec alt"><div class="wrap"><h2 class="center" ${D('home.steps.h')}></h2><div class="cards c4" style="margin-top:28px">
  ${[1,2,3,4].map(i=>`<div class="card"><div class="ico">${i}</div><h3 ${D('home.s'+i+'.h')}></h3><p ${D('home.s'+i+'.p')}></p></div>`).join('')}</div></div></section>
@@ -92,7 +92,7 @@ const q=new URLSearchParams(location.search);const next=q.get('next')&&q.get('ne
 if(q.get('ref')){document.getElementById('rr').value=q.get('ref');show(true)}
 function show(r){document.getElementById('loginbox').style.display=r?'none':'';document.getElementById('regbox').style.display=r?'':'none'}
 document.getElementById('toreg').onclick=e=>{e.preventDefault();show(true)};document.getElementById('tolog').onclick=e=>{e.preventDefault();show(false)};
-document.getElementById('rd').max=new Date().toISOString().slice(0,10);
+document.getElementById('rd').max=new Date(new Date().getFullYear()-18,new Date().getMonth(),new Date().getDate()).toISOString().slice(0,10);
 PC.ready.then(()=>{if(PC.user)location.href=next});
 document.getElementById('lf').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('lm');try{await PC.api('/login',{email:le.value,password:lp.value});location.href=next}catch(x){PC.msg(m,x.message)}};
 document.getElementById('rf').onsubmit=async e=>{e.preventDefault();const m=document.getElementById('rm');try{await PC.api('/register',{name:rn.value,email:re.value,dob:rd.value,password:rp.value,referral:rr.value,lang:PC.lang});location.href=next}catch(x){PC.msg(m,x.message)}};`];
@@ -113,7 +113,7 @@ pages['apply'] = [`Get covered`, `Apply for PulseCover in four steps.`, `
  <div style="display:flex;justify-content:space-between;padding:8px 0"><span ${D('calc.yours')}></span><b id="a_tot" style="font-size:1.4rem;color:var(--navy)"></b></div></div>
  <p style="font-size:.85rem;color:var(--mute)" ${D('calc.note')}></p><div class="cta"><button class="btn ghost" data-back="1" ${D('apply.back')}></button><button class="btn" id="n2" ${D('apply.next')}></button></div></div>
 <div class="card" id="s3" style="display:none"><label ${D('apply.cover')}></label><select id="a_cover"><option value="50000">RM 50,000</option><option value="100000" selected>RM 100,000</option><option value="250000">RM 250,000</option><option value="500000">RM 500,000</option></select>
- <label ${D('apply.ben')}></label><input id="a_ben" maxlength="100"><label ${D('apply.guardian')}></label><input id="a_guard" maxlength="100"><div class="msg" id="m3"></div><div class="cta"><button class="btn ghost" data-back="2" ${D('apply.back')}></button><button class="btn" id="n3" ${D('apply.next')}></button></div></div>
+ <label ${D('apply.ben')}></label><input id="a_ben" maxlength="100"><div class="msg" id="m3"></div><div class="cta"><button class="btn ghost" data-back="2" ${D('apply.back')}></button><button class="btn" id="n3" ${D('apply.next')}></button></div></div>
 <div class="card" id="s4" style="display:none"><label class="check"><input type="checkbox" id="c1"><span ${D('apply.consent1')}></span></label><label class="check"><input type="checkbox" id="c2"><span ${D('apply.consent2')}></span></label>
  <div class="msg" id="m4"></div><div class="cta"><button class="btn ghost" data-back="3" ${D('apply.back')}></button><button class="btn" id="n4" ${D('apply.confirm')}></button></div></div>
 <div class="card" id="done" style="display:none;text-align:center"><div class="ico" style="margin:0 auto 14px">&#10003;</div><h2 ${D('apply.done.h')}></h2><p><span ${D('apply.done.p')}></span> <b id="polno"></b></p><a class="btn" href="/dashboard" ${D('apply.done.go')}></a></div></div></div></section></main>`, `
@@ -131,7 +131,7 @@ n1.onclick=async()=>{try{quote=await PC.api('/quote',mets());showQuote();go(2)}c
 n2.onclick=()=>go(3);document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>go(+b.dataset.back));
 n3.onclick=()=>{if(a_ben.value.trim().length<2)return PC.msg(m3,PC.t('common.required')+': '+PC.t('apply.ben'));go(4)};
 n4.onclick=async()=>{if(!c1.checked||!c2.checked)return PC.msg(m4,PC.t('common.required'));n4.disabled=true;
- try{const r=await PC.api('/apply',{...mets(),device,cover:+a_cover.value,beneficiary:a_ben.value,guardian:a_guard.value,consentData:true,consentTerms:true});
+ try{const r=await PC.api('/apply',{...mets(),device,cover:+a_cover.value,beneficiary:a_ben.value,consentData:true,consentTerms:true});
   [1,2,3,4].forEach(i=>document.getElementById('s'+i).style.display='none');stepbar.style.display='none';polno.textContent=r.number;done.style.display=''}
  catch(e){PC.msg(m4,e.message);n4.disabled=false}};`];
 

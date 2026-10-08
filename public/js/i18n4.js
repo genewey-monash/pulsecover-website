@@ -21,7 +21,7 @@ Object.assign(window.PC_I18N, {
   'acc.err.email': ['Invalid email address.', '邮箱地址无效。', 'Alamat e-mel tidak sah.', 'மின்னஞ்சல் முகவரி தவறானது.'],
   'acc.err.pwlen': ['Password must be at least 8 characters.', '密码至少需要 8 个字符。', 'Kata laluan mestilah sekurang-kurangnya 8 aksara.', 'கடவுச்சொல் குறைந்தது 8 எழுத்துகள் இருக்க வேண்டும்.'],
   'acc.err.match': ['The passwords do not match. Please enter them again.', '两次输入的密码不一致，请重新输入。', 'Kata laluan tidak sepadan. Sila masukkan semula.', 'கடவுச்சொற்கள் பொருந்தவில்லை. மீண்டும் உள்ளிடவும்.'],
-  'acc.err.dob': ['You must be 16 or older to register.', '须年满 16 岁方可注册。', 'Anda mesti berumur 16 tahun atau lebih untuk mendaftar.', 'பதிவு செய்ய 16 வயது அல்லது அதற்கு மேல் இருக்க வேண்டும்.'],
+  'acc.err.dob': ['You must be 18 or older to register.', '须年满 18 岁方可注册。', 'Anda mesti berumur 18 tahun atau lebih untuk mendaftar.', 'பதிவு செய்ய 18 வயது அல்லது அதற்கு மேல் இருக்க வேண்டும்.'],
   'acc.err.exists': ['An account with this email already exists. Please log in instead.', '该邮箱已注册账户，请直接登录。', 'Akaun dengan e-mel ini sudah wujud. Sila log masuk.', 'இந்த மின்னஞ்சலில் ஏற்கனவே கணக்கு உள்ளது. உள்நுழையவும்.'],
   'acc.err.login': ['Incorrect email or password.', '邮箱或密码不正确。', 'E-mel atau kata laluan tidak betul.', 'மின்னஞ்சல் அல்லது கடவுச்சொல் தவறானது.'],
   'acc.pw.0': ['Too short', '太短', 'Terlalu pendek', 'மிகக் குறுகியது'],

@@ -18,7 +18,7 @@
  <div style="display:flex;justify-content:space-between;padding:8px 0"><span data-i18n="calc.yours"></span><b id="a_tot" style="font-size:1.4rem"></b></div>
  <div class="card" style="background:var(--gold-t);border-color:#f2dca6;margin-top:10px"><p style="color:var(--ink);margin:0" data-i18n="apply.sendins"></p></div>
  <div id="eqhost2" style="margin-top:14px"></div><div class="cta"><button class="btn ghost" data-back="1" data-i18n="apply.back"></button><button class="btn" id="n2" data-i18n="apply.next"></button></div></div>
-<div class="card" id="s3" style="display:none"><label data-i18n="apply.ben"></label><input id="a_ben" maxlength="100"><label data-i18n="apply.guardian"></label><input id="a_guard" maxlength="100"><div class="msg" id="m3"></div><div class="cta"><button class="btn ghost" data-back="2" data-i18n="apply.back"></button><button class="btn" id="n3" data-i18n="apply.next"></button></div></div>
+<div class="card" id="s3" style="display:none"><label data-i18n="apply.ben"></label><input id="a_ben" maxlength="100"><div class="msg" id="m3"></div><div class="cta"><button class="btn ghost" data-back="2" data-i18n="apply.back"></button><button class="btn" id="n3" data-i18n="apply.next"></button></div></div>
 <div class="card" id="s4" style="display:none"><label class="check"><input type="checkbox" id="c1"><span data-i18n="apply.consent1"></span></label><label class="check"><input type="checkbox" id="c2"><span data-i18n="apply.consent2"></span></label><div class="msg" id="m4"></div><div class="cta"><button class="btn ghost" data-back="3" data-i18n="apply.back"></button><button class="btn" id="n4" data-i18n="apply.confirm"></button></div></div>
 <div class="card" id="done" style="display:none;text-align:center"><div class="ico" style="margin:0 auto 14px">&#10003;</div><h2 data-i18n="apply.done.h"></h2><p><span data-i18n="apply.done.p"></span> <b id="polno"></b></p><a class="btn" href="/dashboard" data-i18n="apply.done.go"></a></div></div></div></section></main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/i18n5.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script><script>
 let PLANS=[],plan=new URLSearchParams(location.search).get('plan')||'A',conn=[],days=0,quote=null,step=1;
@@ -37,6 +37,6 @@ n1.onclick=async()=>{try{quote=days>=7?(await PC.api('/my-quote',{plan,appSubscr
 n2.onclick=()=>go(3);document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>go(+b.dataset.back));
 n3.onclick=()=>{if(a_ben.value.trim().length<2)return PC.msg(m3,PC.t('common.required')+': '+PC.t('apply.ben'));go(4)};
 n4.onclick=async()=>{if(!c1.checked||!c2.checked)return PC.msg(m4,PC.t('common.required'));n4.disabled=true;
- try{const r=await PC.api('/apply',{...mets(),device:conn[0]||'manual',beneficiary:a_ben.value,guardian:a_guard.value,consentData:true,consentTerms:true});
+ try{const r=await PC.api('/apply',{...mets(),device:conn[0]||'manual',beneficiary:a_ben.value,consentData:true,consentTerms:true});
   [1,2,3,4].forEach(i=>document.getElementById('s'+i).style.display='none');stepbar.style.display='none';polno.textContent=r.number;done.style.display=''}
  catch(e){PC.msg(m4,e.message);n4.disabled=false}};</script></body></html>

@@ -31,7 +31,7 @@ function bad(id,key){const i=document.getElementById(id),h=document.getElementBy
 const age=d=>{const t=new Date(),b=new Date(d);if(isNaN(b))return -1;let a=t.getFullYear()-b.getFullYear();const m=t.getMonth()-b.getMonth();if(m<0||(m===0&&t.getDate()<b.getDate()))a--;return a};
 document.querySelectorAll('.pwtog').forEach(b=>b.onclick=()=>{const i=document.getElementById(b.dataset.for);const s=i.type==='password';i.type=s?'text':'password';b.textContent=PC.t(s?'acc.hide':'acc.show')});
 window.addEventListener('pc:lang',()=>{document.querySelectorAll('.pwtog').forEach(b=>b.textContent=PC.t(document.getElementById(b.dataset.for).type==='password'?'acc.show':'acc.hide'));drawPlans();drawPolicy()});
-p_d.max=new Date().toISOString().slice(0,10);
+p_d.max=new Date(new Date().getFullYear()-18,new Date().getMonth(),new Date().getDate()).toISOString().slice(0,10);
 pf_out.onclick=()=>PC.logout();
 function fillUser(){ses_em.textContent=U.email;p_n.value=U.name;p_e.value=U.email;p_p.value=U.phone||'';p_d.value=U.dob||'';p_a.value=U.address||'';p_l.value=U.lang||'en'}
 function drawPolicy(){if(!U)return;const has=!!POL;nopol.style.display=has?'none':'';haspol.style.display=has?'':'none';if(!has)return;
@@ -42,10 +42,10 @@ async function load(){try{const d=await PC.api('/dashboard');U=d.user;POL=d.poli
 PC.ready.then(load);
 p_n.onblur=()=>bad('p_n',p_n.value.trim().length>=2?null:'acc.err.name');
 pf.onsubmit=async e=>{e.preventDefault();pm1.className='msg';
- const ok=[bad('p_n',p_n.value.trim().length>=2?null:'acc.err.name'),bad('p_p',!p_p.value.trim()||/^\\+?[0-9][0-9 \\-]{6,18}$/.test(p_p.value.trim())?null:'pf.err.phone'),bad('p_d',p_d.value&&age(p_d.value)>=16?null:'acc.err.dob')].every(Boolean);
+ const ok=[bad('p_n',p_n.value.trim().length>=2?null:'acc.err.name'),bad('p_p',!p_p.value.trim()||/^\\+?[0-9][0-9 \\-]{6,18}$/.test(p_p.value.trim())?null:'pf.err.phone'),bad('p_d',p_d.value&&age(p_d.value)>=18?null:'acc.err.dob')].every(Boolean);
  if(!ok){const f=document.querySelector('#pf .fld-err');if(f)f.focus();PC.msg(pm1,PC.t('pf.fix'));return}
  try{U=await PC.api('/profile',{name:p_n.value.trim(),phone:p_p.value.trim(),dob:p_d.value,address:p_a.value.trim(),lang:p_l.value});PC.msg(pm1,PC.t('pf.saved'),true);if(U.lang!==PC.lang)PC.setLang(U.lang);PC.user=U;window.dispatchEvent(new CustomEvent('pc:lang',{detail:PC.lang}))}
- catch(x){PC.msg(pm1,/phone/i.test(x.message)?PC.t('pf.err.phone'):/at least 16/i.test(x.message)?PC.t('acc.err.dob'):x.message)}};
+ catch(x){PC.msg(pm1,/phone/i.test(x.message)?PC.t('pf.err.phone'):/at least 18/i.test(x.message)?PC.t('acc.err.dob'):x.message)}};
 psave.onclick=async()=>{pm2.className='msg';if(!bad('p_b',p_b.value.trim().length>=2?null:'common.required'))return;psave.disabled=true;
  try{const r=await PC.api('/policy',{plan,beneficiary:p_b.value.trim()});POL=r.policy;PREV=await PC.api('/policy/preview',{});drawPolicy();drawPlans();PC.msg(pm2,PC.t('pf.plan.done'),true)}catch(x){PC.msg(pm2,x.message)}psave.disabled=false};
 w_n2.oninput=()=>bad('w_n2',w_n.value===w_n2.value?null:'acc.err.match');w_n.onblur=()=>w_n.value&&bad('w_n',w_n.value.length>=8?null:'acc.err.pwlen');

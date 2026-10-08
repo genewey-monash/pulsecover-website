@@ -9,7 +9,7 @@ module.exports = (pages, D) => {
   const vsRows = [1, 2, 3, 4, 5, 6].map((i) => `<tr><td ${D('vs.r' + i)}></td><td class="tr" ${D('vs.r' + i + '.t')}></td><td class="pc" ${D('vs.r' + i + '.p')}></td></tr>`).join('');
   const vs = `<div class="scroll"><table class="vs"><thead><tr><th></th><th ${D('vs.col.trad')}></th><th class="pc" ${D('vs.col.pc')}></th></tr></thead><tbody>${vsRows}</tbody></table></div>`;
 
-const ages = `<section class="sec alt"><div class="wrap"><div class="center"><h2 ${D('home.who.h')}></h2><p class="lead" ${D('home.who.p')}></p></div><div class="cards c2" style="margin-top:28px"><figure class="fig"><img class="photo" src="/img/senior-walk.jpg" alt="A man in his sixties walking on a jogging track at sunrise wearing a fitness band" width="1200" height="896" loading="lazy"><figcaption ${D('ages.1')}></figcaption></figure><figure class="fig"><img class="photo" src="/img/teen-guardian.jpg" alt="A mother and her teenage son looking at a phone together at the kitchen table" width="1200" height="896" loading="lazy"><figcaption ${D('ages.2')}></figcaption></figure></div></div></section>\n\n`;
+const ages = `<section class="sec alt"><div class="wrap"><div class="center"><h2 ${D('home.who.h')}></h2><p class="lead" ${D('home.who.p')}></p></div><div class="cards c2" style="margin-top:28px"><figure class="fig"><img class="photo" src="/img/senior-walk.jpg" alt="A man in his sixties walking on a jogging track at sunrise wearing a fitness band" width="1200" height="896" loading="lazy"><figcaption ${D('ages.1')}></figcaption></figure><figure class="fig"><img class="photo" src="/img/cafe-phone.jpg" alt="A man smiling as he checks his phone at a café" width="1200" height="896" loading="lazy"><figcaption ${D('ages.2')}></figcaption></figure></div></div></section>\n\n`;
   // ---------------- HOME ----------------
   let [it, id, ib, ij] = pages['index'];
   const heroCta = '<div class="cta"><a class="btn" href="/connect" data-i18n="home.cta1"></a><a class="btn ghost" href="/how-pricing-works" data-i18n="home.cta2"></a></div>';
@@ -81,7 +81,7 @@ window.addEventListener('pc:lang',()=>{if(PC.user)row()});`];
  <div style="display:flex;justify-content:space-between;padding:8px 0"><span ${D('calc.yours')}></span><b id="a_tot" style="font-size:1.4rem"></b></div>
  <div class="card" style="background:var(--gold-t);border-color:#f2dca6;margin-top:10px"><p style="color:var(--ink);margin:0" ${D('apply.sendins')}></p></div>
  <div class="cta"><button class="btn ghost" data-back="1" ${D('apply.back')}></button><button class="btn" id="n2" ${D('apply.next')}></button></div></div>
-<div class="card" id="s3" style="display:none"><label ${D('apply.ben')}></label><input id="a_ben" maxlength="100"><label ${D('apply.guardian')}></label><input id="a_guard" maxlength="100"><div class="msg" id="m3"></div><div class="cta"><button class="btn ghost" data-back="2" ${D('apply.back')}></button><button class="btn" id="n3" ${D('apply.next')}></button></div></div>
+<div class="card" id="s3" style="display:none"><label ${D('apply.ben')}></label><input id="a_ben" maxlength="100"><div class="msg" id="m3"></div><div class="cta"><button class="btn ghost" data-back="2" ${D('apply.back')}></button><button class="btn" id="n3" ${D('apply.next')}></button></div></div>
 <div class="card" id="s4" style="display:none"><label class="check"><input type="checkbox" id="c1"><span ${D('apply.consent1')}></span></label><label class="check"><input type="checkbox" id="c2"><span ${D('apply.consent2')}></span></label><div class="msg" id="m4"></div><div class="cta"><button class="btn ghost" data-back="3" ${D('apply.back')}></button><button class="btn" id="n4" ${D('apply.confirm')}></button></div></div>
 <div class="card" id="done" style="display:none;text-align:center"><div class="ico" style="margin:0 auto 14px">&#10003;</div><h2 ${D('apply.done.h')}></h2><p><span ${D('apply.done.p')}></span> <b id="polno"></b></p><a class="btn" href="/dashboard" ${D('apply.done.go')}></a></div></div></div></section></main>`, `
 let PLANS=[],plan=new URLSearchParams(location.search).get('plan')||'A',conn=[],days=0,quote=null,step=1;
@@ -100,7 +100,7 @@ n1.onclick=async()=>{try{quote=days>=7?(await PC.api('/my-quote',{plan,appSubscr
 n2.onclick=()=>go(3);document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>go(+b.dataset.back));
 n3.onclick=()=>{if(a_ben.value.trim().length<2)return PC.msg(m3,PC.t('common.required')+': '+PC.t('apply.ben'));go(4)};
 n4.onclick=async()=>{if(!c1.checked||!c2.checked)return PC.msg(m4,PC.t('common.required'));n4.disabled=true;
- try{const r=await PC.api('/apply',{...mets(),device:conn[0]||'manual',beneficiary:a_ben.value,guardian:a_guard.value,consentData:true,consentTerms:true});
+ try{const r=await PC.api('/apply',{...mets(),device:conn[0]||'manual',beneficiary:a_ben.value,consentData:true,consentTerms:true});
   [1,2,3,4].forEach(i=>document.getElementById('s'+i).style.display='none');stepbar.style.display='none';polno.textContent=r.number;done.style.display=''}
  catch(e){PC.msg(m4,e.message);n4.disabled=false}};`];
 

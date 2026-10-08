@@ -13,7 +13,7 @@ function covs(p){return 'ABCDEF'.slice(0,{A:3,B:4,C:5,D:6}[p.id]||3).split('')}`
  <div class="cta"><a class="btn" href="/calculator" ${D('home.cta1')}></a><a class="btn ghost" href="/how-pricing-works" ${D('home.cta2')}></a></div></div></div></div></section>
 <div class="wrap"><div class="stats">
  <div class="stat"><b>RM600</b><span ${D('home.stat1')}></span></div><div class="stat"><b>±15%</b><span ${D('home.stat2')}></span></div>
- <div class="stat"><b>3</b><span ${D('home.stat3')}></span></div><div class="stat"><b>16+</b><span ${D('home.stat4')}></span></div></div></div>
+ <div class="stat"><b>3</b><span ${D('home.stat3')}></span></div><div class="stat"><b>18+</b><span ${D('home.stat4')}></span></div></div></div>
 
 <section class="sec"><div class="wrap center"><h2 ${D('home.problem.h')}></h2><p class="lead" ${D('home.problem.p')}></p></div></section>
 
@@ -65,7 +65,7 @@ document.getElementById('wl').onsubmit=async e=>{e.preventDefault();const m=docu
   // ---------------- PLANS ----------------
   pages['plans'] = ['Plans', 'Browse and compare PulseCover plans.', `
 <main>
-<section class="sec" style="padding:48px 0 28px"><div class="wrap"><div class="cards c2" style="align-items:center"><div><h1 ${D('plans.h1')}></h1><p class="lead" ${D('plans.sub')}></p><div class="cta"><a class="btn" href="/calculator" ${D('plan.quote')}></a><a class="btn ghost" href="#advisor" data-open-callback ${D('nav.talk')}></a></div></div><img class="photo" style="min-height:0;height:260px" src="/img/teen-guardian.jpg" alt="A parent and teenager choosing a plan together on a phone" width="1200" height="896" loading="lazy"></div></div></section>
+<section class="sec" style="padding:48px 0 28px"><div class="wrap"><div class="cards c2" style="align-items:center"><div><h1 ${D('plans.h1')}></h1><p class="lead" ${D('plans.sub')}></p><div class="cta"><a class="btn" href="/calculator" ${D('plan.quote')}></a><a class="btn ghost" href="#advisor" data-open-callback ${D('nav.talk')}></a></div></div><img class="photo" style="min-height:0;height:260px" src="/img/three-ages.jpg" alt="Three friends looking at a phone together at a café" width="1200" height="896" loading="lazy"></div></div></section>
 <div class="subnav"><div class="wrap"><strong ${D('nav.plans')}></strong><a href="#list" ${D('plans.all')}></a><a href="#compare" ${D('cmpt.h')}></a><a href="/how-pricing-works" ${D('nav.how')}></a><a href="/faq" ${D('nav.faq')}></a></div></div>
 <section class="sec alt" id="list"><div class="wrap"><div class="plans"><aside class="filters"><h4 ${D('filter.browse')}></h4>
  <h4 ${D('filter.type')}></h4><label><input type="checkbox" data-ft="individual" checked><span ${D('type.individual')}></span></label><label><input type="checkbox" data-ft="family" checked><span ${D('type.family')}></span></label>
