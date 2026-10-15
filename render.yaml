@@ -3,7 +3,7 @@ services:
     name: pulsecover
     runtime: node
     plan: free
-    buildCommand: echo "no build step"
+    buildCommand: npm install
     startCommand: node server.js
     envVars:
       - key: NODE_VERSION

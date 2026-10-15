@@ -1,3 +1,7 @@
+## Deploy (lecturer's setup: Vercel + Supabase)
+
+See `docs/DEPLOY-VERCEL-SUPABASE.md`. The API is `lib/app.js` (run as a Vercel function by `api/[...path].js`), the database is Supabase Postgres (`supabase/schema.sql`).
+
 # PulseCover website (Group 5, BFM3130)
 
 Wearable-based dynamic pricing health & life insurance. Zero dependencies: Node 22.5+ only.
