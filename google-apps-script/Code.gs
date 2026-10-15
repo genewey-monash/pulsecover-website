@@ -118,7 +118,7 @@ function buildEmail(a, d, ref) {
     inner = p(esc(t.intro)) + box('<b>' + esc(t.ref) + ':</b> ' + esc(ref) + '<br><b>' + esc(t.topic) + ':</b> ' + esc(d.topic || '-') + '<br><br><b>' + esc(t.msg) + ':</b><br>' + nl2br(d.message)) + p(esc(t.out));
   } else if (a === 'callback') {
     subject = 'We received your call back request'; title = 'Thank you, ' + name;
-    inner = p('We have received your request. An advisor will call you back within 2 working days. Here is what you told us:') + box('<b>Phone:</b> ' + esc(d.phone) + '<br><b>State:</b> ' + esc(d.state) + '<br><b>Help with:</b> ' + esc(d.need) + '<br><b>Best time:</b> ' + esc(d.time)) + p('Stay put, we will be in touch soon.');
+    inner = p('We have received your request. Our team will call you back within 2 working days. Here is what you told us:') + box('<b>Phone:</b> ' + esc(d.phone) + '<br><b>State:</b> ' + esc(d.state) + '<br><b>Help with:</b> ' + esc(d.need) + '<br><b>Best time:</b> ' + esc(d.time)) + p('Stay put, we will be in touch soon.');
   } else if (a === 'sme') {
     subject = 'We received your business enquiry'; title = 'Thank you, ' + esc(d.contact || '');
     inner = p('Thank you for your interest in PulseCover for ' + esc(d.company) + '. Your estimate for ' + esc(d.employees) + ' employees is shown below. We will contact you within 2 working days.') + box('<b>Per employee per year:</b> RM ' + esc(d.quote && d.quote.perEmployeeAnnual) + '<br><b>Total per year:</b> RM ' + esc(d.quote && d.quote.totalAnnual) + '<br><b>Your message:</b> ' + nl2br(d.message || '-')) + p('The estimate is indicative. Final group pricing depends on your team\'s activity.');

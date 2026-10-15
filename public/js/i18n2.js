@@ -46,8 +46,8 @@ Object.assign(window.PC_I18N, {
   'cookie.t': ['We use essential storage to remember your language and sign-in. Nothing is sold or shared for advertising.', '我们仅使用必要的存储来记住您的语言和登录状态，不会为广告出售或共享任何数据。', 'Kami menggunakan storan penting untuk mengingati bahasa dan log masuk anda. Tiada data dijual atau dikongsi untuk iklan.', 'உங்கள் மொழி, உள்நுழைவை நினைவில் வைக்க அத்தியாவசிய சேமிப்பைப் பயன்படுத்துகிறோம். விளம்பரத்திற்காக எதுவும் விற்கப்படாது, பகிரப்படாது.'],
   'cookie.ok': ['Accept', '接受', 'Terima', 'ஏற்கிறேன்'],
   'cookie.no': ['Essential only', '仅必要项', 'Penting sahaja', 'அத்தியாவசியம் மட்டும்'],
-  'cb.h': ['Talk to an advisor', '联系顾问', 'Bercakap dengan penasihat', 'ஆலோசகருடன் பேசுங்கள்'],
-  'cb.sub': ['Leave your details and an advisor will call you back within 2 working days.', '留下资料，顾问将在 2 个工作日内回电。', 'Tinggalkan butiran anda dan penasihat akan menghubungi dalam 2 hari bekerja.', 'உங்கள் விவரங்களை விடுங்கள்; ஆலோசகர் 2 வேலை நாட்களுக்குள் அழைப்பார்.'],
+  'cb.h': ['Talk to Us', '联系我们', 'Hubungi Kami', 'எங்களுடன் பேசுங்கள்'],
+  'cb.sub': ['Leave your details and our team will call you back within 2 working days.', '留下您的资料，我们的团队将在 2 个工作日内回电。', 'Tinggalkan butiran anda dan pasukan kami akan menghubungi anda dalam 2 hari bekerja.', 'உங்கள் விவரங்களை விடுங்கள்; எங்கள் குழு 2 வேலை நாட்களுக்குள் உங்களை அழைக்கும்.'],
   'cb.phone': ['Mobile number', '手机号码', 'Nombor telefon bimbit', 'கைபேசி எண்'],
   'cb.state': ['State', '州属', 'Negeri', 'மாநிலம்'],
   'cb.select': ['Please select', '请选择', 'Sila pilih', 'தேர்ந்தெடுக்கவும்'],
@@ -64,7 +64,7 @@ Object.assign(window.PC_I18N, {
   'cb.lang': ['Preferred language', '首选语言', 'Bahasa pilihan', 'விருப்ப மொழி'],
   'cb.consent': ['I have read and accept the data protection notice and agree to be contacted.', '我已阅读并接受数据保护声明，同意被联系。', 'Saya telah membaca dan menerima notis perlindungan data dan bersetuju untuk dihubungi.', 'தரவுப் பாதுகாப்பு அறிவிப்பைப் படித்து ஏற்கிறேன்; தொடர்பு கொள்ள ஒப்புக்கொள்கிறேன்.'],
   'cb.submit': ['Request a call back', '请求回电', 'Minta panggilan balas', 'திரும்ப அழைக்கக் கோருக'],
-  'cb.ok': ['Thank you! An advisor will call you back within 2 working days.', '谢谢！顾问将在 2 个工作日内回电。', 'Terima kasih! Penasihat akan menghubungi anda dalam 2 hari bekerja.', 'நன்றி! ஆலோசகர் 2 வேலை நாட்களுக்குள் உங்களை அழைப்பார்.'],
+  'cb.ok': ['Thank you! Our team will call you back within 2 working days. We have emailed you a confirmation.', '谢谢！我们的团队将在 2 个工作日内回电，确认邮件已发送给您。', 'Terima kasih! Pasukan kami akan menghubungi anda dalam 2 hari bekerja. Kami telah menghantar e-mel pengesahan.', 'நன்றி! எங்கள் குழு 2 வேலை நாட்களுக்குள் உங்களை அழைக்கும். உறுதிப்படுத்தல் மின்னஞ்சல் அனுப்பப்பட்டுள்ளது.'],
 
   // plans
   'plans.h1': ['Our plans', '我们的计划', 'Pelan kami', 'எங்கள் திட்டங்கள்'],
@@ -143,7 +143,7 @@ Object.assign(window.PC_I18N, {
   'home.cross.2d': ['File online in minutes and follow each step live.', '几分钟线上提交，并实时追踪每个步骤。', 'Hantar dalam talian dalam beberapa minit dan jejak setiap langkah.', 'சில நிமிடங்களில் ஆன்லைனில் தாக்கல் செய்து ஒவ்வொரு படியையும் பின்தொடருங்கள்.'],
   'home.cross.3': ['Your questions answered', '解答您的疑问', 'Soalan anda dijawab', 'உங்கள் கேள்விகளுக்குப் பதில்'],
   'home.cross.3d': ['Straight answers on pricing, privacy and claims.', '关于定价、隐私和理赔的直接解答。', 'Jawapan terus tentang harga, privasi dan tuntutan.', 'விலை, தனியுரிமை, கோரிக்கைகள் பற்றிய நேரடி பதில்கள்.'],
-  'home.adv.h': ['Let an advisor help you', '让顾问协助您', 'Biar penasihat membantu anda', 'ஆலோசகர் உங்களுக்கு உதவட்டும்'],
+  'home.adv.h': ['Let us help you', '让我们协助您', 'Biar kami membantu anda', 'நாங்கள் உங்களுக்கு உதவுகிறோம்'],
   'home.adv.p': ['Answer your product questions, find the plan that suits your budget, and request a call back.', '解答产品疑问，找到适合您预算的计划，并可请求回电。', 'Jawab soalan produk anda, cari pelan yang sesuai dengan bajet dan minta panggilan balas.', 'தயாரிப்பு கேள்விகளுக்குப் பதில், உங்கள் பட்ஜெட்டுக்கு ஏற்ற திட்டம், திரும்ப அழைப்புக் கோரிக்கை.'],
   'home.adv.b1': ['Answer your product enquiries', '解答产品咨询', 'Jawab pertanyaan produk anda', 'தயாரிப்பு விசாரணைகளுக்குப் பதில்'],
   'home.adv.b2': ['Find a plan that fits your needs and budget', '找到适合需求与预算的计划', 'Cari pelan yang sesuai dengan keperluan dan bajet', 'தேவை, பட்ஜெட்டுக்கு ஏற்ற திட்டத்தைக் கண்டறிதல்'],

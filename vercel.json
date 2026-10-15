@@ -30,6 +30,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "/api/index?__p=:path*"
+    },
+    {
       "source": "/m/:path*",
       "destination": "/m/"
     }

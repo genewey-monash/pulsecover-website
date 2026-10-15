@@ -70,7 +70,7 @@
     ['/dashboard', 'dash.ref.h', 'dash.ref.p', 'tool', 'referral refer friend code credit leaderboard'],
     ['/dashboard', 'dash.pause.h', 'dash.pause.p', 'tool', 'pause tracking illness injury travel pregnancy'],
     ['/contact', 'nav.contact', 'ct.sub', 'page', 'contact email phone address message help'],
-    ['#callback', 'cb.h', 'cb.sub', 'tool', 'call back advisor talk callback phone request'],
+    ['#callback', 'cb.h', 'cb.sub', 'tool', 'call back talk callback phone request'],
     ['/plans#A', 'plan.A', 'plan.wear', 'plan', 'plan a 600 individual online'],
     ['/plans#B', 'plan.B', 'plan.wear', 'plan', 'plan b 900 individual'],
     ['/plans#C', 'plan.C', 'plan.wear', 'plan', 'plan c 1500 family'],
