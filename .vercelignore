@@ -1,7 +1,7 @@
-data/
-private/
-canva-code/
-tools/
-public/download/*.apk
-node_modules/
+/data/
+/private/
+/canva-code/
+/tools/
+/node_modules/
+/public/download/*.apk
 .env
