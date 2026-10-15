@@ -31,7 +31,7 @@
   "rewrites": [
     {
       "source": "/m/:path*",
-      "destination": "/m/index.html"
+      "destination": "/m/"
     }
   ]
 }
