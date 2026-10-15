@@ -9,7 +9,7 @@ Everything is already coded. You only create two free accounts, copy one connect
 ## Part 1. Supabase (database)
 
 1. Go to https://supabase.com, **Start your project**, sign in with GitHub.
-2. **New project**: Name `pulsecover`, set a **Database password** (save it), Region **Southeast Asia (Singapore)**, Plan **Free**. Wait about 2 minutes.
+2. **New project**: Name `pulsecover`, set a **Database password** (save it), Region **Asia-Pacific (any; the guide sets Vercel to Mumbai)**, Plan **Free**. Wait about 2 minutes.
 3. Press the green **Connect** button at the top of the project page.
 4. Under **Connection string**, open the **Transaction pooler** tab (port 6543). Copy the URI. It looks like
    `postgresql://postgres.abcdxyz:[YOUR-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres`
