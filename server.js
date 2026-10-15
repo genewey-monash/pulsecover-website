@@ -25,6 +25,8 @@ function serveStatic(req, res, pathname) {
   let file = path.normalize(path.join(PUBLIC, rel));
   if (!file.startsWith(PUBLIC)) { res.writeHead(403); return res.end('Forbidden'); }
   if (!path.extname(file) && !fs.existsSync(file)) file += '.html';
+  // single-page web app mounted at /m: unknown sub-paths open the app shell (client-side routing)
+  if (rel.startsWith('/m/') && !path.extname(rel) && !fs.existsSync(file)) file = path.join(PUBLIC, 'm', 'index.html');
   fs.readFile(file, (err, data) => {
     if (err) {
       res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', ...SEC });

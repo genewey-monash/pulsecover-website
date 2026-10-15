@@ -1,0 +1,105 @@
+/* PulseCover app mode: when opened on a phone (or installed to the home screen) the site behaves like a native app.
+   Bottom tab bar, compact app bar, full-screen search, bottom-sheet dialogs, touch-sized controls, no desktop-only hints.
+   Switched on by <html class="appmode"> (see the inline script in <head> and /js/appmode.js). The desktop website is untouched. */
+:root{--tabh:60px}
+.tabbar,.apback,.apcancel{display:none}
+
+html.appmode{font-size:15px;-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+html.appmode body{padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px) + 8px);-webkit-touch-callout:none;touch-action:manipulation}
+html.appmode a,html.appmode button{-webkit-user-select:none;user-select:none}
+html.appmode input,html.appmode select,html.appmode textarea{font-size:16px!important}
+html.appmode main{animation:appin .28s cubic-bezier(.2,.7,.2,1) both}
+@keyframes appin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){html.appmode main{animation:none}}
+
+/* ---- sizes: calmer type, spacing and icons ---- */
+html.appmode .wrap{padding-left:16px;padding-right:16px}
+html.appmode .sec{padding:26px 0}
+html.appmode h1{font-size:1.65rem;line-height:1.22;letter-spacing:-.015em}
+html.appmode h2{font-size:1.28rem;line-height:1.28}
+html.appmode h3{font-size:1.05rem}
+html.appmode .lead{font-size:.98rem;line-height:1.55}
+html.appmode .kicker{font-size:.7rem;margin-bottom:6px}
+html.appmode .btn{padding:12px 18px;font-size:.95rem;min-height:46px;border-radius:14px}
+html.appmode .btn.sm{min-height:38px;padding:8px 14px;font-size:.85rem}
+html.appmode .card,html.appmode .plan,html.appmode .formcard{padding:16px;border-radius:18px}
+html.appmode .ico{width:40px;height:40px;border-radius:12px;margin-bottom:10px}
+html.appmode .ico svg{width:22px;height:22px}
+html.appmode .mi svg{width:24px;height:24px}
+html.appmode .stats{margin-top:-14px}
+html.appmode .stat b{font-size:1.3rem}
+html.appmode .hero .wrap{padding-top:18px;padding-bottom:22px}
+html.appmode table{font-size:.85rem}
+html.appmode :where(svg[viewBox="0 0 24 24"]){width:1.25em;height:1.25em;flex:none}
+
+/* ---- app bar (header) ---- */
+html.appmode .promo,html.appmode .crumb,html.appmode .mega,html.appmode nav.main,html.appmode .burger,html.appmode .tools>.btn,html.appmode #asw{display:none!important}
+html.appmode header.top{box-shadow:none;border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+html.appmode .bar{height:54px;gap:6px}
+html.appmode .brand{gap:8px;font-size:1.05rem}
+html.appmode .brand span.name{display:inline!important;font-size:1.05rem;color:var(--ink)}
+html.appmode .brand .logo-img{width:34px;height:34px;border-radius:0;background:transparent!important;padding:0;object-fit:contain}
+html.appmode .tools{gap:6px}
+html.appmode .ibtn{width:38px;height:38px}
+html.appmode .ibtn svg{width:20px;height:20px}
+html.appmode .lbtn{padding:7px 10px;font-size:.8rem;min-height:38px;border-radius:99px}
+html.appmode .lbtn .chev{display:none}
+html.appmode .apback{display:flex;align-items:center;justify-content:center;width:38px;height:38px;margin-left:-6px;border:0;background:none;color:var(--ink);cursor:pointer;flex:none}
+html.appmode .apback svg{width:24px;height:24px}
+@media(max-width:350px){html.appmode .brand span.name{display:none!important}}
+
+/* ---- search: full-screen sheet, no keyboard hints ---- */
+html.appmode .spanel{position:fixed;inset:0;top:0;z-index:300;background:var(--bg);box-shadow:none;border:0;overflow:auto;padding-top:env(safe-area-inset-top,0px);transform:translateY(16px)}
+html.appmode .spanel.open{transform:none}
+html.appmode .spanel .wrap{padding:10px 14px 24px;max-width:none}
+html.appmode .spanel .wrap>div:first-child{display:flex;gap:10px;align-items:center}
+html.appmode .sbox{flex:1;min-width:0;border:0!important;background:var(--band)!important;border-radius:14px;padding:2px 6px 2px 12px;box-shadow:none!important}
+html.appmode .sbox input,html.appmode .sbox input:focus{background:transparent!important;border:0!important;outline:none!important;box-shadow:none!important;padding:11px 0;min-width:0}
+html.appmode .skey,html.appmode .shint{display:none!important}
+html.appmode #sclear{font-size:0;width:30px;height:30px;padding:0!important;border-radius:50%;background:var(--line)!important;color:var(--mute);position:relative;flex:none}
+html.appmode #sclear::before{content:"\00d7";font-size:20px;line-height:30px;display:block;text-align:center}
+html.appmode .apcancel{display:block;border:0;background:none;color:var(--red);font:inherit;font-weight:700;font-size:.95rem;padding:8px 2px;cursor:pointer;flex:none}
+html.appmode .sres{max-height:none;margin-top:14px}
+html.appmode .sres a,html.appmode .sres .si{padding:12px 6px}
+
+/* ---- bottom tab bar ---- */
+html.appmode .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:120;height:calc(var(--tabh) + env(safe-area-inset-bottom,0px));padding:0 6px env(safe-area-inset-bottom,0px);background:var(--bg);border-top:1px solid var(--line);align-items:stretch;justify-content:space-around}
+html.appmode .tabbar a{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--mute);font-size:.66rem;font-weight:700;text-decoration:none!important;position:relative;transition:color .15s}
+html.appmode .tabbar a svg{width:23px;height:23px}
+html.appmode .tabbar a span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html.appmode .tabbar a.on{color:var(--red)}
+html.appmode .tabbar a.on::before{content:"";position:absolute;top:0;width:26px;height:3px;border-radius:0 0 3px 3px;background:var(--red)}
+html.appmode .tabbar a.mid svg{width:26px;height:26px}
+html.appmode .tabbar a:active{transform:scale(.94)}
+html[data-theme="dark"].appmode .tabbar a.on{color:#FF7C95}
+html[data-theme="dark"].appmode .tabbar a.on::before{background:#FF7C95}
+
+/* ---- floating widgets and banners sit above the tab bar ---- */
+html.appmode .fbtab{display:none}
+html.appmode .fpill{right:14px;bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px) + 12px);width:46px;height:46px;padding:0;justify-content:center;box-shadow:0 6px 18px rgba(142,14,40,.3)}
+html.appmode .fpill .t{display:none}
+html.appmode .fpill svg{width:22px;height:22px}
+html.appmode .cookie{bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px));padding:14px 0;border-radius:18px 18px 0 0;z-index:130}
+html.appmode .cookie .wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px 10px;align-items:stretch}
+html.appmode .cookie p{grid-column:1/-1;margin:0;font-size:.8rem;line-height:1.45}
+html.appmode .cookie .btn{width:100%;min-height:42px;padding:9px 10px;font-size:.88rem;justify-content:center}
+html.appmode #pwa-bar{bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px) + 10px)!important}
+
+/* ---- dialogs become bottom sheets ---- */
+html.appmode .modal{align-items:flex-end;padding:0}
+html.appmode .mbox{max-width:none;border-radius:22px 22px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));max-height:90dvh;transform:translateY(100%)}
+html.appmode .modal.open .mbox{transform:none}
+
+/* ---- footer: compact two-column "More" block ---- */
+html.appmode .foot{padding:22px 0 10px;margin-top:8px}
+html.appmode .fgrid{grid-template-columns:1fr 1fr!important;gap:18px 16px}
+html.appmode .fgrid>div:first-child{grid-column:1/-1}
+html.appmode .fgrid>div:last-child{grid-column:1/-1}
+html.appmode .fgrid h4{margin-bottom:6px;font-size:.78rem}
+html.appmode .fgrid a{padding:5px 0;font-size:.88rem}
+html.appmode .badges{display:none!important}
+html.appmode .fgrid .langs{display:flex;flex-wrap:wrap;gap:8px}
+html.appmode .fgrid .langs button{flex:1 1 auto;min-width:0;padding:8px 12px;font-size:.82rem}
+html.appmode .reg{font-size:.72rem;line-height:1.5}
+html.appmode .fbot{flex-direction:column;gap:4px;font-size:.72rem}
+html.appmode .apfeedback{margin-top:6px;border:1px solid rgba(255,255,255,.25);background:none;color:#fff;border-radius:12px;padding:9px 14px;font:inherit;font-weight:700;font-size:.85rem;cursor:pointer}

@@ -27,5 +27,11 @@
   ],
   "regions": [
     "bom1"
+  ],
+  "rewrites": [
+    {
+      "source": "/m/:path*",
+      "destination": "/m/index.html"
+    }
   ]
 }
