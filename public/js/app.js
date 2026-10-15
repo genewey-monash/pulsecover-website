@@ -267,11 +267,38 @@
     else if (s.getAttribute('href').split('#')[0] === location.pathname.replace(/\.html$/, '') || (s.getAttribute('href').startsWith('#'))) { PC.closeSearch(); }
   });
 
+
+  /* ---- guest wearable: simulated 28 days kept in this browser; moved into the account after login ---- */
+  const GK = 'pc_guest_conn';
+  const gRead = () => { try { return JSON.parse(localStorage.getItem(GK)) || null; } catch (e) { return null; } };
+  const gHash = (str) => { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const gRng = (seed) => () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  PC.guestProviders = () => (gRead() || { providers: [] }).providers;
+  PC.guestConnect = async (provider, plan) => {
+    const g = gRead() || { providers: [], seed: Math.random().toString(36).slice(2, 10) };
+    if (!g.providers.includes(provider)) g.providers.push(provider);
+    try { localStorage.setItem(GK, JSON.stringify(g)); } catch (e) {}
+    const r0 = gRng(gHash(g.seed)), base = { st: 5500 + r0() * 5500, ex: 60 + r0() * 110, sl: 6.2 + r0() * 2, hr: 54 + r0() * 18 };
+    let st = 0, ex = 0, sl = 0, hr = 0; const today = new Date();
+    for (let i = 27; i >= 0; i--) {
+      const d = new Date(today); d.setDate(d.getDate() - i);
+      const r = gRng(gHash(g.seed + d.toISOString().slice(0, 10))), wk = d.getDay() % 6 === 0 ? 0.85 : 1.05;
+      st += Math.round(base.st * wk * (0.75 + r() * 0.5)); ex += Math.round((base.ex / 7) * wk * (0.6 + r() * 0.9));
+      sl += Math.round((base.sl + (r() - 0.5)) * 10) / 10; hr += Math.round(base.hr + (r() - 0.5) * 6);
+    }
+    const quote = await PC.api('/quote', { steps: st / 28, exerciseMin: (ex / 28) * 7, sleepHours: sl / 28, restingHr: hr / 28, plan });
+    return { provider, days: 28, added: 28, quote, guest: true };
+  };
+  PC.guestMigrate = async () => {
+    const g = gRead(); if (!g || !PC.user) return;
+    for (const p of g.providers) { try { await PC.api('/connect', { provider: p, consent: true }); } catch (e) {} }
+    try { localStorage.removeItem(GK); } catch (e) {}
+  };
+
   /* ---- wearable connect (consent modal -> /api/connect). Simulated: real vendor OAuth needs partner credentials. ---- */
   PC.providers = { healthconnect: 'Google Health Connect', fitbit: 'Fitbit', garmin: 'Garmin', whoop: 'Whoop' };
   PC.connect = (provider, plan) => new Promise((resolve, reject) => {
-    if (!PC.user) { location.href = '/account?next=' + encodeURIComponent(location.pathname + location.search); return; }
-    document.getElementById('cnmodal')?.remove();
+    document.getElementById('cnmodal')?.remove(); // guests can connect too: the readings are simulated in this browser and saved to the account after login
     const m = document.createElement('div'); m.className = 'modal open'; m.id = 'cnmodal';
     m.innerHTML = `<div class="mbox"><button class="x" data-close aria-label="Close">&times;</button><div class="ico" style="margin-bottom:10px">${PC.icon('plug')}</div><h3 data-i18n="connect.modal.h"></h3><p style="margin:0 0 6px"><b>${PC.providers[provider]}</b></p>
       <ul class="perm"><li data-i18n="connect.a1"></li><li data-i18n="connect.a2"></li><li data-i18n="connect.a3"></li><li data-i18n="connect.a4"></li></ul>
@@ -283,7 +310,7 @@
     m.addEventListener('click', (e) => { if (e.target === m || e.target.hasAttribute('data-close')) { close(); reject(new Error('cancel')); } });
     m.querySelector('#cnok').onclick = async () => {
       const b = m.querySelector('#cnok'); b.disabled = true;
-      try { const r = await PC.api('/connect', { provider, consent: true, plan }); close(); resolve(r); }
+      try { const r = PC.user ? await PC.api('/connect', { provider, consent: true, plan }) : await PC.guestConnect(provider, plan); close(); resolve(r); }
       catch (e) { PC.msg(m.querySelector('.msg'), e.message); b.disabled = false; }
     };
   });
@@ -384,6 +411,7 @@
   PC.ready = (async function () {
     chrome();
     try { PC.user = (await PC.api('/me')).user; } catch (e) {}
+    if (PC.user) PC.guestMigrate(); // a wearable connected as a guest is saved to the account after login
     idleGuard();
     if (PC.user && store.get('pc_lang') === null && idx[PC.user.lang] !== undefined) lang = PC.user.lang;
     PC.apply();

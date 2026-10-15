@@ -43,9 +43,9 @@ let conn=[];
 function row(){document.getElementById('devrow').innerHTML=Object.entries(PC.providers).map(([k,n])=>'<button class="devbtn'+(conn.includes(k)?' on':'')+'" data-p="'+k+'">'+n+'<small>'+(conn.includes(k)?PC.t('connect.connected'):PC.t('connect.cta'))+'</small></button>').join('');
  document.querySelectorAll('.devbtn').forEach(b=>b.onclick=async()=>{try{const r=await PC.connect(b.dataset.p);if(!conn.includes(b.dataset.p))conn.push(b.dataset.p);row();show(r)}catch(e){if(e.message!=='cancel')PC.msg(cmsg,e.message)}})}
 function show(r){const q=r.quote;document.getElementById('cres').innerHTML='<div class="card" style="margin-top:8px"><p style="margin:0 0 6px"><b>&#10003; '+PC.t('connect.connected')+' &middot; '+r.days+' '+PC.t('apply.connected.n')+'</b></p><p style="margin:0 0 10px">'+PC.t('rate.h')+': <span class="gr '+(q.grade==='A+'?'Ap':q.grade)+'">'+q.grade+'</span> &middot; '+PC.t('rate.score')+' '+q.score+'/100</p><a class="btn sm" href="/apply">'+PC.t('plan.apply')+' &rarr;</a></div>'}
-PC.ready.then(async()=>{if(!PC.user){document.getElementById('devrow').style.display='block';document.getElementById('devrow').innerHTML='<p style="width:100%;color:var(--mute)">'+PC.t('connect.login')+'</p><a class="btn" href="/account?next=/connect">'+PC.t('nav.login')+'</a>';return}
- try{const d=await PC.api('/dashboard');conn=d.connections.map(c=>c.provider)}catch(e){}row()});
-window.addEventListener('pc:lang',()=>{if(PC.user)row()});`];
+PC.ready.then(async()=>{if(!PC.user){conn=PC.guestProviders();row();return}
+ await PC.guestMigrate();try{const d=await PC.api('/dashboard');conn=d.connections.map(c=>c.provider)}catch(e){}row()});
+window.addEventListener('pc:lang',()=>{row()});`];
 
   // ---------------- HOW PRICING WORKS ----------------
   let [ht, hd, hb, hj] = pages['how-pricing-works'];
