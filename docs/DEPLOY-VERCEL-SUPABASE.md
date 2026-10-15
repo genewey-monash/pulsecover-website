@@ -32,6 +32,14 @@ Everything is already coded. You only create two free accounts, copy one connect
 2. Open the home page. Register (18 or older), connect a wearable, apply, file a claim.
 3. In Supabase **Table Editor > users** you see the account you just made. That proves Supabase is the backend.
 
+## Part 4. How people open it like an app (QR code)
+
+1. Open `https://YOUR-PROJECT.vercel.app/app`. It shows a **QR code** for the web app link.
+2. Anyone scans the QR code with their phone camera and the web app opens in the browser.
+3. **iPhone (Safari):** tap Share, then **Add to Home Screen**, then **Add**.
+   **Android (Chrome):** tap the menu (three dots), then **Install app** / **Add to Home screen**.
+4. A PulseCover icon appears on the home screen. Tapping it opens the web app full screen, like a normal app.
+
 ## Common problems
 
 | You see | Fix |

@@ -90,5 +90,12 @@ Object.assign(window.PC_I18N, {
   'dl.ios': ['iPhone and iPad', 'iPhone 和 iPad', 'iPhone dan iPad', 'iPhone மற்றும் iPad'],
   'dl.ios.p': ['The iPhone version is built from the same code and is shared through Apple TestFlight. Ask the team for an invitation.', 'iPhone 版本使用同一套代码构建，通过 Apple TestFlight 分享，请向团队索取邀请。', 'Versi iPhone dibina daripada kod yang sama dan dikongsi melalui Apple TestFlight. Minta jemputan daripada pasukan.', 'iPhone பதிப்பு அதே குறியீட்டிலிருந்து உருவாக்கப்பட்டு Apple TestFlight வழியாகப் பகிரப்படும். அழைப்பைக் குழுவிடம் கேளுங்கள்.'],
   'dl.scan': ['Scan with your phone camera', '用手机相机扫描', 'Imbas dengan kamera telefon anda', 'உங்கள் தொலைபேசி கேமராவால் ஸ்கேன் செய்யுங்கள்'],
+  'dl.web.h': ['Open the web app', '打开网页应用', 'Buka app web', 'இணையச் செயலியைத் திறக்கவும்'],
+  'dl.web.p': ['No download. Works in your phone browser and can sit on your home screen like an app.', '无需下载。在手机浏览器中使用，也可像应用一样放在主屏幕上。', 'Tiada muat turun. Berfungsi dalam pelayar telefon dan boleh diletakkan di skrin utama seperti app.', 'பதிவிறக்கம் தேவையில்லை. தொலைபேசி உலாவியில் இயங்கும்; முகப்புத் திரையில் செயலி போலச் சேர்க்கலாம்.'],
+  'dl.web.btn': ['Open Web App', '打开网页应用', 'Buka App Web', 'இணையச் செயலியைத் திற'],
+  'dl.web.add': ['Add to Home Screen', '添加到主屏幕', 'Tambah ke Skrin Utama', 'முகப்புத் திரையில் சேர்'],
+  'dl.web.ios': ['iPhone (Safari): tap Share, then Add to Home Screen, then Add.', 'iPhone（Safari）：点击“分享”，选择“添加到主屏幕”，再点“添加”。', 'iPhone (Safari): ketik Kongsi, kemudian Tambah ke Skrin Utama, kemudian Tambah.', 'iPhone (Safari): பகிர் என்பதைத் தட்டி, முகப்புத் திரையில் சேர், பின்னர் சேர் என்பதைத் தேர்ந்தெடுக்கவும்.'],
+  'dl.web.and': ['Android (Chrome): tap the menu (three dots), then Install app or Add to Home screen.', 'Android（Chrome）：点击菜单（三个点），选择“安装应用”或“添加到主屏幕”。', 'Android (Chrome): ketik menu (tiga titik), kemudian Pasang app atau Tambah ke skrin utama.', 'Android (Chrome): மெனுவை (மூன்று புள்ளிகள்) தட்டி, செயலியை நிறுவு அல்லது முகப்புத் திரையில் சேர் என்பதைத் தேர்ந்தெடுக்கவும்.'],
+  'dl.apk.h': ['Prefer a file? Android app (APK)', '想要安装文件？安卓应用（APK）', 'Mahu fail? App Android (APK)', 'கோப்பு வேண்டுமா? Android செயலி (APK)'],
   'dl.none': ['The app file is being prepared. Please check back soon.', '应用文件正在准备中，请稍后再来。', 'Fail app sedang disediakan. Sila semak semula sebentar lagi.', 'செயலி கோப்பு தயாராகிறது. சிறிது நேரம் கழித்து வாருங்கள்.']
 });

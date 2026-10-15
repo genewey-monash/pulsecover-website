@@ -6,13 +6,6 @@
       "maxDuration": 30
     }
   },
-  "redirects": [
-    {
-      "source": "/download/pulsecover.apk",
-      "destination": "https://pulsecover-website.onrender.com/download/pulsecover.apk",
-      "permanent": false
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",

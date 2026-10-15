@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000;
 const PUBLIC = path.join(__dirname, 'public');
 
 // ---- static files ----
-const MIME = { '.apk': 'application/vnd.android.package-archive', '.ipa': 'application/octet-stream', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.webm': 'video/webm', '.webp': 'image/webp', '.jpeg': 'image/jpeg' };
+const MIME = { '.webmanifest': 'application/manifest+json', '.apk': 'application/vnd.android.package-archive', '.ipa': 'application/octet-stream', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.webm': 'video/webm', '.webp': 'image/webp', '.jpeg': 'image/jpeg' };
 const SEC = { 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Referrer-Policy': 'same-origin' };
 
 function serveStatic(req, res, pathname) {

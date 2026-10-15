@@ -1,21 +1,17 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Get the app | PulseCover</title><meta name="description" content="Download the PulseCover Android app.">
+<title>Get the app | PulseCover</title><meta name="description" content="Open PulseCover as a web app on your phone, or download the Android app.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
-<script>(function(){try{var th=localStorage.getItem('pc_theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=th}catch(e){document.documentElement.dataset.theme='light'}})()</script><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
+<script>(function(){try{var th=localStorage.getItem('pc_theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=th}catch(e){document.documentElement.dataset.theme='light'}})()</script><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#B71234"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="PulseCover"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="/img/apple-touch-icon.png"><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="stylesheet" href="/css/style.css"></head><body>
 <main><section class="sec"><div class="wrap" style="max-width:920px"><div class="dlgrid">
  <div><h1 data-i18n="dl.h1"></h1><p class="lead" data-i18n="dl.sub"></p>
-  <div class="card dlcard" id="dlbox"><div class="dlhead"><img src="/img/logo-mark.png" alt="" width="64" height="64"><div><b>PulseCover</b><small id="dlmeta"></small></div></div>
-   <a class="btn" id="dlbtn" href="/download/pulsecover.apk" download data-i18n="dl.btn"></a><p class="fnote" id="dlreq" data-i18n="dl.req"></p><p class="fhelp" id="dlnone" data-i18n="dl.none"></p></div>
-  <h3 style="margin-top:28px" data-i18n="dl.steps"></h3>
-  <ol class="tysteps"><li data-i18n="dl.s1"></li><li data-i18n="dl.s2"></li><li data-i18n="dl.s3"></li></ol>
-  <div class="card" style="margin-top:22px"><h3 data-i18n="dl.ios"></h3><p data-i18n="dl.ios.p"></p></div></div>
+  <div class="card dlcard"><div class="dlhead"><img src="/img/logo-mark.png" alt="" width="64" height="64"><div><b data-i18n="dl.web.h"></b><small data-i18n="dl.web.p"></small></div></div>
+   <div class="cta"><a class="btn" href="/" data-i18n="dl.web.btn"></a><button class="btn ghost" id="pwa-install" type="button" style="display:none" data-i18n="dl.web.add"></button></div>
+   <ol class="tysteps" style="margin-top:16px"><li data-i18n="dl.web.ios"></li><li data-i18n="dl.web.and"></li></ol></div>
+  </div>
  <div class="qrbox card"><div id="qr" aria-hidden="true"></div><p class="fnote" style="text-align:center" data-i18n="dl.scan"></p></div>
-</div></div></section></main><script src="/js/qrcode.js"></script><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/i18n5.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script><script>
-(function(){var url=location.origin+'/download/pulsecover.apk';
+</div></div></section></main><script src="/js/qrcode.js"></script><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/i18n5.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script><script src="/js/pwa.js"></script><script>
+(function(){var url=location.origin+'/';
  try{var q=qrcode(0,'M');q.addData(url);q.make();document.getElementById('qr').innerHTML=q.createSvgTag({cellSize:6,margin:2,scalable:true})}catch(e){}
- fetch('/download/version.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(v){
-  function paint(){document.getElementById('dlmeta').textContent=PC.t('dl.ver')+' '+v.version+' · '+PC.t('dl.size')+' '+v.sizeMB+' MB'}
-  PC.ready.then(paint);window.addEventListener('pc:lang',paint)}).catch(function(){document.getElementById('dlbtn').style.display='none';document.getElementById('dlreq').style.display='none';document.getElementById('dlnone').classList.add('on')});
 })();</script></body></html>
