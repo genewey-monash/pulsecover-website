@@ -7,7 +7,7 @@ module.exports = (pages, D) => {
    <div class="cta"><a class="btn" href="/m/" ${D('dl.web.btn')}></a><button class="btn ghost" id="pwa-install" type="button" style="display:none" ${D('dl.web.add')}></button></div>
    <ol class="tysteps" style="margin-top:16px"><li ${D('dl.web.ios')}></li><li ${D('dl.web.and')}></li></ol></div>
   </div>
- <div class="qrbox card"><div id="qr" aria-hidden="true"></div><p class="fnote" style="text-align:center" ${D('dl.scan')}></p></div>
+ <div class="qrbox card"><div id="qr" aria-hidden="true"></div><p class="fnote" style="text-align:center;margin:18px 0 4px;font-size:.95rem" ${D('dl.scan')}></p></div>
 </div></div></section></main><script src="/js/qrcode.js"></script>`, `
 (function(){var url=location.origin+'/m/';
  try{var q=qrcode(0,'M');q.addData(url);q.make();document.getElementById('qr').innerHTML=q.createSvgTag({cellSize:6,margin:2,scalable:true})}catch(e){}

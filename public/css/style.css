@@ -512,3 +512,7 @@ select:not(.lang){background-repeat:no-repeat!important;background-size:14px!imp
 .langopt:hover{border-color:var(--red)}
 .langopt:has(input:checked){border-color:var(--red);background:var(--red-t)}
 .modal label.check{margin-top:16px}
+
+/* app QR card: breathing room around the code */
+.qrbox{padding:26px 26px 20px}
+.qrbox #qr{border-radius:12px;overflow:hidden}
