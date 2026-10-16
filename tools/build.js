@@ -16,7 +16,7 @@ pages['index'] = [`Wearable-based life & health insurance`, `Insurance priced on
 <section class="hero"><div class="wrap grid"><div>
  <span class="eyebrow" ${D('home.eyebrow')}></span>
  <h1 ${D('home.h1')}></h1><p class="lead" ${D('home.sub')}></p>
- <div class="cta"><a class="btn" href="/calculator" ${D('home.cta1')}></a><a class="btn ghost" href="/how-pricing-works" ${D('home.cta2')}></a></div></div>
+ <div class="cta"><a class="btn" href="/calculator" ${D('home.cta1')}></a><a class="btn ghost" href="/how-pricing-works" ${D('home.cta2')}></a><a class="btn ghost" href="/app" ${D('dl.web.btn')}></a></div></div>
  <div class="phone"><div class="scr"><div class="pill">PulseCover</div><div class="ring" style="--p:82"><i>82<small ${D('calc.score')}></small></i></div>
  <div class="bars"><div class="b"><div class="t"><span ${D('comp.steps')}></span><b>9,240</b></div><div class="tr"><i style="width:100%"></i></div></div>
  <div class="b"><div class="t"><span ${D('comp.exercise')}></span><b>132 min</b></div><div class="tr"><i style="width:88%"></i></div></div>

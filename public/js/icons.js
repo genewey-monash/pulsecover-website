@@ -14,6 +14,7 @@ window.PC_ICON_PATHS = {
     pause: '<circle cx="12" cy="12" r="9"/><path d="M10 8.5v7M14 8.5v7"/>',
     gift: '<rect x="3" y="9" width="18" height="12" rx="1"/><path d="M3 13h18M12 9v12M12 9C9 9 7 7.5 8 5.8s3.8-.2 4 3.2c.2-3.4 3-5 4-3.2s-1 3.2-4 3.2z"/>',
     star: '<path d="M12 3.5l2.6 5.5 6 .8-4.4 4.1 1.1 6L12 17l-5.3 2.9 1.1-6L3.4 9.8l6-.8z"/>',
+    qr: '<rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h3.2v3.2H14zM20.5 14v3.2M14 20.5h3.2M20.5 20.5h0"/>',
     search: '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>',
     book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5z"/><path d="M4 19a2 2 0 0 1 2-2h13"/>',
     cash: '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.8"/>',

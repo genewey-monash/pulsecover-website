@@ -161,7 +161,7 @@ Object.assign(window.PC_I18N, {
   'cm.ended': ['Ended', '已结束', 'Tamat', 'முடிந்தது'],
   'cm.progress': ['active days', '个活跃日', 'hari aktif', 'செயலில் உள்ள நாட்கள்'],
   'cm.soon': ['Coming soon', '即将推出', 'Akan datang', 'விரைவில்'],
-  'cm.login': ['Log in to join a campaign.', '登录后参加活动。', 'Log masuk untuk menyertai kempen.', 'உள்நுழைந்து பிரச்சாரத்தில் சேருங்கள்.'],
+  'cm.login': ['Log in to join', '登录后参加', 'Log masuk untuk sertai', 'உள்நுழைந்து சேருங்கள்'],
   'cm.privacy': ['Joining is optional. Partners receive only aggregate results and a completion confirmation, never your raw data.', '参加完全自愿。合作方只会收到汇总结果和完成确认，绝不会获得您的原始数据。', 'Penyertaan adalah pilihan. Rakan kongsi hanya menerima keputusan agregat dan pengesahan penyelesaian, tidak pernah data mentah anda.', 'சேர்வது விருப்பமானது. கூட்டாளர்கள் தொகுப்பு முடிவுகளையும் நிறைவு உறுதிப்படுத்தலையும் மட்டுமே பெறுவார்கள்; உங்கள் மூலத் தரவை அல்ல.'],
   'dl.web.h': ['Open the web app', '打开网页应用', 'Buka app web', 'இணையச் செயலியைத் திறக்கவும்'],
   'dl.web.p': ['No download. Works in your phone browser and can sit on your home screen like an app.', '无需下载。在手机浏览器中使用，也可像应用一样放在主屏幕上。', 'Tiada muat turun. Berfungsi dalam pelayar telefon dan boleh diletakkan di skrin utama seperti app.', 'பதிவிறக்கம் தேவையில்லை. தொலைபேசி உலாவியில் இயங்கும்; முகப்புத் திரையில் செயலி போலச் சேர்க்கலாம்.'],

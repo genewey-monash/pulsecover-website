@@ -10,7 +10,7 @@ function covs(p){return 'ABCDEF'.slice(0,{A:3,B:4,C:5,D:6}[p.id]||3).split('')}`
 <section class="hero"><div class="wrap" style="padding:0"><div class="grid">
  <img class="pic" src="/img/hero-family.jpg" alt="A multi-generation Malaysian family walking together in a park, wearing fitness trackers" width="1376" height="768">
  <div class="copy"><span class="eyebrow" ${D('home.eyebrow')}></span><h1 ${D('home.h1')}></h1><p class="lead" ${D('home.sub')}></p>
- <div class="cta"><a class="btn" href="/calculator" ${D('home.cta1')}></a><a class="btn ghost" href="/how-pricing-works" ${D('home.cta2')}></a></div></div></div></div></section>
+ <div class="cta"><a class="btn" href="/calculator" ${D('home.cta1')}></a><a class="btn ghost" href="/how-pricing-works" ${D('home.cta2')}></a><a class="btn ghost" href="/app" ${D('dl.web.btn')}></a></div></div></div></div></section>
 <div class="wrap"><div class="stats">
  <div class="stat"><b>RM600</b><span ${D('home.stat1')}></span></div><div class="stat"><b>±15%</b><span ${D('home.stat2')}></span></div>
  <div class="stat"><b>3</b><span ${D('home.stat3')}></span></div><div class="stat"><b>18+</b><span ${D('home.stat4')}></span></div></div></div>

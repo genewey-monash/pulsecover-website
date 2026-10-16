@@ -107,6 +107,7 @@
       <nav class="main" id="mainnav" aria-label="Main">${nav}<div class="navacct" id="navacct"></div></nav>
       <div class="tools">
         <button class="ibtn" id="sbtn" aria-label="Search">${PC.icon('search')}</button>
+        <a class="ibtn appbtn" href="/app" id="appbtn" data-i18n-aria="nav.app" aria-label="Get the app" title="Get the app">${PC.icon('qr')}</a>
         <button class="ibtn" id="themebtn" aria-label="Theme" aria-pressed="false"></button>
         <div class="dd lsw" id="lsw"><button class="lbtn" id="langbtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Language"><span id="langlabel"></span>${PC.icon('chev', 'chev')}</button>
           <ul class="dmenu lmenu" id="langmenu" role="listbox" aria-label="Language">${LANGS.map((l) => `<li role="option" tabindex="-1" data-l="${l.code}"><span>${l.label}</span>${PC.icon('check', 'tick')}</li>`).join('')}</ul></div>
@@ -116,7 +117,6 @@
             <a role="menuitem" href="/dashboard">${PC.icon('grid')}<span data-i18n="nav.dash"></span></a>
             <a role="menuitem" href="/profile">${PC.icon('user')}<span data-i18n="nav.profile"></span></a>
             <hr><button role="menuitem" type="button" id="logoutbtn" class="out">${PC.icon('logout')}<span data-i18n="nav.logout"></span></button></div></div>
-        <a class="btn ghost sm appbtn" href="/app" data-i18n="nav.app"></a>
         <a class="btn sm" href="/connect" data-i18n="nav.connect"></a>
         <button class="burger" id="burger" aria-label="Menu">&#9776;</button>
       </div></div>
@@ -398,6 +398,7 @@
     if (!scope) document.documentElement.lang = { en: 'en', zh: 'zh-Hans', ms: 'ms', ta: 'ta' }[lang];
     root.querySelectorAll('[data-i18n]').forEach((e) => { e.textContent = PC.t(e.dataset.i18n); });
     root.querySelectorAll('[data-i18n-ph]').forEach((e) => { e.placeholder = PC.t(e.dataset.i18nPh); });
+    root.querySelectorAll('[data-i18n-aria]').forEach((e) => { const v = PC.t(e.dataset.i18nAria); e.setAttribute('aria-label', v); e.title = v; });
     root.querySelectorAll('[data-i18n-opt]').forEach((e) => { e.textContent = PC.t(e.dataset.i18nOpt); });
     root.querySelectorAll('[data-plan]').forEach((e) => { e.textContent = PC.planName(e.dataset.plan); });
     if (scope) return;
