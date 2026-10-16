@@ -35,7 +35,7 @@
         ['mega.individual', [['/plans#A', 'heart', 'A'], ['/plans#B', 'shield', 'B']]],
         ['mega.family', [['/plans#C', 'family', 'C'], ['/plans#D', 'family', 'D']]],
         ['mega.business', [['/business', 'users', 'nav.sme'], ['/business#enquiry', 'chart', 'mega.hr']]],
-        ['mega.tools', [['/connect', 'plug', 'nav.connect'], ['/calculator', 'calc', 'nav.calc'], ['/compare', 'scale', 'nav.compare'], ['/how-pricing-works', 'watch', 'nav.how']]]
+        ['mega.tools', [['/connect', 'plug', 'nav.connect'], ['/calculator', 'calc', 'nav.calc'], ['/compare', 'scale', 'nav.compare'], ['/how-pricing-works', 'watch', 'nav.how'], ['/rewards', 'gift', 'nav.rewards'], ['/campaigns', 'badge', 'nav.campaigns']]]
       ], links: [['/plans', 'mega.browse', 'mega.browse.d'], ['/how-pricing-works', 'mega.rules', 'mega.rules.d'], ['/claims', 'nav.claims', 'mega.claims.d'], ['/privacy', 'footer.privacy', 'mega.priv.d']]
     },
     help: {
@@ -47,7 +47,7 @@
     }
   };
   const TOP = [['mega:products'], ['/how-pricing-works', 'nav.pricing'], ['/calculator', 'nav.calc'], ['/business', 'nav.sme'], ['mega:help']];
-  const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/profile': 'nav.profile', '/app': 'nav.app', '/claims': 'nav.claims' };
+  const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/rewards': 'nav.rewards', '/campaigns': 'nav.campaigns', '/app': 'nav.app', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/profile': 'nav.profile', '/app': 'nav.app', '/claims': 'nav.claims' };
   // Search index: [href, titleKey, descKey, group, extra English keywords]. Matches the current language AND English keywords.
   const SEARCH = [
     ['/', 'nav.home', 'footer.tag', 'page', 'home start welcome'],
@@ -61,6 +61,9 @@
     ['/business#enquiry', 'sme.enquiry.h', 'sme.assoc', 'tool', 'enquiry business quote group contact'],
     ['/investors', 'nav.investors', 'inv.sub', 'page', 'investors market financials breakeven revenue cost sources'],
     ['/privacy', 'footer.privacy', 'prv.sub', 'page', 'privacy data protection consent security pdpa'],
+    ['/rewards', 'nav.rewards', 'rw.sub', 'tool', 'rewards streak streaks coupons level achievements gamified'],
+    ['/campaigns', 'nav.campaigns', 'cm.sub', 'tool', 'campaign campaigns challenge step insurer promotion offer'],
+    ['/app', 'nav.app', 'dl.web.p', 'tool', 'app web app qr code install download home screen phone'],
     ['/claims', 'nav.claims', 'cl.sub', 'tool', 'claim claims file submit track hospital accident'],
     ['/apply', 'nav.apply', 'apply.sub', 'tool', 'apply get covered buy join sign up policy'],
     ['/account', 'nav.login', 'acc.sub', 'tool', 'login log in register sign up account password'],
@@ -71,7 +74,7 @@
     ['/dashboard', 'dash.pause.h', 'dash.pause.p', 'tool', 'pause tracking illness injury travel pregnancy'],
     ['/contact', 'nav.contact', 'ct.sub', 'page', 'contact email phone address message help'],
     ['#callback', 'cb.h', 'cb.sub', 'tool', 'call back talk callback phone request'],
-    ['/plans#A', 'plan.A', 'plan.wear', 'plan', 'plan a 600 individual online'],
+    ['/plans#A', 'plan.A', 'plan.wear', 'plan', 'plan a 600 individual'],
     ['/plans#B', 'plan.B', 'plan.wear', 'plan', 'plan b 900 individual'],
     ['/plans#C', 'plan.C', 'plan.wear', 'plan', 'plan c 1500 family'],
     ['/plans#D', 'plan.D', 'plan.wear', 'plan', 'plan d 2400 family']
@@ -113,6 +116,7 @@
             <a role="menuitem" href="/dashboard">${PC.icon('grid')}<span data-i18n="nav.dash"></span></a>
             <a role="menuitem" href="/profile">${PC.icon('user')}<span data-i18n="nav.profile"></span></a>
             <hr><button role="menuitem" type="button" id="logoutbtn" class="out">${PC.icon('logout')}<span data-i18n="nav.logout"></span></button></div></div>
+        <a class="btn ghost sm appbtn" href="/app" data-i18n="nav.app"></a>
         <a class="btn sm" href="/connect" data-i18n="nav.connect"></a>
         <button class="burger" id="burger" aria-label="Menu">&#9776;</button>
       </div></div>
@@ -135,7 +139,7 @@
         <p style="margin:6px 0"><b style="color:#fff">1300-00-0000</b><br>hello@pulsecover.example</p>
         <div class="soc">${[['Facebook', 'facebook', 'https://www.facebook.com/'], ['Instagram', 'instagram', 'https://www.instagram.com/'], ['X', 'x', 'https://x.com/'], ['Telegram', 'telegram', 'https://t.me/'], ['LinkedIn', 'linkedin', 'https://www.linkedin.com/'], ['YouTube', 'youtube', 'https://www.youtube.com/']].map(([n, f, u]) => `<a href="${u}" target="_blank" rel="noopener noreferrer" aria-label="${n}" title="${n}"><img src="/img/social/${f}.svg" alt="" width="18" height="18"></a>`).join('')}</div>
         <div class="badges"><a class="badge-app" href="https://www.apple.com/app-store/" target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store"><img src="/img/social/apple.svg" alt="" width="22" height="22"><span><small>Download on the</small><b>App Store</b></span></a><a class="badge-app" href="https://play.google.com/" target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play"><img src="/img/social/google-play.svg" alt="" width="22" height="22"><span><small>Get it on</small><b>Google Play</b></span></a></div></div>
-      <div><h4 data-i18n="footer.product"></h4><a href="/plans" data-i18n="nav.plans"></a><a href="/calculator" data-i18n="nav.calc"></a><a href="/compare" data-i18n="nav.compare"></a><a href="/apply" data-i18n="nav.apply"></a><a href="/business" data-i18n="nav.sme"></a><a href="/app" data-i18n="nav.app"></a></div>
+      <div><h4 data-i18n="footer.product"></h4><a href="/plans" data-i18n="nav.plans"></a><a href="/calculator" data-i18n="nav.calc"></a><a href="/compare" data-i18n="nav.compare"></a><a href="/apply" data-i18n="nav.apply"></a><a href="/business" data-i18n="nav.sme"></a><a href="/app" data-i18n="nav.app"></a><a href="/rewards" data-i18n="nav.rewards"></a><a href="/campaigns" data-i18n="nav.campaigns"></a></div>
       <div><h4 data-i18n="footer.support"></h4><a href="/claims" data-i18n="nav.claims"></a><a href="/dashboard" data-i18n="nav.dashboard"></a><a href="/faq" data-i18n="nav.faq"></a><a href="/contact" data-i18n="nav.contact"></a></div>
       <div><h4 data-i18n="footer.company"></h4><a href="/how-pricing-works" data-i18n="nav.how"></a><a href="/investors" data-i18n="nav.investors"></a><a href="/privacy" data-i18n="footer.privacy"></a></div>
       <div><h4 data-i18n="nav.language"></h4><div class="langs" id="flangs">${LANGS.map((l) => `<button data-l="${l.code}">${l.label}</button>`).join('')}</div></div></div>

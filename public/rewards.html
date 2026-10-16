@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Streaks and rewards | PulseCover</title><meta name="description" content="Build a streak and unlock coupons from healthy brands.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
+<script>(function(){try{var th=localStorage.getItem('pc_theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=th}catch(e){document.documentElement.dataset.theme='light'}})()</script><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#B71234"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="PulseCover"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="/img/apple-touch-icon.png"><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/appmode.css"><script>(function(){var d=document.documentElement,m=function(){var on=false;try{on=matchMedia('(max-width:820px)').matches||(matchMedia('(display-mode: standalone)').matches&&matchMedia('(pointer:coarse)').matches)||(navigator.standalone===true)}catch(e){}d.classList.toggle('appmode',on)};m();addEventListener('resize',m);try{if(location.pathname==='/'&&!/[?&]site=1/.test(location.search)&&matchMedia('(max-width:820px)').matches&&matchMedia('(pointer:coarse)').matches&&!sessionStorage.getItem('pc_site')){location.replace('/m/')}else if(/[?&]site=1/.test(location.search)){sessionStorage.setItem('pc_site','1')}}catch(e){}})()</script></head><body>
+<main><section class="sec"><div class="wrap" style="max-width:980px">
+ <span class="kicker" data-i18n="nav.rewards"></span><h1 data-i18n="rw.h1"></h1><p class="lead" data-i18n="rw.sub"></p>
+ <div class="card" id="rwlogin" style="display:none;margin-top:18px"><p data-i18n="rw.login"></p><div class="cta"><a class="btn" href="/account?next=/rewards" data-i18n="nav.login"></a><a class="btn ghost" href="/connect" data-i18n="nav.connect"></a></div></div>
+ <div id="rwbox" style="display:none;margin-top:18px">
+  <div class="cards c3" id="rwstats"></div>
+  <p class="fnote" style="margin:10px 0 0" data-i18n="rw.rule"></p>
+  <div class="card" id="rwnext" style="margin-top:16px"></div>
+  <h2 style="margin-top:34px" data-i18n="rw.coupons"></h2><div class="cards c2" id="rwcoupons" style="margin-top:12px"></div>
+  <h2 style="margin-top:34px" data-i18n="rw.ach"></h2><div id="rwach" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"></div>
+  <p class="fnote" style="margin-top:22px" data-i18n="rw.note"></p><p class="fnote" data-i18n="rw.demo"></p>
+ </div>
+</div></section></main><script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/i18n5.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script><script src="/js/pwa.js"></script><script src="/js/appmode.js"></script><script>
+let R=null;
+const bar=(v,max)=>'<div style="height:8px;border-radius:5px;background:var(--line);margin-top:10px;overflow:hidden"><div style="height:100%;width:'+Math.max(4,Math.min(100,v/max*100))+'%;background:var(--red)"></div></div>';
+function draw(){ if(!R) return; const t=PC.t;
+ document.getElementById('rwstats').innerHTML=
+  '<div class="card"><small style="color:var(--mute)">'+t('rw.streak')+'</small><div style="font-size:2.2rem;font-weight:800;color:var(--red)">'+R.streak+' <span style="font-size:1rem;color:var(--mute)">'+t('rw.days')+'</span></div></div>'+
+  '<div class="card"><small style="color:var(--mute)">'+t('rw.best')+'</small><div style="font-size:2.2rem;font-weight:800">'+R.best+' <span style="font-size:1rem;color:var(--mute)">'+t('rw.days')+'</span></div></div>'+
+  '<div class="card"><small style="color:var(--mute)">'+t('rw.level')+'</small><div style="font-size:2.2rem;font-weight:800">'+t('lv.'+R.level)+'</div></div>';
+ document.getElementById('rwnext').innerHTML=R.next?'<b>'+t('rw.next')+':</b> '+t('cp.'+R.next.id+'.h')+' &middot; '+R.next.left+' '+t('rw.left')+bar(R.best,R.next.min):'<b>&#10003; '+t('rw.unlocked')+'</b>';
+ document.getElementById('rwcoupons').innerHTML=R.coupons.map(c=>'<div class="card" style="'+(c.unlocked?'':'opacity:.78')+'"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><b>'+t('cp.'+c.id+'.h')+'</b><p style="margin:4px 0 0;color:var(--mute)">'+t('cp.'+c.id+'.p')+'</p></div><span class="chip">'+(c.unlocked?'&#10003; '+t('rw.unlocked'):c.min+' '+t('rw.days'))+'</span></div>'+
+  (c.unlocked?'<div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><small style="color:var(--mute)">'+t('rw.code')+'</small><code style="font-weight:800;letter-spacing:.06em;padding:6px 10px;border-radius:8px;background:var(--red-t);color:var(--red)">'+c.code+'</code><button class="btn ghost sm" data-copy="'+c.code+'">'+t('rw.copy')+'</button></div>':'<div style="margin-top:10px;color:var(--mute);font-size:.9rem">'+t('rw.locked')+' '+c.min+' '+t('rw.days')+bar(R.best,c.min)+'</div>')+'</div>').join('');
+ document.getElementById('rwach').innerHTML=R.achievements.map(a=>'<span class="chip" style="padding:10px 14px;'+(a.done?'background:var(--red);color:#fff':'opacity:.6')+'">'+(a.done?'&#10003; ':'')+t('ach.'+a.id)+'</span>').join('');
+ document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{try{navigator.clipboard.writeText(b.dataset.copy)}catch(e){}b.textContent=PC.t('rw.copied')});
+}
+PC.ready.then(async()=>{ if(!PC.user){document.getElementById('rwlogin').style.display='';return}
+ document.getElementById('rwbox').style.display='';
+ try{R=await PC.api('/rewards');draw()}catch(e){} });
+window.addEventListener('pc:lang',draw);</script></body></html>
