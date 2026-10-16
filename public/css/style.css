@@ -500,3 +500,7 @@ html[data-theme="dark"] select:not(.lang){background-image:url("data:image/svg+x
 
 /* round header icon buttons (search, app QR, theme): one consistent icon size */
 .ibtn svg{width:22px;height:22px;flex:none}
+
+/* fix: dark-mode selects reset the arrow's repeat/position (the page's dark rule uses the background shorthand), so restate everything here */
+html[data-theme="dark"] select:not(.lang){background:#14111A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none' stroke='%23F3F1F6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 5l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 16px center/14px;padding-right:44px}
+select:not(.lang){background-repeat:no-repeat!important;background-size:14px!important}
