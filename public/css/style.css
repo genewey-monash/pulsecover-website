@@ -504,3 +504,11 @@ html[data-theme="dark"] select:not(.lang){background-image:url("data:image/svg+x
 /* fix: dark-mode selects reset the arrow's repeat/position (the page's dark rule uses the background shorthand), so restate everything here */
 html[data-theme="dark"] select:not(.lang){background:#14111A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none' stroke='%23F3F1F6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 5l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 16px center/14px;padding-right:44px}
 select:not(.lang){background-repeat:no-repeat!important;background-size:14px!important}
+
+/* Talk to Us: preferred-language choices as roomy pills */
+.langopts{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0 6px}
+.langopt{display:inline-flex;align-items:center;gap:10px;margin:0!important;padding:11px 18px;border:1.5px solid var(--line);border-radius:999px;font-weight:600;cursor:pointer;line-height:1.2;transition:border-color .2s,background .2s}
+.langopt input{margin:0!important;width:18px;height:18px;flex:none}
+.langopt:hover{border-color:var(--red)}
+.langopt:has(input:checked){border-color:var(--red);background:var(--red-t)}
+.modal label.check{margin-top:16px}

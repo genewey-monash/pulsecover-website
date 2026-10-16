@@ -338,7 +338,7 @@
       <div><label data-i18n="cb.state"></label><select name="state" required><option value="" data-i18n-opt="cb.select"></option>${STATES.map((s) => `<option>${s}</option>`).join('')}</select></div>
       <div><label data-i18n="cb.need"></label><select name="need"><option value="info" data-i18n-opt="cb.n1"></option><option value="plan" data-i18n-opt="cb.n2"></option><option value="claims" data-i18n-opt="cb.n3"></option><option value="business" data-i18n-opt="cb.n4"></option><option value="other" data-i18n-opt="cb.n5"></option></select></div>
       <div><label data-i18n="cb.time"></label><select name="time"><option value="morning" data-i18n-opt="cb.t1"></option><option value="afternoon" data-i18n-opt="cb.t2"></option><option value="evening" data-i18n-opt="cb.t3"></option></select></div></div>
-      <label data-i18n="cb.lang"></label><div style="display:flex;gap:14px;flex-wrap:wrap">${LANGS.map((l) => `<label style="margin:0;font-weight:400"><input type="radio" name="clang" value="${l.code}" ${l.code === lang ? 'checked' : ''}>${l.label}</label>`).join('')}</div>
+      <label data-i18n="cb.lang" style="margin-top:22px;display:block"></label><div class="langopts">${LANGS.map((l) => `<label class="langopt"><input type="radio" name="clang" value="${l.code}" ${l.code === lang ? 'checked' : ''}><span>${l.label}</span></label>`).join('')}</div>
       <label class="check"><input type="checkbox" name="consent"><span data-i18n="cb.consent"></span></label>
       <div class="msg"></div><button class="btn" style="margin-top:8px" data-i18n="cb.submit"></button></form>`;
     const f = host.querySelector('form'), m = host.querySelector('.msg');
