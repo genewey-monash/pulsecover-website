@@ -54,4 +54,31 @@ function draw(){ const t=PC.t;
 }
 PC.ready.then(async()=>{try{L=await PC.api('/campaigns')}catch(e){}draw()});
 window.addEventListener('pc:lang',draw);`];
+
+  // ---- Premium Quote: dedicated highlighted band on the home page, right below the benefits grid ----
+  const ROWS = ['r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7', 'r8'];
+  const premiumBand = `<section class="sec red premsec" id="premium"><div class="wrap"><div class="cards c2" style="gap:40px;align-items:center">
+ <div><span class="kicker" style="color:#FFD9E0" ${D('pq.kicker')}></span><h2 ${D('pq.h')}></h2><p class="lead" ${D('pq.p')}></p>
+  <ul class="premlist"><li ${D('pq.b1')}></li><li ${D('pq.b2')}></li><li ${D('pq.b3')}></li><li ${D('pq.b4')}></li></ul>
+  <div class="cta"><a class="btn light" href="/premium" ${D('pq.cta')}></a><a class="btn outl-w" href="/calculator" ${D('pq.try')}></a></div></div>
+ <div class="premcard"><small ${D('pq.col.premium')}></small><div class="premprice">RM14.90</div><p ${D('pq.price.note')}></p><div class="premfree"><b ${D('pq.col.free')}></b> &middot; <span ${D('pq.r3')}></span></div></div>
+</div></div></section>`;
+  let [it, id, ib, ij] = pages['index'];
+  const at = ib.indexOf('home.ben.h'); const nx = ib.indexOf('<section', at);
+  if (at > -1 && nx > -1) ib = ib.slice(0, nx) + premiumBand + '\n' + ib.slice(nx);
+  pages['index'] = [it, id, ib, ij];
+
+  // ---- Free vs Premium comparison page ----
+  const cell = (yes) => (yes ? `<span class="pq-y" role="img" aria-label="Included">&#10003;</span>` : `<span class="pq-n" role="img" aria-label="Not included">&ndash;</span>`);
+  const rowHtml = ROWS.map((r, i) => `<tr><th scope="row" ${D('pq.' + r)}></th><td class="c">${cell(true)}</td><td class="c prem">${cell(true)}</td></tr>`.replace(/<td class="c">(.*?)<\/td><td class="c prem">/, (m, g) => `<td class="c">${cell(i < 4)}</td><td class="c prem">`)).join('');
+  pages['premium'] = ['Premium Quote', 'Free versus Premium Quote: what is included.', `
+<main><section class="sec"><div class="wrap" style="max-width:920px">
+ <span class="kicker" ${D('nav.premium')}></span><h1 ${D('pq.h')}></h1><p class="lead" ${D('pq.p')}></p>
+ <div class="scroll" style="margin-top:26px"><table class="tbl pqt"><thead><tr><th ${D('pq.col.feature')}></th><th class="c" ${D('pq.col.free')}></th><th class="c prem" ${D('pq.col.premium')}></th></tr></thead><tbody>
+  <tr><th scope="row" ${D('pq.r.price')}></th><td class="c"><b ${D('pq.v.free')}></b></td><td class="c prem"><b ${D('pq.v.premium')}></b></td></tr>
+  ${rowHtml}
+  <tr class="ctarow"><td></td><td class="c"><a class="btn ghost sm" href="/connect" ${D('pq.free.cta')}></a></td><td class="c prem"><a class="btn sm" href="/calculator" ${D('pq.premium.cta')}></a></td></tr>
+ </tbody></table></div>
+ <p class="fnote" style="margin-top:18px" ${D('pq.note')}></p>
+</div></section></main>`, ''];
 };

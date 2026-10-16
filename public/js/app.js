@@ -35,7 +35,7 @@
         ['mega.individual', [['/plans#A', 'heart', 'A'], ['/plans#B', 'shield', 'B']]],
         ['mega.family', [['/plans#C', 'family', 'C'], ['/plans#D', 'family', 'D']]],
         ['mega.business', [['/business', 'users', 'nav.sme'], ['/business#enquiry', 'chart', 'mega.hr']]],
-        ['mega.tools', [['/connect', 'plug', 'nav.connect'], ['/calculator', 'calc', 'nav.calc'], ['/compare', 'scale', 'nav.compare'], ['/how-pricing-works', 'watch', 'nav.how'], ['/rewards', 'gift', 'nav.rewards'], ['/campaigns', 'badge', 'nav.campaigns']]]
+        ['mega.tools', [['/connect', 'plug', 'nav.connect'], ['/calculator', 'calc', 'nav.calc'], ['/compare', 'scale', 'nav.compare'], ['/how-pricing-works', 'watch', 'nav.how'], ['/rewards', 'gift', 'nav.rewards'], ['/campaigns', 'badge', 'nav.campaigns'], ['/premium', 'star', 'nav.premium']]]
       ], links: [['/plans', 'mega.browse', 'mega.browse.d'], ['/how-pricing-works', 'mega.rules', 'mega.rules.d'], ['/claims', 'nav.claims', 'mega.claims.d'], ['/privacy', 'footer.privacy', 'mega.priv.d']]
     },
     help: {
@@ -47,7 +47,7 @@
     }
   };
   const TOP = [['mega:products'], ['/how-pricing-works', 'nav.pricing'], ['/calculator', 'nav.calc'], ['/business', 'nav.sme'], ['mega:help']];
-  const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/rewards': 'nav.rewards', '/campaigns': 'nav.campaigns', '/app': 'nav.app', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/profile': 'nav.profile', '/app': 'nav.app', '/claims': 'nav.claims' };
+  const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/rewards': 'nav.rewards', '/premium': 'nav.premium', '/campaigns': 'nav.campaigns', '/app': 'nav.app', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/profile': 'nav.profile', '/app': 'nav.app', '/claims': 'nav.claims' };
   // Search index: [href, titleKey, descKey, group, extra English keywords]. Matches the current language AND English keywords.
   const SEARCH = [
     ['/', 'nav.home', 'footer.tag', 'page', 'home start welcome'],
@@ -61,6 +61,7 @@
     ['/business#enquiry', 'sme.enquiry.h', 'sme.assoc', 'tool', 'enquiry business quote group contact'],
     ['/investors', 'nav.investors', 'inv.sub', 'page', 'investors market financials breakeven revenue cost sources'],
     ['/privacy', 'footer.privacy', 'prv.sub', 'page', 'privacy data protection consent security pdpa'],
+    ['/premium', 'nav.premium', 'pq.p', 'page', 'premium quote paid upgrade free comparison detailed assessment coaching policy guidance partner discounts report savings'],
     ['/rewards', 'nav.rewards', 'rw.sub', 'tool', 'rewards streak streaks coupons level achievements gamified'],
     ['/campaigns', 'nav.campaigns', 'cm.sub', 'tool', 'campaign campaigns challenge step insurer promotion offer'],
     ['/app', 'nav.app', 'dl.web.p', 'tool', 'app web app qr code install download home screen phone'],
@@ -139,7 +140,7 @@
         <p style="margin:6px 0"><b style="color:#fff">1300-00-0000</b><br>hello@pulsecover.example</p>
         <div class="soc">${[['Facebook', 'facebook', 'https://www.facebook.com/'], ['Instagram', 'instagram', 'https://www.instagram.com/'], ['X', 'x', 'https://x.com/'], ['Telegram', 'telegram', 'https://t.me/'], ['LinkedIn', 'linkedin', 'https://www.linkedin.com/'], ['YouTube', 'youtube', 'https://www.youtube.com/']].map(([n, f, u]) => `<a href="${u}" target="_blank" rel="noopener noreferrer" aria-label="${n}" title="${n}"><img src="/img/social/${f}.svg" alt="" width="18" height="18"></a>`).join('')}</div>
         <div class="badges"><a class="btn ghost sm" href="/app" data-i18n="dl.web.btn"></a></div></div>
-      <div><h4 data-i18n="footer.product"></h4><a href="/plans" data-i18n="nav.plans"></a><a href="/calculator" data-i18n="nav.calc"></a><a href="/compare" data-i18n="nav.compare"></a><a href="/apply" data-i18n="nav.apply"></a><a href="/business" data-i18n="nav.sme"></a><a href="/app" data-i18n="nav.app"></a><a href="/rewards" data-i18n="nav.rewards"></a><a href="/campaigns" data-i18n="nav.campaigns"></a></div>
+      <div><h4 data-i18n="footer.product"></h4><a href="/plans" data-i18n="nav.plans"></a><a href="/calculator" data-i18n="nav.calc"></a><a href="/compare" data-i18n="nav.compare"></a><a href="/apply" data-i18n="nav.apply"></a><a href="/business" data-i18n="nav.sme"></a><a href="/app" data-i18n="nav.app"></a><a href="/premium" data-i18n="nav.premium"></a><a href="/rewards" data-i18n="nav.rewards"></a><a href="/campaigns" data-i18n="nav.campaigns"></a></div>
       <div><h4 data-i18n="footer.support"></h4><a href="/claims" data-i18n="nav.claims"></a><a href="/dashboard" data-i18n="nav.dashboard"></a><a href="/faq" data-i18n="nav.faq"></a><a href="/contact" data-i18n="nav.contact"></a></div>
       <div><h4 data-i18n="footer.company"></h4><a href="/how-pricing-works" data-i18n="nav.how"></a><a href="/investors" data-i18n="nav.investors"></a><a href="/privacy" data-i18n="footer.privacy"></a></div>
       <div><h4 data-i18n="nav.language"></h4><div class="langs" id="flangs">${LANGS.map((l) => `<button data-l="${l.code}">${l.label}</button>`).join('')}</div></div></div>
@@ -300,7 +301,7 @@
   };
 
   /* ---- wearable connect (consent modal -> /api/connect). Simulated: real vendor OAuth needs partner credentials. ---- */
-  PC.providers = { healthconnect: 'Google Health Connect', fitbit: 'Fitbit', garmin: 'Garmin', whoop: 'Whoop' };
+  PC.providers = { applehealth: 'Apple Health', healthconnect: 'Google Health Connect', fitbit: 'Fitbit', garmin: 'Garmin', whoop: 'Whoop' };
   PC.connect = (provider, plan) => new Promise((resolve, reject) => {
     document.getElementById('cnmodal')?.remove(); // guests can connect too: the readings are simulated in this browser and saved to the account after login
     const m = document.createElement('div'); m.className = 'modal open'; m.id = 'cnmodal';
