@@ -52,9 +52,9 @@ Object.assign(window.PC_I18N, {
 
   // referral section
   'ref.h': ['Share PulseCover with a friend', '与朋友分享 PulseCover', 'Kongsi PulseCover dengan rakan', 'PulseCover-ஐ நண்பருடன் பகிருங்கள்'],
-  'ref.p': ['Earn a RM10–20 credit for each friend who joins and links a wearable. Climb the leaderboard and unlock milestone rewards.', '每位加入并连接设备的朋友可为您带来 RM10–20 积分。冲上排行榜，解锁里程碑奖励。', 'Dapatkan kredit RM10–20 bagi setiap rakan yang menyertai dan menyambung peranti. Naik papan pendahulu dan buka ganjaran pencapaian.', 'சேர்ந்து சாதனத்தை இணைக்கும் ஒவ்வொரு நண்பருக்கும் RM10–20 கிரெடிட் பெறுங்கள். தரவரிசையில் உயர்ந்து மைல்கல் பரிசுகளைத் திறக்கவும்.'],
+  'ref.p': ['Earn a RM10 credit for each friend who joins and links a wearable. Track every referral in the app with instant updates.', '每位加入并连接可穿戴设备的朋友，您可获得 RM10 额度。在应用中即时跟踪每一次推荐。', 'Dapat kredit RM10 bagi setiap rakan yang menyertai dan menyambung peranti boleh pakai. Jejak setiap rujukan dalam app dengan kemas kini segera.', 'சேர்ந்து அணிகலனை இணைக்கும் ஒவ்வொரு நண்பருக்கும் RM10 கிரெடிட் பெறுங்கள். ஒவ்வொரு பரிந்துரையையும் உடனடி அறிவிப்புகளுடன் பின்தொடருங்கள்.'],
   'ref.s1': ['Copy your personal code from your dashboard', '在主页复制您的专属推荐码', 'Salin kod peribadi anda daripada papan pemuka', 'டாஷ்போர்டில் உங்கள் தனிப்பட்ட குறியீட்டை நகலெடுக்கவும்'],
   'ref.s2': ['Your friend joins and links a wearable', '朋友加入并连接设备', 'Rakan anda menyertai dan menyambung peranti', 'உங்கள் நண்பர் சேர்ந்து சாதனத்தை இணைக்கிறார்'],
-  'ref.s3': ['You receive a RM10 to RM20 credit', '您获得 RM10 至 RM20 积分', 'Anda menerima kredit RM10 hingga RM20', 'உங்களுக்கு RM10 முதல் RM20 கிரெடிட் கிடைக்கும்'],
+  'ref.s3': ['You receive a RM10 credit', '您获得 RM10 额度', 'Anda menerima kredit RM10', 'உங்களுக்கு RM10 கிரெடிட் கிடைக்கும்'],
   'ref.cta': ['Get my code', '获取我的推荐码', 'Dapatkan kod saya', 'என் குறியீட்டைப் பெறு']
 });

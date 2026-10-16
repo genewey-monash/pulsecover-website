@@ -301,6 +301,7 @@
   };
 
   /* ---- wearable connect (consent modal -> /api/connect). Simulated: real vendor OAuth needs partner credentials. ---- */
+  PC.connectable = ['applehealth', 'healthconnect']; // Fitbit, Garmin and Whoop data flow in through these two
   PC.providers = { applehealth: 'Apple Health', healthconnect: 'Google Health Connect', fitbit: 'Fitbit', garmin: 'Garmin', whoop: 'Whoop' };
   PC.connect = (provider, plan) => new Promise((resolve, reject) => {
     document.getElementById('cnmodal')?.remove(); // guests can connect too: the readings are simulated in this browser and saved to the account after login
