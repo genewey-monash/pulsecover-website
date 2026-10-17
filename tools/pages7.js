@@ -1,35 +1,40 @@
 // v7: gamified Streaks and Rewards, and Campaigns (opt-in insurer and brand challenges).
 module.exports = (pages, D) => {
-  pages['rewards'] = ['Streaks and rewards', 'Build a streak and unlock coupons from healthy brands.', `
-<main><section class="sec"><div class="wrap" style="max-width:980px">
+  pages['rewards'] = ['Streaks and rewards', 'Build streaks, earn badges and unlock rewards from healthy brands.', `
+<main id="rw2_page" class="rw2"><section class="sec"><div class="wrap" style="max-width:1040px">
  <span class="kicker" ${D('nav.rewards')}></span><h1 ${D('rw.h1')}></h1><p class="lead" ${D('rw.sub')}></p>
- <div class="card" id="rwlogin" style="display:none;margin-top:18px"><p ${D('rw.login')}></p><div class="cta"><a class="btn" href="/account?next=/rewards" ${D('nav.login')}></a><a class="btn ghost" href="/connect" ${D('nav.connect')}></a></div></div>
- <div id="rwbox" style="display:none;margin-top:18px">
-  <div class="cards c3" id="rwstats"></div>
-  <p class="fnote" style="margin:10px 0 0" ${D('rw.rule')}></p>
-  <div class="card" id="rwnext" style="margin-top:16px"></div>
-  <h2 style="margin-top:34px" ${D('rw.coupons')}></h2><div class="cards c2" id="rwcoupons" style="margin-top:12px"></div>
-  <h2 style="margin-top:34px" ${D('rw.ach')}></h2><div id="rwach" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"></div>
-  <p class="fnote" style="margin-top:22px" ${D('rw.note')}></p><p class="fnote" ${D('rw.demo')}></p>
- </div>
-</div></section></main>`, `
-let R=null;
-const bar=(v,max)=>'<div style="height:8px;border-radius:5px;background:var(--line);margin-top:10px;overflow:hidden"><div style="height:100%;width:'+Math.max(4,Math.min(100,v/max*100))+'%;background:var(--red)"></div></div>';
-function draw(){ if(!R) return; const t=PC.t;
- document.getElementById('rwstats').innerHTML=
-  '<div class="card"><small style="color:var(--mute)">'+t('rw.streak')+'</small><div style="font-size:2.2rem;font-weight:800;color:var(--red)">'+R.streak+' <span style="font-size:1rem;color:var(--mute)">'+t('rw.days')+'</span></div></div>'+
-  '<div class="card"><small style="color:var(--mute)">'+t('rw.best')+'</small><div style="font-size:2.2rem;font-weight:800">'+R.best+' <span style="font-size:1rem;color:var(--mute)">'+t('rw.days')+'</span></div></div>'+
-  '<div class="card"><small style="color:var(--mute)">'+t('rw.level')+'</small><div style="font-size:2.2rem;font-weight:800">'+t('lv.'+R.level)+'</div></div>';
- document.getElementById('rwnext').innerHTML=R.next?'<b>'+t('rw.next')+':</b> '+t('cp.'+R.next.id+'.h')+' &middot; '+R.next.left+' '+t('rw.left')+bar(R.best,R.next.min):'<b>&#10003; '+t('rw.unlocked')+'</b>';
- document.getElementById('rwcoupons').innerHTML=R.coupons.map(c=>'<div class="card" style="'+(c.unlocked?'':'opacity:.78')+'"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><b>'+t('cp.'+c.id+'.h')+'</b><p style="margin:4px 0 0;color:var(--mute)">'+t('cp.'+c.id+'.p')+'</p></div><span class="chip">'+(c.unlocked?'&#10003; '+t('rw.unlocked'):c.min+' '+t('rw.days'))+'</span></div>'+
-  (c.unlocked?'<div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><small style="color:var(--mute)">'+t('rw.code')+'</small><code style="font-weight:800;letter-spacing:.06em;padding:6px 10px;border-radius:8px;background:var(--red-t);color:var(--ink)">'+c.code+'</code><button class="btn ghost sm" data-copy="'+c.code+'">'+t('rw.copy')+'</button></div>':'<div style="margin-top:10px;color:var(--mute);font-size:.9rem">'+t('rw.locked')+' '+c.min+' '+t('rw.days')+bar(R.best,c.min)+'</div>')+'</div>').join('');
- document.getElementById('rwach').innerHTML=R.achievements.map(a=>'<span class="chip" style="padding:10px 14px;'+(a.done?'background:var(--red);color:#fff':'opacity:.6')+'">'+(a.done?'&#10003; ':'')+t('ach.'+a.id)+'</span>').join('');
- document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{try{navigator.clipboard.writeText(b.dataset.copy)}catch(e){}b.textContent=PC.t('rw.copied')});
-}
-PC.ready.then(async()=>{ if(!PC.user){document.getElementById('rwlogin').style.display='';return}
- document.getElementById('rwbox').style.display='';
- try{R=await PC.api('/rewards');draw()}catch(e){} });
-window.addEventListener('pc:lang',draw);`];
+ <div class="rw2-banner" id="rw2_banner" style="display:none"><p ${D('rw2.samplebanner')}></p><div class="cta"><a class="btn sm" href="/connect" ${D('nav.connect')}></a><a class="btn ghost sm" href="/account?next=/rewards" ${D('nav.login')}></a></div></div>
+ <label class="check rw2-pd" id="rw2_premdemo"><input type="checkbox" id="rw2_pd"><span ${D('rw2.demo.premium')}></span></label>
+ <div class="card rw2-player" id="rw2_player"></div>
+ <p class="rw2-fn" ${D('rw2.note')}></p>
+
+ <h2 class="rw2-h" ${D('rw2.q.h')}></h2><p class="mute" ${D('rw2.q.p')}></p>
+ <div id="rw2_quests"></div><p class="rw2-fn" ${D('rw2.safe')}></p>
+
+ <h2 class="rw2-h" ${D('rw2.s.h')}></h2>
+ <div class="cards c2 rw2-sgrid" id="rw2_streak"></div><div id="rw2_ms"></div>
+
+ <h2 class="rw2-h" ${D('rw2.b.h')}></h2><p class="mute" ${D('rw2.b.p')}></p>
+ <div id="rw2_next"></div>
+ <div class="rw2-tabs" id="rw2_bf" role="group"></div>
+ <div class="rw2-bgrid" id="rw2_badges"></div>
+ <h3 class="rw2-sub" ${D('rw2.b.hist')}></h3><div class="card rw2-hist" id="rw2_hist"></div>
+
+ <h2 class="rw2-h" ${D('rw2.l.h')}></h2>
+ <div class="card"><ol class="rw2-lv" id="rw2_levels"></ol></div>
+ <details class="rw2-xp"><summary ${D('rw2.xp.h')}></summary><ul id="rw2_xpl"></ul></details>
+
+ <h2 class="rw2-h" ${D('rw2.v.h')}></h2><p class="mute" ${D('rw2.v.p')}></p>
+ <div class="rw2-tabs" id="rw2_vt" role="group"></div>
+ <div class="cards c3 rw2-vgrid" id="rw2_vault"></div>
+ <p class="rw2-fn" ${D('rw.note')}></p><p class="rw2-fn" ${D('rw.demo')}></p>
+
+ <div class="cards c2 rw2-soc" id="rw2_ref"></div>
+ <div class="card rw2-up" id="rw2_upgrade"><div><h3 ${D('rw2.up.h')}></h3><p ${D('rw2.up.p')}></p></div><a class="btn" href="/premium-quote" ${D('rw2.up.cta')}></a></div>
+ <p class="rw2-fn" ${D('rw2.noprem')}></p>
+</div></section>
+<div class="rw2-toast" id="rw2_toast" role="status" aria-live="polite"></div><div class="rw2-pop" id="rw2_pop" role="status" aria-live="polite"></div><div class="rw2-conf" id="rw2_conf" aria-hidden="true"></div>
+</main><script src="/js/rewards-catalog.js"></script><script src="/js/rewards.js"></script>`, ''];
 
   pages['campaigns'] = ['Campaigns', 'Optional challenges and offers from our partners.', `
 <main><section class="sec"><div class="wrap" style="max-width:980px">

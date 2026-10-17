@@ -6,7 +6,7 @@
  * Actions: register, contact, callback, sme, quote, application, claim, waitlist, feedback.
  */
 const SECRET = 'CHANGE_THIS_TO_A_LONG_RANDOM_TEXT';        // must match SHEET_SECRET on the server
-const SITE = 'https://pulsecover-website.onrender.com';
+const SITE = 'https://pulsecover.vercel.app';
 const BRAND_NAME = 'PulseCover';
 const RED = '#B71234', GOLD = '#E8A317';
 
