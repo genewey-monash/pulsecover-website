@@ -167,7 +167,7 @@ Object.assign(window.PC_I18N, {
   'rw2.fc.p': ['Compare XP only with friends you choose. No public leaderboard and no health data are shown.', '仅与您选择的好友比较经验值。不设公开排行榜，也不显示任何健康数据。', 'Banding XP sahaja dengan rakan pilihan anda. Tiada papan pendahulu awam dan tiada data kesihatan dipaparkan.', 'நீங்கள் தேர்ந்தெடுக்கும் நண்பர்களுடன் XP மட்டும் ஒப்பிடுங்கள். பொது தரவரிசை இல்லை; ஆரோக்கியத் தரவு காட்டப்படாது.'],
   'rw2.fc.opt': ['Join the friends challenge', '参加好友挑战', 'Sertai cabaran rakan', 'நண்பர்கள் சவாலில் சேருங்கள்'],
   'rw2.fc.you': ['You', '您', 'Anda', 'நீங்கள்'],
-  'rw2.fc.friend': ['Friend {n} (sample)', '好友 {n}（示例）', 'Rakan {n} (contoh)', 'நண்பர் {n} (மாதிரி)'],
+  'rw2.fc.friend': ['Friend {n}', '好友 {n}', 'Rakan {n}', 'நண்பர் {n}'],
   'rw2.fc.note': ['Friends shown here are SAMPLE examples. Your XP is private unless you opt in.', '此处好友为示例。除非您选择加入，您的经验值保持私密。', 'Rakan di sini ialah CONTOH. XP anda peribadi kecuali anda memilih sertai.', 'இங்குள்ள நண்பர்கள் மாதிரிகள். நீங்கள் சேராதவரை உங்கள் XP தனிப்பட்டதாகவே இருக்கும்.'],
   'rw2.up.h': ['Unlock exclusive discounts and events', '解锁专属折扣与活动', 'Buka diskaun dan acara eksklusif', 'பிரத்யேக தள்ளுபடிகள், நிகழ்வுகளைத் திறக்கவும்'],
   'rw2.up.p': ['Premium Quote members get partner discounts, higher-value offers and events, plus a detailed assessment and coaching.', '高级报价会员可享合作伙伴折扣、更高价值的优惠与活动，以及详细评估和健康指导。', 'Ahli Sebut Harga Premium dapat diskaun rakan, tawaran dan acara bernilai lebih tinggi, serta penilaian terperinci dan bimbingan.', 'பிரீமியம் உறுப்பினர்களுக்குக் கூட்டாளர் தள்ளுபடிகள், அதிக மதிப்புச் சலுகைகள், நிகழ்வுகள், விரிவான மதிப்பீடு, பயிற்சி கிடைக்கும்.'],

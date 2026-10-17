@@ -34,7 +34,7 @@ module.exports = (pages, D) => {
  <p class="rw2-fn" ${D('rw2.noprem')}></p>
 </div></section>
 <div class="rw2-toast" id="rw2_toast" role="status" aria-live="polite"></div><div class="rw2-pop" id="rw2_pop" role="status" aria-live="polite"></div><div class="rw2-conf" id="rw2_conf" aria-hidden="true"></div>
-</main><script src="/js/rewards-catalog.js"></script><script src="/js/rewards.js"></script>`, ''];
+</main><script src="/js/partner-icons.js"></script><script src="/js/rewards-catalog.js"></script><script src="/js/rewards.js"></script>`, ''];
 
   pages['campaigns'] = ['Campaigns', 'Optional challenges and offers from our partners.', `
 <main><section class="sec"><div class="wrap" style="max-width:980px">

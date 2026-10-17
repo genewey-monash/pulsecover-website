@@ -67,7 +67,7 @@
     try { saved = raw ? JSON.parse(raw) : null; } catch (e) {}
     if (saved && isFinite(saved.steps) && isFinite(saved.exerciseMin) && isFinite(saved.sleepHours) && isFinite(saved.restingHr)) {
       S.cur = { plan: saved.plan, steps: +saved.steps, exerciseMin: +saved.exerciseMin, sleepHours: +saved.sleepHours, restingHr: +saved.restingHr };
-      S.source = 'calc'; S.plan = P.PLANS[saved.plan] ? saved.plan : 'A'; S.series = sampleSeries(S.cur); return Promise.resolve();
+      S.source = 'calc'; S.from = typeof saved.from === 'string' && saved.from.indexOf('/plan-result') === 0 ? saved.from : null; S.plan = P.PLANS[saved.plan] ? saved.plan : 'A'; S.series = sampleSeries(S.cur); return Promise.resolve();
     }
     return (PC.user ? PC.api('/dashboard') : Promise.reject()).then(function (d) {
       var ms = (d && d.metrics) || [];
@@ -229,7 +229,7 @@
     var plan = P.PLANS[S.plan], q = calc(S.cur), mult = [1, 1.07, 0.95], names = ['A', 'B', 'C'];
     $('pqr_pol').innerHTML = names.map(function (n, i) {
       var fam = plan.type === 'family';
-      return '<div class="card pqr-pol"><span class="pqr-tag">' + T('pqr.sample') + '</span><h3>' + T('pqr.pol.name', { n: n }) + '</h3><div class="pqr-pp">' + rm(Math.round(q.annualPremium * mult[i])) + '<small>' + T('common.year') + '</small></div><small class="mute">' + T('pqr.pol.ind') + '</small>' +
+      return '<div class="card pqr-pol"><div class="xtop">' + PC_PARTNER_ICON('shield', 22) + '<div><h3>' + T('pqr.pol.name', { n: n }) + '</h3></div><span class="pqr-tag">' + T('pqr.sample') + '</span></div><div class="pqr-pp">' + rm(Math.round(q.annualPremium * mult[i])) + '<small>' + T('common.year') + '</small></div><small class="mute">' + T('pqr.pol.ind') + '</small>' +
         '<ul><li>' + T('pqr.pol.cov', { c: rm(plan.cover) }) + '</li><li>' + T(fam ? 'pqr.pol.fam' : 'pqr.pol.ci') + '</li><li>' + T('pqr.pol.h' + (i + 1)) + '</li></ul>' +
         '<dl><dt>' + T('pqr.pol.wait') + '</dt><dd>' + T('pqr.pol.w' + (i + 1)) + '</dd><dt>' + T('pqr.pol.panel') + '</dt><dd>' + T('pqr.pol.p' + (i + 1)) + '</dd></dl></div>';
     }).join('');
@@ -237,14 +237,14 @@
 
   /* ---------- 6. perks and events ---------- */
   var PERKS = [
-    { id: 'pharm', min: 3, brand: 'Sample Pharmacy', k: 'cp.pharm', ic: 'P' },
-    { id: 'cafe', min: 7, brand: 'Sample Cafe', k: 'cp.cafe', ic: 'C' },
-    { id: 'super', min: 14, brand: 'Sample Market', k: 'cp.super', ic: 'M' },
-    { id: 'watch', min: 14, brand: 'Sample Wearables', k: 'pqr.perk.watch', ic: 'W' },
-    { id: 'gym', min: 30, brand: 'Sample Gym', k: 'cp.gym', ic: 'G' },
-    { id: 'gymtrial', min: 21, brand: 'Sample Fitness', k: 'pqr.perk.trial', ic: 'F' }
+    { id: 'pharm', min: 3, k: 'cp.pharm', icon: 'medkit' },
+    { id: 'cafe', min: 7, k: 'cp.cafe', icon: 'cafe' },
+    { id: 'super', min: 14, k: 'cp.super', icon: 'cart' },
+    { id: 'watch', min: 14, k: 'pqr.perk.watch', icon: 'watch' },
+    { id: 'gym', min: 30, k: 'cp.gym', icon: 'barbell' },
+    { id: 'gymtrial', min: 21, k: 'pqr.perk.trial', icon: 'pricetag' }
   ];
-  var EVENTS = [{ id: 'run', off: 21, loc: 'pqr.ev.loc.run' }, { id: 'steps', off: 10, loc: 'pqr.ev.loc.online' }, { id: 'talk', off: 35, loc: 'pqr.ev.loc.online' }];
+  var EVENTS = [{ id: 'run', off: 21, loc: 'pqr.ev.loc.run', icon: 'flag' }, { id: 'steps', off: 10, loc: 'pqr.ev.loc.online', icon: 'footsteps' }, { id: 'talk', off: 35, loc: 'pqr.ev.loc.online', icon: 'mic' }];
   var claimed = function () { try { return JSON.parse(store.g('pc_pq_claims') || '{}'); } catch (e) { return {}; } };
   var joined = function () { try { return JSON.parse(store.g('pc_pq_events') || '{}'); } catch (e) { return {}; } };
   var dateStr = function (off) { var d = new Date(Date.now() + off * 86400000); return d.toLocaleDateString(PC.lang === 'zh' ? 'zh-CN' : PC.lang === 'ms' ? 'ms-MY' : PC.lang === 'ta' ? 'ta-IN' : 'en-MY', { day: 'numeric', month: 'short', year: 'numeric' }); };
@@ -255,11 +255,11 @@
       var act = code ? '<div class="pqr-code"><small>' + T('rw.code') + '</small><code>' + esc(code) + '</code></div>'
         : open ? '<button class="btn sm" data-claim="' + p.id + '">' + T('pqr.perk.claim') + '</button>'
           : '<span class="pqr-lock"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg> ' + T('pqr.perk.need', { n: p.min }) + '</span>';
-      return '<div class="card pqr-perk' + (open ? '' : ' locked') + '"><div class="pqr-brand" aria-hidden="true">' + p.ic + '</div><div><small class="mute">' + esc(p.brand) + ' &middot; ' + T('pqr.sample') + '</small><h4>' + T(p.k + '.h') + '</h4><p>' + T(p.k + '.p') + '</p><small class="mute">' + T('pqr.perk.exp', { d: dateStr(60) }) + '</small></div><div class="act">' + act + '</div></div>';
+      return '<div class="card pqr-perk' + (open ? '' : ' locked') + '"><div class="xtop">' + PC_PARTNER_ICON(p.icon, 22, !open) + '<div><h4>' + T(p.k + '.h') + '</h4><p>' + T(p.k + '.p') + '</p></div><span class="pqr-tag">' + T('pqr.sample') + '</span></div><small class="mute">' + T('pqr.perk.exp', { d: dateStr(60) }) + '</small><div class="act">' + act + '</div></div>';
     }).join('');
     $('pqr_events').innerHTML = EVENTS.map(function (e) {
       var on = ev[e.id];
-      return '<div class="card pqr-ev"><span class="pqr-tag">' + T('pqr.sample') + '</span><h4>' + T('pqr.ev.' + e.id + '.h') + '</h4><small class="mute">' + dateStr(e.off) + ' &middot; ' + T(e.loc) + '</small><p>' + T('pqr.ev.' + e.id + '.p') + '</p><button class="btn sm' + (on ? ' ghost' : '') + '" data-join="' + e.id + '" aria-pressed="' + !!on + '">' + (on ? '&#10003; ' + T('pqr.ev.joined') : T('pqr.ev.join')) + '</button></div>';
+      return '<div class="card pqr-ev"><div class="xtop">' + PC_PARTNER_ICON(e.icon, 22) + '<div><h4>' + T('pqr.ev.' + e.id + '.h') + '</h4><small class="mute">' + dateStr(e.off) + ' &middot; ' + T(e.loc) + '</small></div><span class="pqr-tag">' + T('pqr.sample') + '</span></div><p>' + T('pqr.ev.' + e.id + '.p') + '</p><button class="btn sm' + (on ? ' ghost' : '') + '" data-join="' + e.id + '" aria-pressed="' + !!on + '">' + (on ? '&#10003; ' + T('pqr.ev.joined') : T('pqr.ev.join')) + '</button></div>';
     }).join('');
     [].forEach.call($('pqr_perks').querySelectorAll('[data-claim]'), function (b) { b.onclick = function () {
       var a = claimed(), id = b.dataset.claim; a[id] = 'PC-' + id.toUpperCase().slice(0, 4) + '-' + (Math.abs(hash(id + (S.rewards.best) + (PC.user ? PC.user.id || PC.user.email : 'guest'))) % 1e6 + 1e6).toString(36).slice(-6).toUpperCase(); store.set('pc_pq_claims', JSON.stringify(a)); renderPerks(); }; });
@@ -284,6 +284,7 @@
   }
   function renderAll() {
     var c = S.cur;
+    var bk = document.querySelector('.pqr-back'); if (bk) { var kk = S.from ? 'pl2.qback' : 'pqr.back'; bk.setAttribute('data-i18n', kk); bk.href = S.from || '/calculator'; bk.textContent = T(kk); }
     $('pqr_banner').style.display = S.source === 'sample' ? '' : 'none';
     $('pqr_src').textContent = T(S.source === 'wearable' ? 'pqr.src.wearable' : S.source === 'calc' ? 'pqr.src.calc' : 'pqr.src.sample');
     $('pqr_plan_sel').value = S.plan;

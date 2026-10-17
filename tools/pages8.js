@@ -40,5 +40,5 @@ module.exports = (pages, D) => {
  <p class="pqr-fn" ${D('pqr.disc')}></p>
 </div></section>
 <div class="pqr-sticky"><a class="btn" id="pqr_apply2" href="/apply" ${D('pqr.sticky.apply')}></a><button type="button" class="btn ghost" id="pqr_mail" ${D('pqr.sticky.mail')}></button></div>
-</main><script src="/js/pricing.js"></script><script src="/js/premium-quote.js"></script>`, ''];
+</main><script src="/js/partner-icons.js"></script><script src="/js/pricing.js"></script><script src="/js/premium-quote.js"></script>`, ''];
 };

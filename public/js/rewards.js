@@ -11,17 +11,7 @@
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
     str: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   };
-  var ICONS = {
-    steps: '<path d="M8 4c2 0 3 2 3 4s-1 3-3 3-3-1-3-3 1-4 3-4zM6 14h4v2a2 2 0 01-4 0zM16 9c2 0 3 2 3 4s-1 3-3 3-3-1-3-3 1-4 3-4zM14 19h4v1a2 2 0 01-4 0z"/>',
-    bolt: '<path d="M13 2L5 14h6l-1 8 8-12h-6z"/>',
-    moon: '<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',
-    heart: '<path d="M12 21s-7-4.4-9.3-9C1 8.4 3 5 6.300 5c2 0 3.700 1.100 4.700 2.800C12 6.100 13.700 5 15.700 5 19 5 21 8.400 21.300 12c-2.300 4.600-9.300 9-9.300 9z"/>',
-    flame: '<path d="M12 2s5 4.500 5 9.500a5 5 0 01-10 0c0-2 1-3.500 2-4.500 0 2 1 3 2 3 0-3-1-5.500 1-8zM12 22a4 4 0 01-4-4c0-2 2-3 4-6 2 3 4 4 4 6a4 4 0 01-4 4z"/>',
-    plug: '<path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 01-12 0zM12 18v4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>',
-    users: '<path d="M9 11a4 4 0 100-8 4 4 0 000 8zM2 21c0-4 3-7 7-7s7 3 7 7zM17 11a3 3 0 100-6M18 14c3 0 5 2 5 6h-4"/>',
-    star: '<path d="M12 2l3 6.500 7 .800-5.200 4.700 1.500 7L12 17.500 5.700 21l1.500-7L2 9.300l7-.800z"/>'
-  };
-  var icon = function (n, size) { return '<svg viewBox="0 0 24 24" width="' + (size || 22) + '" height="' + (size || 22) + '" fill="currentColor" aria-hidden="true">' + (ICONS[n] || ICONS.star) + '</svg>'; };
+  var icon = function (n, size) { return window.PC_LINE_ICON(n, size || 22); };
   var S = { src: 'sample', days: [], dates: [], user: null, dash: null, R: null, premium: false, realPremium: false, friends: 0, view: 7, bf: 'all', vt: 'all', freezeOpen: false };
 
   /* ---------- dates ---------- */
@@ -296,7 +286,7 @@
       if (x.state === 'claimed') act = ev ? '<span class="rw2-ok">&#10003; ' + T('rw2.v.joined') + '</span>' : '<div class="rw2-code"><span class="rw2-ok">&#10003; ' + T('rw2.v.claimed') + '</span><small>' + T('rw.code') + '</small><code>' + esc(x.claimed) + '</code></div>';
       else if (x.state === 'open') act = '<button type="button" class="btn sm" data-claim="' + it.id + '">' + T(ev ? 'rw2.v.join' : 'rw2.v.claim') + '</button>';
       else act = (!x.premOk ? '<a class="btn sm" href="/premium-quote">' + T('rw2.v.go') + '</a>' : '') + (!x.met ? '<small class="rw2-need">' + T('rw2.v.need', { x: rt }) + '</small>' : '');
-      return '<div class="card rw2-v ' + (x.state === 'locked' ? 'locked' : '') + '"><div class="top"><span class="br" aria-hidden="true">' + (x.state === 'locked' ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>' : it.ic) + '</span><div><small>' + esc(it.brand) + ' &middot; ' + T('rw2.sample') + '</small><b>' + T(it.k + '.h') + '</b></div>' + (it.premium ? '<span class="rw2-chip prem">' + T('rw2.v.premium') + '</span>' : '') + '</div>' +
+      return '<div class="card rw2-v ' + (x.state === 'locked' ? 'locked' : '') + '"><div class="xtop">' + PC_PARTNER_ICON(it.icon, 22, x.state === 'locked') + '<div><b>' + T(it.k + '.h') + '</b></div><div class="chips">' + (it.premium ? '<span class="rw2-chip prem">' + T('rw2.v.premium') + '</span>' : '') + '<span class="rw2-tag">' + T('rw2.sample') + '</span></div></div>' +
         '<p>' + T(it.k + '.p') + '</p>' + (ev ? '<small class="mute">' + new Date(Date.now() + it.off * 86400000).toLocaleDateString(locale(), { day: 'numeric', month: 'short', year: 'numeric' }) + ' &middot; ' + T(it.loc) + '</small>' : '<small class="mute">' + T('rw2.v.exp', { d: new Date(Date.now() + 60 * 86400000).toLocaleDateString(locale(), { day: 'numeric', month: 'short', year: 'numeric' }) }) + '</small>') +
         '<small class="rw2-by">' + (rt ? T('rw2.v.by', { x: rt }) : T('rw2.v.by', { x: T('rw2.v.premium') })) + '</small><div class="act">' + act + '</div></div>';
     }).join('') : '<p class="mute">' + T('rw2.v.empty') + '</p>';
@@ -311,7 +301,7 @@
   function renderSocial(M) {
     var u = S.user, on = LS.get('pc_rw_fc', false), you = M.total, fr = [['1', 420], ['2', 180], ['3', 640]];
     $('rw2_ref').innerHTML = '<div class="card"><h3>' + T('rw2.r.h') + '</h3><p>' + T('rw2.r.p') + '</p>' + (u && u.refcode ? '<div class="rw2-rc"><small>' + T('rw2.r.code') + '</small><code>' + esc(u.refcode) + '</code><button type="button" class="btn ghost sm" id="rw2_copy" data-copy="' + esc(u.refcode) + '">' + T('rw.copy') + '</button></div><small class="mute">' + T('rw2.r.count', { n: S.friends }) + '</small>' : '<div class="cta" style="margin-top:12px"><a class="btn sm" href="/account?next=/rewards">' + T('rw2.r.login') + '</a></div>') + '</div>' +
-      '<div class="card"><h3>' + T('rw2.fc.h') + '</h3><p>' + T('rw2.fc.p') + '</p><label class="check"><input type="checkbox" id="rw2_fc"' + (on ? ' checked' : '') + '><span>' + T('rw2.fc.opt') + '</span></label>' +
+      '<div class="card"><h3>' + T('rw2.fc.h') + (on ? ' <span class="rw2-tag">' + T('rw2.sample') + '</span>' : '') + '</h3><p>' + T('rw2.fc.p') + '</p><label class="check"><input type="checkbox" id="rw2_fc"' + (on ? ' checked' : '') + '><span>' + T('rw2.fc.opt') + '</span></label>' +
       (on ? '<ul class="rw2-fl">' + [['you', you]].concat(fr.map(function (f) { return [T('rw2.fc.friend', { n: f[0] }), f[1]]; })).map(function (f) { return '<li' + (f[0] === 'you' ? ' class="me"' : '') + '><span class="av">' + esc((f[0] === 'you' ? T('rw2.fc.you') : f[0]).charAt(0)) + '</span><b>' + esc(f[0] === 'you' ? T('rw2.fc.you') : f[0]) + '</b><span>' + PC.fmt(f[1], 0) + ' ' + T('rw2.xp') + '</span></li>'; }).join('') + '</ul><p class="rw2-fn">' + T('rw2.fc.note') + '</p>' : '') + '</div>';
     var fc = $('rw2_fc'); fc.onchange = function () { LS.set('pc_rw_fc', fc.checked); renderSocial(M); };
     var cp = $('rw2_copy'); if (cp) cp.onclick = function () { try { navigator.clipboard.writeText(cp.dataset.copy); } catch (e) {} cp.textContent = T('rw.copied'); };
