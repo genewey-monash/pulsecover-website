@@ -7,7 +7,7 @@ const head = (title, desc) => `<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
 <script>(function(){try{var th=localStorage.getItem('pc_theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=th}catch(e){document.documentElement.dataset.theme='light'}})()</script><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#B71234"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="PulseCover"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="/img/apple-touch-icon.png"><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/appmode.css"><script>(function(){var d=document.documentElement,m=function(){var on=false;try{on=matchMedia('(max-width:820px)').matches||(matchMedia('(display-mode: standalone)').matches&&matchMedia('(pointer:coarse)').matches)||(navigator.standalone===true)}catch(e){}d.classList.toggle('appmode',on)};m();addEventListener('resize',m);try{if(location.pathname==='/'&&!/[?&]site=1/.test(location.search)&&matchMedia('(max-width:820px)').matches&&matchMedia('(pointer:coarse)').matches&&!sessionStorage.getItem('pc_site')){location.replace('/m/')}else if(/[?&]site=1/.test(location.search)){sessionStorage.setItem('pc_site','1')}}catch(e){}})()</script></head><body>`;
-const tail = (js = '') => `<script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/i18n5.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script><script src="/js/pwa.js"></script><script src="/js/appmode.js"></script>${js ? `<script>${js}</script>` : ''}</body></html>`;
+const tail = (js = '') => `<script src="/js/i18n.js"></script><script src="/js/i18n2.js"></script><script src="/js/i18n3.js"></script><script src="/js/i18n4.js"></script><script src="/js/i18n5.js"></script><script src="/js/i18n6.js"></script><script src="/js/icons.js"></script><script src="/js/app.js"></script><script src="/js/ui.js"></script><script src="/js/pwa.js"></script><script src="/js/appmode.js"></script>${js ? `<script>${js}</script>` : ''}</body></html>`;
 const pages = {};
 const D = (k) => `data-i18n="${k}"`;
 
@@ -53,7 +53,8 @@ pages['calculator'] = [`Premium calculator`, `See how your daily habits change y
  <div class="row"><span ${D('calc.permonth')}></span><b id="r_month"></b></div>
  <div class="row" style="border:0"><span id="r_savlbl"></span><b id="r_sav"></b></div>
  <h3 style="margin-top:18px;font-size:1rem" ${D('calc.breakdown')}></h3><div class="bars" id="bars"></div>
- <a class="btn" style="width:100%;margin-top:18px" id="applybtn" href="/apply" ${D('calc.cta')}></a></div></div>
+ <a class="btn" style="width:100%;margin-top:18px" id="applybtn" href="/apply" ${D('calc.cta')}></a>
+ <a class="btn ghost" style="width:100%;margin-top:10px" id="pqbtn" href="/premium-quote" ${D('calc.pq')}></a></div></div>
 <div class="card" style="margin-top:24px"><h3 ${D('calc.formula.h')}></h3><p ${D('calc.formula.p')}></p></div></div></section></main>`, `
 const ids=['steps','exerciseMin','sleepHours','restingHr'];let timer,last;
 function vals(){const g=i=>+document.getElementById(i).value;return{steps:g('steps'),exerciseMin:g('exerciseMin'),sleepHours:g('sleepHours'),restingHr:g('restingHr'),appSubscription:document.getElementById('appSub').checked}}
@@ -66,6 +67,7 @@ function paint(){if(!last)return;const q=last;document.getElementById('r_score')
  document.getElementById('bars').innerHTML=Object.entries(q.components).map(([k,v])=>'<div class="b"><div class="t"><span>'+PC.t('comp.'+k)+'</span><span>'+v+'</span></div><div class="tr"><i style="width:'+v+'%"></i></div></div>').join('');
  const v=vals();document.getElementById('applybtn').href='/apply?steps='+v.steps+'&ex='+v.exerciseMin+'&sl='+v.sleepHours+'&hr='+v.restingHr;}
 async function run(){const v=vals();labels(v);try{last=await PC.api('/quote',v);paint()}catch(e){}}
+document.getElementById('pqbtn').addEventListener('click',()=>{try{const v=vals();sessionStorage.setItem('pc_pq',JSON.stringify({plan:'A',steps:v.steps,exerciseMin:v.exerciseMin,sleepHours:v.sleepHours,restingHr:v.restingHr}))}catch(e){}});
 ids.concat('appSub').forEach(i=>document.getElementById(i).addEventListener('input',()=>{labels(vals());clearTimeout(timer);timer=setTimeout(run,120)}));
 window.addEventListener('pc:lang',paint);run();`];
 
@@ -236,6 +238,9 @@ require('./pages5')(pages, D);
 require('./pages5').dashboard(pages, D);
 require('./pages6')(pages, D);
 require('./pages7')(pages, D);
+require('./pages8')(pages, D);
+// the browser gets the very same scoring engine the API runs (pricing.js), so the Premium Quote page cannot drift from the server
+fs.writeFileSync(path.join(out, 'js', 'pricing.js'), '/* generated from /pricing.js by tools/build.js - do not edit */\n(function(){var module={exports:{}};\n' + fs.readFileSync(path.join(__dirname, '..', 'pricing.js'), 'utf8') + '\nwindow.PCPricing=module.exports;})();\n');
 for (const [name, [title, desc, body, js]] of Object.entries(pages))
   fs.writeFileSync(path.join(out, name + '.html'), head(title, desc) + body + tail(js));
 console.log('built', Object.keys(pages).length, 'pages');
