@@ -402,6 +402,7 @@
   }
   /* once a wearable is linked, every "Connect wearable" call to action becomes "View my score" and goes to the quote */
   PC.paintConnect = () => {
+    return; // Gene wants "Connect Wearable" to stay the main button, whether or not a wearable is linked (the Connect page shows the linked state)
     document.querySelectorAll('[data-connect-cta]').forEach((e) => {
       if (!e.dataset.cta0) e.dataset.cta0 = e.dataset.i18n;
       e.dataset.i18n = PC.connected ? 'nav.myscore' : e.dataset.cta0; e.textContent = PC.t(e.dataset.i18n);

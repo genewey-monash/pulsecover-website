@@ -795,3 +795,6 @@ header.top .tools{gap:4px}
 .pp-base .card{display:flex;flex-direction:column;align-items:flex-start;gap:6px}.pp-base .card .btn{margin-top:auto;align-self:stretch;text-align:center}.pp-base .card span{margin-bottom:14px}
 .pf-grid .card{display:flex;flex-direction:column;align-items:flex-start;gap:8px}.pf-grid .card h3{margin:0}.pf-grid .card p{margin:0 0 10px;color:var(--mute)}.pf-grid .card .btn{margin-top:auto}
 #pqr_s2,#pqr_s4,#pqr_s5{scroll-margin-top:90px}
+
+/* plan result: the score card scrolls with the page (a sticky card made the Premium card slide over it) */
+.pl2 .result,main:has(#pl2_title) .result{position:static}
