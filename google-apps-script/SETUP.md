@@ -41,3 +41,14 @@ The script has two files: `Code.gs` (Sheet logging, register and contact emails)
 
 ## Account backup
 Render's free disk is wiped whenever the site sleeps or redeploys, so the website saves its accounts to a hidden `_Backup` tab in this Sheet (one older copy in `_Backup_prev`) and reloads them at start-up. The tab holds account details and scrambled password hashes. Do not share the Sheet widely, and do not delete those tabs.
+
+## Family plan invite emails (added with the Family quote)
+
+The family invite email is sent by this same Apps Script (action `family_invite`), so there is no new email account or API key to create.
+
+1. Paste the latest `Code.gs` and `Emails.gs` into the Apps Script project (keep your own `SECRET` line unchanged).
+2. **Deploy > Manage deployments > pencil > Version: New version > Deploy.** The web app URL stays the same.
+3. Optional test: choose `testFamilyInvite` in the editor's function list and press **Run**. A sample invite (with a dummy link) arrives in your own inbox.
+4. Hosting: nothing new is needed. `SHEET_WEBHOOK_URL` and `SHEET_SECRET` already exist on Vercel. Optionally set `SITE_URL` (default `https://pulsecover.vercel.app`) if the site moves to another domain.
+
+Notes: invites go only to the address the plan holder typed, at their request, and are never written to the Sheet or any marketing list. Each link is a random 256-bit token that is stored only as a hash, expires after 7 days and works once. A free Google account can send about 100 emails a day through Apps Script; for a production launch switch the sender to a transactional email service (Resend, SendGrid or Amazon SES) with a verified domain and keep the key in a server environment variable.

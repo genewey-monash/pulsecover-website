@@ -1,7 +1,6 @@
 /* v6 translations: Premium Quote Results page. Order: [English, Chinese, Malay, Tamil]. */
 Object.assign(window.PC_I18N, {
   'calc.pq': ['Get Premium Quote', '获取高级报价', 'Dapatkan Sebut Harga Premium', 'பிரீமியம் விலைப்புள்ளி பெறுங்கள்'],
-  'pqr.badge': ['Premium Quote (RM14.90/month, illustrative)', '高级报价（每月 RM14.90，示例价格）', 'Sebut Harga Premium (RM14.90/bulan, ilustrasi)', 'பிரீமியம் விலைப்புள்ளி (மாதம் RM14.90, எடுத்துக்காட்டு)'],
   'pqr.back': ['Back to calculator', '返回计算器', 'Kembali ke kalkulator', 'கணிப்பானுக்குத் திரும்பு'],
   'pqr.h1': ['Your Premium Quote Results', '您的高级报价结果', 'Keputusan Sebut Harga Premium Anda', 'உங்கள் பிரீமியம் விலைப்புள்ளி முடிவுகள்'],
   'pqr.lead': ['A detailed look at your health score, what could improve it, and a simple plan to get there.', '详细了解您的健康评分、可改善之处，以及达成目标的简单计划。', 'Pandangan terperinci tentang skor kesihatan anda, apa yang boleh memperbaikinya, dan pelan mudah untuk mencapainya.', 'உங்கள் ஆரோக்கிய மதிப்பெண், அதை மேம்படுத்த வழிகள் மற்றும் எளிய திட்டம் பற்றிய விரிவான பார்வை.'],

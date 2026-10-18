@@ -107,3 +107,47 @@ function handleBackup(a, d) {
   [sh, prev].forEach(function (x) { try { x.hideSheet(); } catch (e) { /* needs at least one visible sheet */ } });
   return { ok: true, chunks: ch.length };
 }
+
+/* ---------- family plan invite (one email, only at the plan holder's request, only to the address they typed) ---------- */
+const FAM = {
+  en: { rel: { spouse: 'spouse', child: 'child', parent: 'parent', other: 'family member' },
+    s: function (n) { return n + ' invited you to join their PulseCover family plan'; }, h: function (n) { return 'Join ' + n + '\'s family plan'; },
+    intro: function (n, r) { return n + ' has invited you to join their PulseCover family plan as their ' + r + '.'; },
+    what: 'PulseCover links your own wearable through Apple Health or Google Health Connect and turns your daily habits into a Health Score. It is a data service, not an insurer, and partner insurers set the final prices.',
+    share: 'You will only share your Health Score and grade, never your raw health data.', accept: 'Accept invite', decline: 'Decline',
+    expire: function (days) { return 'This invite expires in ' + days + ' days and can be used once.'; }, ignore: 'If you weren\'t expecting this, you can ignore this email.' },
+  zh: { rel: { spouse: '配偶', child: '子女', parent: '父母', other: '家人' },
+    s: function (n) { return n + ' 邀请您加入其 PulseCover 家庭计划'; }, h: function (n) { return '加入 ' + n + ' 的家庭计划'; },
+    intro: function (n, r) { return n + ' 邀请您以“' + r + '”身份加入其 PulseCover 家庭计划。'; },
+    what: 'PulseCover 通过 Apple Health 或 Google Health Connect 连接您自己的可穿戴设备，把您的日常习惯转化为健康评分。它是数据服务而非保险公司，最终价格由合作保险公司决定。',
+    share: '您只会分享您的健康评分和等级，绝不会分享原始健康数据。', accept: '接受邀请', decline: '拒绝',
+    expire: function (days) { return '此邀请将在 ' + days + ' 天后失效，且只能使用一次。'; }, ignore: '如果您并不期待这封邮件，可以直接忽略。' },
+  ms: { rel: { spouse: 'pasangan', child: 'anak', parent: 'ibu bapa', other: 'ahli keluarga' },
+    s: function (n) { return n + ' menjemput anda menyertai pelan keluarga PulseCover mereka'; }, h: function (n) { return 'Sertai pelan keluarga ' + n; },
+    intro: function (n, r) { return n + ' telah menjemput anda menyertai pelan keluarga PulseCover mereka sebagai ' + r + ' mereka.'; },
+    what: 'PulseCover menyambungkan peranti boleh pakai anda sendiri melalui Apple Health atau Google Health Connect dan menukar tabiat harian anda kepada Skor Kesihatan. Ia perkhidmatan data, bukan penanggung insurans, dan penanggung insurans rakan menetapkan harga akhir.',
+    share: 'Anda hanya akan berkongsi Skor Kesihatan dan gred anda, tidak sekali-kali data kesihatan mentah.', accept: 'Terima jemputan', decline: 'Tolak',
+    expire: function (days) { return 'Jemputan ini tamat dalam ' + days + ' hari dan boleh digunakan sekali sahaja.'; }, ignore: 'Jika anda tidak menjangkakannya, anda boleh abaikan e-mel ini.' },
+  ta: { rel: { spouse: 'துணைவர்', child: 'குழந்தை', parent: 'பெற்றோர்', other: 'குடும்ப உறுப்பினர்' },
+    s: function (n) { return n + ' தங்கள் PulseCover குடும்பத் திட்டத்தில் சேர உங்களை அழைத்துள்ளார்'; }, h: function (n) { return n + ' குடும்பத் திட்டத்தில் சேருங்கள்'; },
+    intro: function (n, r) { return n + ' தங்கள் PulseCover குடும்பத் திட்டத்தில் தங்கள் ' + r + ' ஆகச் சேர உங்களை அழைத்துள்ளார்.'; },
+    what: 'PulseCover உங்கள் சொந்த அணியக்கூடிய சாதனத்தை Apple Health அல்லது Google Health Connect வழியாக இணைத்து, உங்கள் தினசரிப் பழக்கங்களை ஆரோக்கிய மதிப்பெண்ணாக மாற்றுகிறது. இது தரவுச் சேவை, காப்பீட்டாளர் அல்ல; இறுதி விலையை கூட்டாளர் காப்பீட்டாளர்கள் நிர்ணயிப்பர்.',
+    share: 'உங்கள் ஆரோக்கிய மதிப்பெண்ணையும் தரத்தையும் மட்டுமே பகிர்வீர்கள்; மூல ஆரோக்கியத் தரவை ஒருபோதும் அல்ல.', accept: 'அழைப்பை ஏற்கவும்', decline: 'நிராகரி',
+    expire: function (days) { return 'இந்த அழைப்பு ' + days + ' நாட்களில் காலாவதியாகும்; ஒருமுறை மட்டுமே பயன்படுத்தலாம்.'; }, ignore: 'இதை எதிர்பார்க்கவில்லை என்றால் இந்த மின்னஞ்சலைப் புறக்கணிக்கலாம்.' }
+};
+function handleFamilyInvite(d) {
+  if (!validEmail(d.to)) return { ok: false, error: 'invalid recipient' };
+  if (String(d.link).indexOf(SITE + '/invite/') !== 0 || String(d.decline).indexOf(SITE + '/invite/') !== 0) return { ok: false, error: 'invalid link' };
+  const L = FAM[d.lang] || FAM.en, name = String(d.inviter || 'A PulseCover member').slice(0, 60), rel = L.rel[d.relationship] || L.rel.other, days = Number(d.days) || 7;
+  const inner = p(esc(L.intro(name, rel))) + p(esc(L.what)) + box('<b>' + esc(L.share) + '</b>') + btn(L.accept, d.link) +
+    '<p style="margin:10px 0 18px;font-size:14px"><a href="' + d.decline + '" style="color:#646273">' + esc(L.decline) + '</a></p>' + p('<span style="color:#646273;font-size:13px">' + esc(L.expire(days)) + '<br>' + esc(L.ignore) + '</span>');
+  const text = L.intro(name, rel) + '\n\n' + L.what + '\n\n' + L.share + '\n\n' + L.accept + ': ' + d.link + '\n' + L.decline + ': ' + d.decline + '\n\n' + L.expire(days) + '\n' + L.ignore;
+  MailApp.sendEmail({ to: d.to, subject: L.s(name), htmlBody: layout(L.h(name), inner, d.lang), body: text, name: BRAND_NAME, noReply: true });
+  return { ok: true, emailed: true };
+}
+
+/** Run once from the editor to check the family invite email layout (sends a sample invite to your own address; the link is a dummy). */
+function testFamilyInvite() {
+  const me = Session.getActiveUser().getEmail(), dummy = SITE + '/invite/' + new Array(65).join('a');
+  Logger.log(JSON.stringify(handleFamilyInvite({ to: me, inviter: 'Gene', relationship: 'spouse', link: dummy, decline: dummy + '?decline=1', lang: 'en', days: 7 })));
+}

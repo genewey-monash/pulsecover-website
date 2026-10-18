@@ -68,7 +68,6 @@ Object.assign(window.PC_I18N, {
 
   // plans
   'plans.h1': ['Our plans', '我们的计划', 'Pelan kami', 'எங்கள் திட்டங்கள்'],
-  'plans.sub': ['Four example plans, one pricing idea: pay for how you live, within a capped ±15% band.', '四个示例计划，同一个定价理念：按生活方式付费，涨跌幅限制在 ±15%。', 'Empat pelan contoh, satu idea harga: bayar mengikut cara anda hidup, dalam jalur terhad ±15%.', 'நான்கு எடுத்துக்காட்டுத் திட்டங்கள், ஒரே விலைக் கருத்து: நீங்கள் வாழும் விதத்திற்கு ஏற்ப, ±15% வரம்புக்குள் செலுத்துங்கள்.'],
   'plans.all': ['All plans', '全部计划', 'Semua pelan', 'அனைத்து திட்டங்கள்'],
   'filter.browse': ['Browse', '筛选', 'Semak', 'உலாவு'],
   'filter.type': ['Plan type', '计划类型', 'Jenis pelan', 'திட்ட வகை'],
@@ -87,7 +86,6 @@ Object.assign(window.PC_I18N, {
   'plan.quote': ['Get quote', '获取报价', 'Dapatkan sebut harga', 'விலை பெறுக'],
   'plan.apply': ['Apply', '投保', 'Mohon', 'விண்ணப்பி'],
   'plan.none': ['No plans match your filters.', '没有符合条件的计划。', 'Tiada pelan sepadan dengan penapis anda.', 'உங்கள் வடிகட்டிகளுக்குப் பொருந்தும் திட்டங்கள் இல்லை.'],
-  'plan.wear': ['Wearable-linked premium, adjusted once a year within ±15%', '与可穿戴设备挂钩的保费，每年在 ±15% 内调整一次', 'Premium berkait peranti, dilaras setahun sekali dalam ±15%', 'சாதனம்-இணைந்த பிரீமியம், ஆண்டுக்கு ஒருமுறை ±15% க்குள் சரிசெய்யப்படும்'],
   'cov.A': ['Example coverage A', '示例保障 A', 'Contoh perlindungan A', 'எடுத்துக்காட்டு காப்பீடு A'],
   'cov.B': ['Example coverage B', '示例保障 B', 'Contoh perlindungan B', 'எடுத்துக்காட்டு காப்பீடு B'],
   'cov.C': ['Example coverage C', '示例保障 C', 'Contoh perlindungan C', 'எடுத்துக்காட்டு காப்பீடு C'],
@@ -99,8 +97,6 @@ Object.assign(window.PC_I18N, {
   'cmpbar.clear': ['Clear', '清除', 'Kosongkan', 'அழி'],
   'cmpt.h': ['Plan comparison', '计划比较', 'Perbandingan pelan', 'திட்ட ஒப்பீடு'],
   'cmpt.price': ['Base premium (per year)', '基础保费（每年）', 'Premium asas (setahun)', 'அடிப்படை பிரீமியம் (ஆண்டுக்கு)'],
-  'cmpt.best': ['Best case (−15%)', '最佳情况（-15%）', 'Kes terbaik (−15%)', 'சிறந்த நிலை (−15%)'],
-  'cmpt.worst': ['Highest case (+15%)', '最高情况（+15%）', 'Kes tertinggi (+15%)', 'அதிகபட்ச நிலை (+15%)'],
   'cmpt.cover': ['Cover amount', '保额', 'Jumlah perlindungan', 'காப்பீட்டுத் தொகை'],
   'cmpt.type': ['Plan type', '计划类型', 'Jenis pelan', 'திட்ட வகை'],
   'cmpt.buy': ['Sign up via', '投保方式', 'Daftar melalui', 'பதிவு வழி'],
@@ -116,9 +112,7 @@ Object.assign(window.PC_I18N, {
   'home.viewall': ['View all plans', '查看全部计划', 'Lihat semua pelan', 'அனைத்து திட்டங்களையும் காண்க'],
   'home.ben.h': ['Why people choose PulseCover', '大家为什么选择 PulseCover', 'Mengapa orang memilih PulseCover', 'மக்கள் PulseCover-ஐ ஏன் தேர்ந்தெடுக்கிறார்கள்'],
   'home.ben1.h': ['Lower price for healthy habits', '健康习惯，保费更低', 'Harga lebih rendah untuk tabiat sihat', 'ஆரோக்கியப் பழக்கங்களுக்கு குறைந்த விலை'],
-  'home.ben1.p': ['Earn up to 15% off your yearly premium.', '每年保费最高可减 15%。', 'Dapatkan sehingga 15% diskaun premium tahunan.', 'ஆண்டு பிரீமியத்தில் 15% வரை தள்ளுபடி பெறுங்கள்.'],
   'home.ben2.h': ['Never a surprise', '绝无意外', 'Tiada kejutan', 'ஆச்சரியங்கள் இல்லை'],
-  'home.ben2.p': ['Capped at ±15%, repriced only at renewal, 12-month average.', '涨跌幅封顶 ±15%，仅在续保时重新定价，以 12 个月平均值计算。', 'Dihadkan ±15%, ditentukan semula semasa pembaharuan sahaja, purata 12 bulan.', '±15% வரம்பு, புதுப்பிப்பில் மட்டுமே மறுவிலை, 12 மாத சராசரி.'],
   'home.ben3.h': ['No health forms', '无需健康问卷', 'Tiada borang kesihatan', 'சுகாதார படிவங்கள் இல்லை'],
   'home.ben3.p': ['Your wearable data replaces manual health declarations.', '可穿戴设备数据取代手动健康申报。', 'Data peranti anda menggantikan perisytiharan kesihatan manual.', 'உங்கள் சாதனத் தரவு கைமுறை சுகாதார அறிவிப்புகளை மாற்றுகிறது.'],
   'home.ben4.h': ['Simple digital claims', '简单的数字理赔', 'Tuntutan digital mudah', 'எளிய டிஜிட்டல் கோரிக்கைகள்'],
@@ -148,5 +142,4 @@ Object.assign(window.PC_I18N, {
   'home.adv.b1': ['Answer your product enquiries', '解答产品咨询', 'Jawab pertanyaan produk anda', 'தயாரிப்பு விசாரணைகளுக்குப் பதில்'],
   'home.adv.b2': ['Find a plan that fits your needs and budget', '找到适合需求与预算的计划', 'Cari pelan yang sesuai dengan keperluan dan bajet', 'தேவை, பட்ஜெட்டுக்கு ஏற்ற திட்டத்தைக் கண்டறிதல்'],
   'home.adv.b3': ['Request a call back in your language', '用您的语言请求回电', 'Minta panggilan balas dalam bahasa anda', 'உங்கள் மொழியில் திரும்ப அழைப்பு'],
-  'home.disc': ['Premiums shown are examples. Final premium depends on your wearable data at renewal, within the ±15% band.', '所示保费为示例。最终保费取决于续保时您的可穿戴设备数据，并限制在 ±15% 区间内。', 'Premium yang dipaparkan ialah contoh. Premium akhir bergantung pada data peranti anda semasa pembaharuan, dalam jalur ±15%.', 'காட்டப்படும் பிரீமியங்கள் எடுத்துக்காட்டுகள். இறுதி பிரீமியம் புதுப்பிப்பின்போது உங்கள் சாதனத் தரவைப் பொறுத்து, ±15% வரம்புக்குள்.']
 });

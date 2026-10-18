@@ -4,7 +4,10 @@ module.exports = (pages, D) => {
   const node = (ic, n, mid) => `<div class="fnode${mid ? ' mid' : ''}">${mid ? '<video class="logoanim" src="/img/logo-animated.mp4" autoplay muted loop playsinline preload="metadata" aria-label="PulseCover logo animation"></video>' : `<div class="ico" data-ic="${ic}"></div>`}<h3 ${D('flow.' + n + '.h')}></h3><p ${D('flow.' + n + '.p')}></p></div>`;
   const flow = `<div class="flow">${node('watch', 1)}${arrow}${node('badge', 2, true)}${arrow}${node('shield', 3)}</div><p class="center" style="color:var(--mute);max-width:640px;margin:14px auto 0" ${D('flow.note')}></p>`;
   const pills = '<div class="pills"><span class="pv"><i></i>Google Health Connect</span><span class="pv"><i></i>Fitbit</span><span class="pv"><i></i>Garmin</span><span class="pv"><i></i>Whoop</span></div>';
-  const BANDS = [['Ap', 'A+', '90–100', '−12% to −15%'], ['A', 'A', '75–89', '−7.5% to −11.7%'], ['B', 'B', '60–74', '−3% to −7.2%'], ['C', 'C', '40–59', '−2.7% to +3%'], ['D', 'D', '25–39', '+3.3% to +7.5%'], ['E', 'E', '0–24', '+7.8% to +15%']];
+  const PR = require('../pricing');
+  const pctOf = (sc) => Math.round(-PR.adjustment(sc) * 1000) / 10;
+  const effect = (lo, hi) => (pctOf(hi) === 0 ? '0%' : pctOf(lo) === 0 ? '0% to \u2212' + pctOf(hi) + '%' : '\u2212' + pctOf(lo) + '% to \u2212' + pctOf(hi) + '%');
+  const BANDS = [['Ap', 'A+', 90, 100], ['A', 'A', 75, 89], ['B', 'B', 60, 74], ['C', 'C', 40, 59], ['D', 'D', 25, 39], ['E', 'E', 0, 24]].map(([c, g, lo, hi]) => [c, g, lo + '\u2013' + hi, effect(lo, hi)]);
   const bands = `<div class="scroll"><table class="tbl"><thead><tr><th ${D('rate.grade')}></th><th ${D('rate.score')}></th><th ${D('rate.meaning')}></th><th ${D('rate.effect')}></th></tr></thead><tbody>${BANDS.map(([c, g, s, e]) => `<tr><td><span class="gr ${c}">${g}</span></td><td>${s}</td><td ${D('grade.' + g)}></td><td>${e}</td></tr>`).join('')}</tbody></table></div>`;
   const vsRows = [1, 2, 3, 4, 5, 6].map((i) => `<tr><td ${D('vs.r' + i)}></td><td class="tr" ${D('vs.r' + i + '.t')}></td><td class="pc" ${D('vs.r' + i + '.p')}></td></tr>`).join('');
   const vs = `<div class="scroll"><table class="vs"><thead><tr><th></th><th ${D('vs.col.trad')}></th><th class="pc" ${D('vs.col.pc')}></th></tr></thead><tbody>${vsRows}</tbody></table></div>`;

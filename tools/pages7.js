@@ -4,7 +4,6 @@ module.exports = (pages, D) => {
 <main id="rw2_page" class="rw2"><section class="sec"><div class="wrap" style="max-width:1040px">
  <span class="kicker" ${D('nav.rewards')}></span><h1 ${D('rw.h1')}></h1><p class="lead" ${D('rw.sub')}></p>
  <div class="rw2-banner" id="rw2_banner" style="display:none"><p ${D('rw2.samplebanner')}></p><div class="cta"><a class="btn sm" href="/connect" ${D('nav.connect')}></a><a class="btn ghost sm" href="/account?next=/rewards" ${D('nav.login')}></a></div></div>
- <label class="check rw2-pd" id="rw2_premdemo"><input type="checkbox" id="rw2_pd"><span ${D('rw2.demo.premium')}></span></label>
  <div class="card rw2-player" id="rw2_player"></div>
  <p class="rw2-fn" ${D('rw2.note')}></p>
 
@@ -80,10 +79,14 @@ window.addEventListener('pc:lang',draw);`];
 <main><section class="sec"><div class="wrap" style="max-width:920px">
  <span class="kicker" ${D('nav.premium')}></span><h1 ${D('pq.h')}></h1><p class="lead" ${D('pq.p')}></p>
  <div class="scroll" style="margin-top:26px"><table class="tbl pqt"><thead><tr><th ${D('pq.col.feature')}></th><th class="c" ${D('pq.col.free')}></th><th class="c prem" ${D('pq.col.premium')}></th></tr></thead><tbody>
-  <tr><th scope="row" ${D('pq.r.price')}></th><td class="c"><b ${D('pq.v.free')}></b></td><td class="c prem"><b ${D('pq.v.premium')}></b></td></tr>
+  <tr><th scope="row" ${D('pq.r.price')}></th><td class="c"><b ${D('pq.v.free')}></b></td><td class="c prem"><b id="pq_price"></b></td></tr>
   ${rowHtml}
   <tr class="ctarow"><td></td><td class="c"><a class="btn ghost sm" href="/connect" ${D('pq.free.cta')}></a></td><td class="c prem"><a class="btn sm" href="/premium-quote" ${D('pq.premium.cta')}></a></td></tr>
  </tbody></table></div>
+ <div class="card" style="margin-top:22px"><div id="pq_sub"></div></div>
  <p class="fnote" style="margin-top:18px" ${D('pq.note')}></p>
-</div></section></main>`, ''];
+</div></section></main>`, `
+function price(){var e=document.getElementById('pq_price');if(e)e.textContent=PC.sub.label(PC.sub.billing())}
+price();window.addEventListener('pc:sub',price);window.addEventListener('pc:lang',price);
+PC.sub.mount(document.getElementById('pq_sub'),{onUnlock:function(b){PC.sub.open(b,{})}});`];
 };

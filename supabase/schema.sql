@@ -29,3 +29,9 @@ ALTER TABLE connections ENABLE ROW LEVEL SECURITY;
 ALTER TABLE callbacks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feedback ENABLE ROW LEVEL SECURITY;
 ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
+
+-- Family plan invites (token is stored only as a SHA-256 hash)
+CREATE TABLE IF NOT EXISTS family_invites(id SERIAL PRIMARY KEY, owner_id INTEGER, email TEXT, relationship TEXT, token_hash TEXT, status TEXT, invited_at TEXT, expires_at TEXT, last_sent TEXT, member_user_id INTEGER, responded_at TEXT, send_error TEXT);
+CREATE INDEX IF NOT EXISTS idx_family_owner ON family_invites(owner_id);
+CREATE INDEX IF NOT EXISTS idx_family_token ON family_invites(token_hash);
+ALTER TABLE family_invites ENABLE ROW LEVEL SECURITY;

@@ -331,8 +331,6 @@
     if (cel && cel.changed) M = compute(); // XP from quests changes level
     renderPlayer(M); renderQuests(M); renderStreaks(M); renderBadges(M); renderLevels(M); renderVault(M); renderSocial(M);
     $('rw2_banner').style.display = S.src === 'real' ? 'none' : '';
-    $('rw2_premdemo').style.display = S.realPremium ? 'none' : '';
-    $('rw2_pd').checked = LS.get('pc_rw_demo_prem', false);
     if (cel) {
       var msgs = cel.msgs.slice();
       if (cel.fresh.length) { var f = cel.fresh[0]; msgs.unshift(T('rw2.b.unlocked', { b: T('rw2.b.' + f.b.def.id + '.n'), t: tierName(f.tier) }) + (cel.extra > 0 ? ' · ' + T('rw2.b.more', { n: cel.extra }) : '')); setTimeout(function () { popin(f.b, f.tier); centerConf(); }, 350); }
@@ -353,11 +351,11 @@
       S.src = recs ? 'real' : 'sample';
       if (!recs) { recs = sampleRecords(); S.friends = 1; S.R = null; S.realPremium = false; }
       var d = dense(recs); S.days = d.days; S.dates = d.dates;
-      S.premium = S.realPremium || !!LS.get('pc_rw_demo_prem', false);
+      S.premium = S.realPremium || PC.sub.isPremium();
     });
   }
   function init() {
-    $('rw2_pd').onchange = function () { LS.set('pc_rw_demo_prem', this.checked); S.premium = S.realPremium || this.checked; renderAll(true); };
+    window.addEventListener('pc:sub', function () { S.premium = S.realPremium || PC.sub.isPremium(); renderAll(true); });
     load().then(function () {
       renderAll();
       document.querySelector('.rw2').classList.add('ready');

@@ -7,7 +7,9 @@ module.exports = (pages, D) => {
  <h1 ${D('pqr.h1')}></h1><p class="lead" ${D('pqr.lead')}></p>
  <div class="pqr-banner" id="pqr_banner" style="display:none"><p ${D('pqr.banner')}></p><div class="cta"><a class="btn sm" href="/connect" ${D('nav.connect')}></a><a class="btn ghost sm" href="/calculator" ${D('nav.calc')}></a></div></div>
  <div class="pqr-ctl"><label for="pqr_plan_sel" ${D('pqr.plan.lbl')}></label><select id="pqr_plan_sel"></select><span class="pqr-src" id="pqr_src"></span></div>
+ <div class="card pqr-free" id="pqr_freecard"><div><h3 ${D('pqr.free.h')}></h3><p ${D('pqr.free.p')}></p></div><div id="pqr_sub"></div></div>
  <div class="card pqr-hero" id="pqr_hero" aria-live="polite"></div>
+ <div id="pqr_sav"></div>
 
  <h2 class="pqr-h" ${D('pqr.s2.h')}></h2><p class="mute" ${D('pqr.s2.p')}></p>
  <div class="cards c4 pqr-factors" id="pqr_factors"></div>

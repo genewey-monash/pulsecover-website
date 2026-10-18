@@ -34,7 +34,6 @@ Object.assign(window.PC_I18N, {
   'pl2.biz.cat': ['Group life & health protection', '团体人寿与健康保障', 'Perlindungan hayat & kesihatan kumpulan', 'குழு ஆயுள் & சுகாதாரப் பாதுகாப்பு'],
   'pl2.biz.c1': ['Priced per employee, not per policy', '按员工人数定价，而非按保单', 'Harga setiap pekerja, bukan setiap polisi', 'ஒரு ஊழியருக்கு விலை, பாலிசிக்கு அல்ல'],
   'pl2.biz.c2': ['Group discount from 10 employees', '10 名员工起享团体折扣', 'Diskaun kumpulan bermula 10 pekerja', '10 ஊழியர்களிலிருந்து குழுத் தள்ளுபடி'],
-  'pl2.biz.c3': ['Team activity score adjusts the price within +/-15%', '团队活跃评分会在 ±15% 内调整价格', 'Skor aktiviti pasukan melaras harga dalam +/-15%', 'குழுச் செயல்பாட்டு மதிப்பெண் விலையை ±15% க்குள் சரிசெய்யும்'],
   'pl2.biz.from': ['Per employee from', '每位员工起', 'Setiap pekerja bermula', 'ஒரு ஊழியருக்கு தொடக்கம்'],
   'pl2.biz.enquire': ['Enquire', '咨询', 'Pertanyaan', 'விசாரணை']
 });

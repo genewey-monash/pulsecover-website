@@ -9,7 +9,9 @@
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   };
-  PC.t = (k) => (DICT[k] ? (DICT[k][idx[lang]] || DICT[k][0]) : k);
+  // {tokens} such as {maxPct}, {indBase} and {subYearly} are filled from the pricing config (pricing.js), so no wording hard-codes a price
+  const fillTokens = (s) => (s.indexOf('{') < 0 || !window.PC_TOKENS ? s : s.replace(/\{([a-zA-Z]+)\}/g, (m, k) => (k in window.PC_TOKENS ? window.PC_TOKENS[k] : m)));
+  PC.t = (k) => (DICT[k] ? fillTokens(DICT[k][idx[lang]] || DICT[k][0]) : k);
   PC.fmt = (n, d = 2) => Number(n).toLocaleString('en-MY', { minimumFractionDigits: d, maximumFractionDigits: d });
   PC.esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   PC.planName = (id) => PC.t('plan.word') + ' ' + id;
@@ -35,7 +37,7 @@
         ['mega.individual', [['/plans#A', 'heart', 'A'], ['/plans#B', 'shield', 'B']]],
         ['mega.family', [['/plans#C', 'family', 'C'], ['/plans#D', 'family', 'D']]],
         ['mega.business', [['/business', 'users', 'nav.sme'], ['/business#enquiry', 'chart', 'mega.hr']]],
-        ['mega.tools', [['/connect', 'plug', 'nav.connect'], ['/calculator', 'calc', 'nav.calc'], ['/compare', 'scale', 'nav.compare'], ['/how-pricing-works', 'watch', 'nav.how'], ['/rewards', 'gift', 'nav.rewards'], ['/campaigns', 'badge', 'nav.campaigns'], ['/premium', 'star', 'nav.premium']]]
+        ['mega.tools', [['/connect', 'plug', 'nav.connect'], ['/compare', 'scale', 'nav.compare'], ['/how-pricing-works', 'watch', 'nav.how'], ['/rewards', 'gift', 'nav.rewards'], ['/campaigns', 'badge', 'nav.campaigns'], ['/premium', 'star', 'nav.premium']]]
       ], links: [['/plans', 'mega.browse', 'mega.browse.d'], ['/how-pricing-works', 'mega.rules', 'mega.rules.d'], ['/claims', 'nav.claims', 'mega.claims.d'], ['/privacy', 'footer.privacy', 'mega.priv.d']]
     },
     help: {
@@ -46,7 +48,9 @@
       ], links: []
     }
   };
-  const TOP = [['mega:products'], ['/how-pricing-works', 'nav.pricing'], ['/calculator', 'nav.calc'], ['/business', 'nav.sme'], ['mega:help']];
+  const TOP = [['mega:products'], ['/how-pricing-works', 'nav.pricing'], ['/dashboard', 'nav.dashboard'], ['/rewards', 'nav.rewards'], ['/business', 'nav.sme'], ['mega:help']];
+  // pages that belong to a dropdown highlight its button (the Calculator stays reachable from the Pricing page and the footer, not the navbar)
+  const MEGA_PAGES = { products: ['/plans', '/plan-result', '/connect', '/compare', '/campaigns', '/premium', '/premium-quote', '/claims', '/apply'], help: ['/faq', '/contact', '/investors', '/privacy', '/profile'] };
   const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/premium-quote': 'pqr.h1', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/rewards': 'nav.rewards', '/premium': 'nav.premium', '/campaigns': 'nav.campaigns', '/app': 'nav.app', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/profile': 'nav.profile', '/app': 'nav.app', '/claims': 'nav.claims' };
   // Search index: [href, titleKey, descKey, group, extra English keywords]. Matches the current language AND English keywords.
   const SEARCH = [
@@ -99,8 +103,8 @@
     const hdr = document.createElement('header'); hdr.className = 'top';
     const promoOn = store.get('pc_promo') !== '1';
     const nav = TOP.map((t) => {
-      if (t[0].startsWith('mega:')) { const m = t[0].slice(5); return `<button class="nv" data-mega="${m}" aria-expanded="false">${'<span data-i18n="' + MEGA[m].key + '"></span>'}</button>`; }
-      return `<a href="${t[0]}" class="${t[0] === here ? 'on' : ''}" data-i18n="${t[1]}"></a>`;
+      if (t[0].startsWith('mega:')) { const m = t[0].slice(5); return `<button class="nv ${(MEGA_PAGES[m] || []).includes(here) ? 'on' : ''}" data-mega="${m}" aria-expanded="false">${'<span data-i18n="' + MEGA[m].key + '"></span>'}</button>`; }
+      return `<a href="${t[0]}" class="${t[0] === here ? 'on' : ''}"${t[0] === here ? ' aria-current="page"' : ''} data-i18n="${t[1]}"></a>`;
     }).join('');
     const megaHtml = Object.entries(MEGA).map(([k, m]) => `<div class="mega" id="mega-${k}"><div class="wrap"><div class="mgrid" style="grid-template-columns:repeat(${m.cols.length},1fr)">${m.cols.map(([h, items]) => `<div><h4 data-i18n="${h}"></h4>${items.map((i) => mi(i[0], i[1], i[2])).join('')}</div>`).join('')}</div>${m.links.length ? `<div class="mlinks">${m.links.map((l) => `<a href="${l[0]}"><span data-i18n="${l[1]}"></span><small data-i18n="${l[2]}"></small></a>`).join('')}</div>` : ''}</div></div>`).join('');
     hdr.innerHTML = `${promoOn ? `<div class="promo" id="promo"><div class="wrap"><span><b data-i18n="promo.b"></b> <span data-i18n="promo.t"></span></span> <a href="/dashboard" data-i18n="promo.l"></a><button id="promox" aria-label="Close">&times;</button></div></div>` : ''}

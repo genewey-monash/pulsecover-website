@@ -29,27 +29,9 @@
   var BANDS = [{ g: 'A+', min: 90 }, { g: 'A', min: 75 }, { g: 'B', min: 60 }, { g: 'C', min: 40 }, { g: 'D', min: 25 }, { g: 'E', min: 0 }];
   var withVal = function (c, f, v) { var o = {}; for (var k in c) o[k] = c[k]; o[KEYMAP[f]] = v; return o; };
 
-  /* realistic, capped improvement target for a factor (null = already at the top of the score) */
-  function fullTarget(f, c) {
-    if (f === 'steps') return c.steps >= 8000 ? null : Math.min(8000, round(c.steps + 3000, 250));
-    if (f === 'exercise') return c.exerciseMin >= 150 ? null : Math.min(150, round(c.exerciseMin + 60, 5));
-    if (f === 'sleep') { if (c.sleepHours >= 7 && c.sleepHours <= 9) return null; return c.sleepHours < 7 ? Math.min(7.5, round(c.sleepHours + 1, 0.25)) : 8.5; }
-    var hr = c.restingHr; return hr <= 55 ? null : Math.max(55, hr - 5);
-  }
-
-  function scenarios(c) {
-    var base = calc(c), rows = [];
-    FACTORS.forEach(function (f) {
-      var to = fullTarget(f, c);
-      if (to === null) { rows.push({ f: f, from: c[KEYMAP[f]], to: null, fscore: fscore(f, c), score: base.score, annual: base.annualPremium, saving: 0 }); return; }
-      var n = withVal(c, f, to), q = calc(n);
-      rows.push({ f: f, from: c[KEYMAP[f]], to: to, fscore: fscore(f, n), score: q.score, annual: q.annualPremium, saving: Math.max(0, Math.round((base.annualPremium - q.annualPremium) * 100) / 100) });
-    });
-    var top = rows.filter(function (r) { return r.to !== null && r.saving > 0; }).sort(function (a, b) { return b.saving - a.saving; }).slice(0, 3);
-    var n = c; top.forEach(function (r) { n = withVal(n, r.f, r.to); });
-    var q = calc(n);
-    return { rows: rows, base: base, best: { factors: top.map(function (r) { return r.f; }), score: q.score, annual: q.annualPremium, saving: Math.max(0, Math.round((base.annualPremium - q.annualPremium) * 100) / 100), metrics: n } };
-  }
+  /* realistic, capped improvement targets and the savings scenarios come from the shared engine (pricing.js) */
+  function fullTarget(f, c) { return P.fullTarget(f, metrics(c)); }
+  function scenarios(c) { return P.improvementPlan(metrics(c), S.plan); }
 
   /* ---------- data loading ---------- */
   function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -74,7 +56,7 @@
       if (ms.length < 7) throw 0;
       var avg = P.averageMetrics(ms.slice(-30));
       S.cur = { plan: d.policy && d.policy.plan || 'A', steps: Math.round(avg.steps), exerciseMin: Math.round(avg.exerciseMin), sleepHours: Math.round(avg.sleepHours * 4) / 4, restingHr: Math.round(avg.restingHr) };
-      S.plan = P.PLANS[S.cur.plan] ? S.cur.plan : 'A'; S.source = 'wearable';
+      S.plan = P.PLANS[S.cur.plan] ? S.cur.plan : 'A'; S.source = 'wearable'; S.realPremium = !!(d.policy && +d.policy.app_sub);
       var byDay = {}; ms.forEach(function (m) { byDay[m.day] = m.score; });
       var out = [], now = new Date();
       for (var i = 89; i >= 0; i--) { var dt = new Date(now.getTime() - i * 86400000).toISOString().slice(0, 10); out.push(byDay[dt] == null ? null : byDay[dt]); }
@@ -288,9 +270,39 @@
     $('pqr_banner').style.display = S.source === 'sample' ? '' : 'none';
     $('pqr_src').textContent = T(S.source === 'wearable' ? 'pqr.src.wearable' : S.source === 'calc' ? 'pqr.src.calc' : 'pqr.src.sample');
     $('pqr_plan_sel').value = S.plan;
-    renderHero(); renderFactors(); renderTrend(); renderSavings(); renderPlan(); renderPolicies(); renderPerks(); observe();
+    renderHero(); renderFactors(); renderTrend(); renderSavings(); renderPlan(); renderPolicies(); renderPerks(); observe(); renderSavingsCard(); applyGates();
+  }
+  /* ---------- Premium gating (sections 2, 4, 5, 6 are Premium features; the score, savings card and sample numbers stay free) ---------- */
+  var GATES = [];
+  function buildGates() {
+    ['pqr.s2.h', 'pqr.s4.h', 'pqr.s5.h', 'pqr.s6.h'].forEach(function (key) {
+      var h = document.querySelector('h2[data-i18n="' + key + '"]'); if (!h) return;
+      var gate = document.createElement('div'), gc = document.createElement('div'), lock = document.createElement('div');
+      gate.className = 'pqr-gate'; gc.className = 'pqr-gc'; lock.className = 'pqr-lock';
+      h.parentNode.insertBefore(gate, h); gate.appendChild(gc);
+      var n = h; while (n && !(n !== h && n.nodeType === 1 && n.matches('h2.pqr-h'))) { var nx = n.nextSibling; gc.appendChild(n); n = nx; }
+      lock.innerHTML = '<div class="pqr-lockc"><b></b><p></p><button type="button" class="btn sm"></button></div>';
+      gate.appendChild(lock); GATES.push(gate);
+      lock.querySelector('button').onclick = function () { PC.sub.open(PC.sub.billing(), { nextHref: '/premium-quote' }); };
+    });
+  }
+  function premium() { return PC.sub.isPremium() || !!S.realPremium; }
+  function applyGates() {
+    var prem = premium();
+    GATES.forEach(function (g) {
+      g.classList.toggle('locked', !prem); gc(g).setAttribute('aria-hidden', prem ? 'false' : 'true'); if (!prem) gc(g).setAttribute('inert', ''); else gc(g).removeAttribute('inert');
+      var l = g.querySelector('.pqr-lockc'); l.querySelector('b').textContent = T('sb.lock.h'); l.querySelector('p').textContent = T('sb.lock.p'); l.querySelector('button').textContent = T('sb.cta') + ' - ' + PC.sub.label(PC.sub.billing());
+    });
+    $('pqr_freecard').style.display = prem ? 'none' : '';
+  }
+  function gc(g) { return g.querySelector('.pqr-gc'); }
+  function renderSavingsCard() {
+    var plan = P.PLANS[S.plan], fam = plan.type === 'family';
+    PC.sub.savings($('pqr_sav'), { kind: fam ? 'family' : 'ind', metrics: metrics(S.cur), plan: S.plan, members: 4, sample: S.source !== 'wearable' });
   }
   function init() {
+    buildGates(); PC.sub.mount($('pqr_sub'), { onUnlock: function (b) { PC.sub.open(b, { nextHref: '/premium-quote' }); } });
+    window.addEventListener('pc:sub', function () { applyGates(); renderSavingsCard(); });
     $('pqr_plan_sel').innerHTML = Object.keys(P.PLANS).map(function (k) { return '<option value="' + k + '">' + T('pqr.plan.' + k) + '</option>'; }).join('');
     $('pqr_plan_sel').addEventListener('change', function () { S.plan = this.value; renderAll(); updateWhatIf(); });
     [].forEach.call($('pqr_tr_tog').querySelectorAll('button'), function (b) { b.onclick = function () { S.days = +b.dataset.d; renderTrend(); }; });
