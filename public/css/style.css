@@ -753,3 +753,12 @@ html[data-theme="dark"] .pl2 .result select{background:#262231;color:#F3F1F6}
 .fm-sum{margin-top:20px}.fm-sum .btn{background:#fff;color:var(--red);border-color:#fff}
 .fm-add{margin-top:20px}.fm-add h3{margin:0 0 4px}.fm-add form{max-width:520px}.fm-add .btn{margin-top:14px}.fm-note{font-size:.84rem;color:var(--gold-d);margin:8px 0 0}html[data-theme="dark"] .fm-note{color:#F2C561}
 @media (max-width:760px){.fm-grid{grid-template-columns:1fr}}
+
+/* six main nav items (Products, Pricing, Dashboard, Rewards, For Business, Help) must fit the normal desktop header, so spacing is a little tighter */
+nav.main{margin-left:4px}
+nav.main>a,nav.main>button.nv{padding:10px 5px;font-size:.9rem;gap:4px}
+nav.main>a::after,nav.main>button.nv::after{left:5px;right:5px}
+.tools{gap:4px}.bar{gap:8px}
+@media (min-width:1061px) and (max-width:1380px){nav.main>a,nav.main>button.nv{padding:10px 4px;font-size:.87rem}nav.main>a::after,nav.main>button.nv::after{left:4px;right:4px}.lang{min-width:76px;padding:9px 9px}}
+html.navtight nav.main>a,html.navtight nav.main>button.nv{padding:10px 3px;font-size:.8rem;gap:3px}html.navtight nav.main>a::after,html.navtight nav.main>button.nv::after{left:3px;right:3px}html.navtight .tools{gap:3px}html.navtight .lang{min-width:70px;padding:8px 7px;font-size:.8rem}html.navtight .tools .btn.sm{padding:8px 12px;font-size:.8rem}html.navtight .brand{font-size:1.15rem}html.navtight .brand img{width:40px;height:40px}
+html.navtighter .appbtn{display:none}

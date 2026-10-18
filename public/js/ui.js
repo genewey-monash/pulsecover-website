@@ -54,10 +54,15 @@
   /* ---- switch to the menu button when this language does not fit ---- */
   function fitNav() {
     const root = document.documentElement, nav = document.getElementById('mainnav'); if (!nav) return;
-    root.classList.remove('navb');
+    root.classList.remove('navb', 'navtight', 'navtighter');
     if (window.innerWidth <= 1060) { root.classList.add('navb'); return; }
-    const bar = document.querySelector('.bar'); const need = [...nav.children].reduce((s, c) => s + c.getBoundingClientRect().width, 0);
-    if (nav.scrollWidth > nav.clientWidth + 1 || need > nav.clientWidth + 1 || bar.scrollWidth > bar.clientWidth + 1) root.classList.add('navb');
+    const bar = document.querySelector('.bar');
+    const overflows = () => { const need = [...nav.children].reduce((s, c) => s + c.getBoundingClientRect().width, 0); return nav.scrollWidth > nav.clientWidth + 1 || need > nav.clientWidth + 1 || bar.scrollWidth > bar.clientWidth + 1; };
+    if (!overflows()) return;
+    root.classList.add('navtight'); // longer labels (Malay, Tamil): squeeze the spacing first, switch to the menu button only if that is still not enough
+    if (!overflows()) return;
+    root.classList.add('navtighter'); // last step before the menu button: the QR icon steps aside (the app link stays in the hero and footer)
+    if (overflows()) { root.classList.remove('navtight', 'navtighter'); root.classList.add('navb'); }
   }
   function fit() { fitNav(); }
 
