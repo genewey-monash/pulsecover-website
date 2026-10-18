@@ -3,7 +3,7 @@ module.exports = (pages, D) => {
   const arrow = '<div class="farrow"><svg viewBox="0 0 46 24" width="46" height="24"><path d="M2 12h38M31 4l9 8-9 8" fill="none" stroke="#B71234" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
   const node = (ic, n, mid) => `<div class="fnode${mid ? ' mid' : ''}">${mid ? '<video class="logoanim" src="/img/logo-animated.mp4" autoplay muted loop playsinline preload="metadata" aria-label="PulseCover logo animation"></video>' : `<div class="ico" data-ic="${ic}"></div>`}<h3 ${D('flow.' + n + '.h')}></h3><p ${D('flow.' + n + '.p')}></p></div>`;
   const flow = `<div class="flow">${node('watch', 1)}${arrow}${node('badge', 2, true)}${arrow}${node('shield', 3)}</div><p class="center" style="color:var(--mute);max-width:640px;margin:14px auto 0" ${D('flow.note')}></p>`;
-  const pills = '<div class="pills"><span class="pv"><i></i>Google Health Connect</span><span class="pv"><i></i>Fitbit</span><span class="pv"><i></i>Garmin</span><span class="pv"><i></i>Whoop</span></div>';
+  const pills = '<div class="pills"><span class="pv"><i></i>Apple Health</span><span class="pv"><i></i>Google Health Connect</span><span class="pv"><i></i>Fitbit</span><span class="pv"><i></i>Garmin</span><span class="pv"><i></i>Whoop</span></div>';
   const PR = require('../pricing');
   const pctOf = (sc) => Math.round(-PR.adjustment(sc) * 1000) / 10;
   const effect = (lo, hi) => (pctOf(hi) === 0 ? '0%' : pctOf(lo) === 0 ? '0% to \u2212' + pctOf(hi) + '%' : '\u2212' + pctOf(lo) + '% to \u2212' + pctOf(hi) + '%');

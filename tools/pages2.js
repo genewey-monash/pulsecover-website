@@ -15,7 +15,7 @@ function covs(p){return 'ABCDEF'.slice(0,{A:3,B:4,C:5,D:6}[p.id]||3).split('')}`
  <div class="cta"><a class="btn" href="/calculator" ${D('home.cta1')}></a><a class="btn ghost" href="/how-pricing-works" ${D('home.cta2')}></a><a class="btn ghost" href="/app" ${D('dl.web.btn')}></a></div></div></div></div></section>
 <div class="wrap"><div class="stats">
  <div class="stat"><b>RM${BASE_IND}</b><span ${D('home.stat1')}></span></div><div class="stat"><b>${MAX_PCT}%</b><span ${D('home.stat2')}></span></div>
- <div class="stat"><b>3</b><span ${D('home.stat3')}></span></div><div class="stat"><b>18+</b><span ${D('home.stat4')}></span></div></div></div>
+ <div class="stat"><b>5</b><span ${D('home.stat3')}></span></div><div class="stat"><b>18+</b><span ${D('home.stat4')}></span></div></div></div>
 
 <section class="sec"><div class="wrap center"><h2 ${D('home.problem.h')}></h2><p class="lead" ${D('home.problem.p')}></p></div></section>
 
