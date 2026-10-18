@@ -7,7 +7,7 @@
   var T = function (k, o) { var s = PC.t(k); if (o) for (var x in o) s = s.split('{' + x + '}').join(o[x]); return s; };
   var rm = function (n) { return 'RM ' + PC.fmt(n, 2); };
   var SAMPLE = { steps: 7500, exerciseMin: 100, sleepHours: 7.5, restingHr: 66 };
-  var S = { m: SAMPLE, real: false, members: 4, heads: 25 };
+  var S = { m: SAMPLE, real: false };
   var ID = (function () {
     var q = (new URLSearchParams(location.search).get('plan') || '').toUpperCase(), keep = null;
     try { keep = sessionStorage.getItem('pc_plan_sel'); } catch (e) {}
@@ -39,37 +39,30 @@
   }
 
   function viewBlock(q) {
-    if (FAM) {
-      var per = q.annualPremium / S.members;
-      return '<h3 class="pl2-vh">' + T('pl2.fam.h') + '</h3><label class="pl2-lbl" for="pl2_n">' + T('pl2.fam.members') + '</label><select id="pl2_n">' + [2, 3, 4, 5, 6].map(function (n) { return '<option value="' + n + '"' + (n === S.members ? ' selected' : '') + '>' + n + '</option>'; }).join('') + '</select>' +
-        '<div class="row"><span>' + T('pl2.fam.combined') + '</span><b>' + rm(q.annualPremium) + '</b></div><div class="row"><span>' + T('pl2.fam.per') + '</span><b>' + rm(per) + '</b></div><div class="row" style="border:0"><span>' + T('calc.permonth') + ' / ' + T('pl2.fam.per').toLowerCase() + '</span><b>' + rm(per / 12) + '</b></div><p class="pl2-fn">' + T('pl2.fam.note') + '</p>';
-    }
-    if (BIZ) {
-      var b = P.smeQuote(S.heads, q.score);
-      return '<h3 class="pl2-vh">' + T('pl2.biz.h') + '</h3><label class="pl2-lbl" for="pl2_n">' + T('pl2.biz.heads') + '</label><select id="pl2_n">' + [5, 10, 25, 50, 100, 250, 500].map(function (n) { return '<option value="' + n + '"' + (n === S.heads ? ' selected' : '') + '>' + n + '</option>'; }).join('') + '</select>' +
-        '<div class="row"><span>' + T('pl2.biz.per') + '</span><b>' + rm(b.perEmployeeAnnual) + '</b></div><div class="row"><span>' + T('pl2.biz.total') + '</span><b>' + rm(b.totalAnnual) + '</b></div><div class="row"><span>' + T('pl2.biz.disc') + '</span><b>' + b.bulkDiscountPct + '%</b></div><div class="row" style="border:0"><span>' + T(b.savingsVsFlat >= 0 ? 'calc.saved' : 'calc.extra') + '</span><b>' + rm(Math.abs(b.savingsVsFlat)) + '</b></div><p class="pl2-fn">' + T('pl2.biz.note') + '</p>';
-    }
+    if (BIZ) return '<h3 class="pl2-vh">' + T('pl2.biz.custom') + '</h3><p class="pl2-bizp">' + T('pl2.biz.custom.p') + '</p><p class="pl2-fn light">' + T('pl2.biz.note') + '</p>';
     return '';
   }
   function render() {
-    var m = S.m, q = P.quote(m, { plan: PLAN.id }), adj = q.adjustmentPct, per = BIZ ? P.smeQuote(S.heads, q.score) : null;
-    var ann = BIZ ? per.perEmployeeAnnual : q.annualPremium, base = q.base, adjPct = BIZ ? per.adjustmentPct : adj, sav = BIZ ? (base - per.perEmployeeAnnual) : q.savings;
+    var m = S.m, q = P.quote(m, { plan: PLAN.id }), adj = q.adjustmentPct;
+    var ann = q.annualPremium, base = q.base, adjPct = adj, sav = q.savings;
     $('pl2_title').textContent = T('pl2.h1', { p: (BIZ ? T('pl2.biz') : PC.planName(PLAN.id)).replace(/ /g, '\u00A0') });
     $('pl2_banner').style.display = S.real ? 'none' : '';
     $('pl2_src').textContent = S.real ? T('pl2.src.real') : (BIZ ? T('pl2.biz.team') : '');
     if (FAM) { $('pl2_result').style.display = 'none'; $('pl2_fam').style.display = ''; document.querySelector('.pl2 .wrap').style.maxWidth = '1040px'; renderFamily(); return; }
     $('pl2_result').innerHTML = '<h3>' + T('calc.score') + (S.real ? '' : ' <span class="pl2-tag">' + T('pqr.sample') + '</span>') + '</h3><div class="big">' + q.score + ' / 100 (' + q.grade + ')</div><span class="badge ' + (adj < 0 ? 'good' : adj > 0 ? 'up' : 'neu') + '">' + (adj > 0 ? '+' : '') + adj + '%</span>' +
-      '<div style="margin-top:14px" class="row"><span>' + T('calc.base') + (BIZ ? ' / ' + T('pl2.biz.per').toLowerCase() : '') + '</span><b>' + rm(base) + '</b></div>' +
+      (BIZ ? '' : (
+      '<div style="margin-top:14px" class="row"><span>' + T('calc.base') + '</span><b>' + rm(base) + '</b></div>' +
       '<div class="row"><span>' + T('calc.adj') + '</span><b>' + (adjPct > 0 ? '+' : '') + adjPct + '%</b></div>' +
-      '<div class="row"><span>' + T('calc.yours') + (BIZ ? ' / ' + T('pl2.biz.per').toLowerCase() : '') + '</span><b style="font-size:1.3rem">' + rm(ann) + '</b></div>' +
+      '<div class="row"><span>' + T('calc.yours') + '</span><b style="font-size:1.3rem">' + rm(ann) + '</b></div>' +
       '<div class="row"><span>' + T('calc.permonth') + '</span><b>' + rm(ann / 12) + '</b></div>' +
-      '<div class="row" style="border:0"><span>' + T(sav >= 0 ? 'calc.saved' : 'calc.extra') + '</span><b>' + rm(Math.abs(sav)) + '</b></div>' +
+      '<div class="row" style="border:0"><span>' + T(sav >= 0 ? 'calc.saved' : 'calc.extra') + '</span><b>' + rm(Math.abs(sav)) + '</b></div>'
+      )) +
       '<h3 style="margin-top:18px;font-size:1rem">' + T('calc.breakdown') + '</h3><div class="bars">' + ['steps', 'exercise', 'sleep', 'heart'].map(function (k) { var v = q.components[k]; return '<div class="b"><div class="t"><span>' + T('comp.' + k) + '</span><span>' + v + '</span></div><div class="tr"><i style="width:' + v + '%"></i></div></div>'; }).join('') + '</div>' +
       '<div class="pl2-view">' + viewBlock(q) + '</div>' +
       (BIZ ? '<a class="btn" style="width:100%;margin-top:18px" href="/business#enquiry">' + T('pl2.biz.cta') + '</a>' : '<a class="btn" style="width:100%;margin-top:18px" id="pl2_apply" href="/apply?plan=' + PLAN.id + '&steps=' + m.steps + '&ex=' + m.exerciseMin + '&sl=' + m.sleepHours + '&hr=' + m.restingHr + '">' + T('calc.cta') + '</a>') +
       '<p class="pl2-fn light">' + T('pl2.disc') + '</p>';
-    var n = $('pl2_n'); if (n) n.onchange = function () { if (BIZ) S.heads = +n.value; else S.members = +n.value; render(); };
-    if (PC.sub) PC.sub.savings($('pl2_sav'), { kind: FAM ? 'family' : BIZ ? 'biz' : 'ind', metrics: m, plan: PLAN.id, members: S.members, heads: S.heads, sample: !S.real });
+    if (BIZ) $('pl2_sav').innerHTML = ''; // custom pricing: there is no price to compare with the Premium subscription
+    else if (PC.sub) PC.sub.savings($('pl2_sav'), { kind: FAM ? 'family' : BIZ ? 'biz' : 'ind', metrics: m, plan: PLAN.id, members: S.members, heads: S.heads, sample: !S.real });
   }
 
   /* ---------- Family quote: member score cards (SAMPLE until real members join), summary, email invites ---------- */

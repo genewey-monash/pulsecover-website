@@ -197,7 +197,7 @@
     $('rw2_player').innerHTML =
       '<div class="rw2-ph"><span class="rw2-av" aria-hidden="true">' + esc(init) + '</span><div class="rw2-pn"><div class="rw2-pr"><b>' + esc(levelName(M.li)) + '</b><span class="rw2-chip ' + (S.premium ? 'prem' : '') + '">' + T(S.premium ? 'rw2.premium' : 'rw2.free') + '</span>' + tag() + '</div>' +
       '<small>' + T('rw2.xp') + ' ' + PC.fmt(M.total, 0) + (nxt ? ' &middot; ' + T('rw2.toNext', { n: PC.fmt(nxt.xp - M.total, 0), l: levelName(M.li + 1) }) : ' &middot; ' + T('rw2.maxlvl')) + '</small>' + bar(frac, 'red') + '</div></div>' +
-      '<div class="rw2-pstats"><div><span class="fl">' + icon('flame', 22) + '</span><b>' + M.cur + '</b><small>' + T('rw2.streakday') + '</small></div><div><b>' + M.best + '</b><small>' + T('rw2.longest') + '</small></div><div><b>' + earned + ' / ' + all + '</b><small>' + esc(T('rw2.badges', { a: earned, b: all })) + '</small></div></div>';
+      '<div class="rw2-pstats"><div><b><span class="fl">' + icon('flame', 20) + '</span>' + M.cur + '</b><small>' + T('rw2.streakday') + '</small></div><div><b>' + M.best + '</b><small>' + T('rw2.longest') + '</small></div><div><b>' + earned + ' / ' + all + '</b><small>' + T('rw2.badges.short') + '</small></div></div>';
   }
   function renderQuests(M) {
     var li = M.li;

@@ -388,7 +388,7 @@
   }
 
   function paintLangUI() {
-    const cur = LANGS.find((l) => l.code === lang) || LANGS[0], lb = document.getElementById('langlabel'); if (lb) lb.textContent = cur.label;
+    const cur = LANGS.find((l) => l.code === lang) || LANGS[0], lb = document.getElementById('langlabel'); if (lb) { lb.textContent = ({ en: 'EN', zh: '中文', ms: 'BM', ta: 'தமிழ்' })[cur.code] || cur.label; lb.parentNode.title = cur.label; }
     document.querySelectorAll('#langmenu li').forEach((li) => { const on = li.dataset.l === lang; li.classList.toggle('on', on); li.setAttribute('aria-selected', String(on)); });
   }
   function paintAcct() {

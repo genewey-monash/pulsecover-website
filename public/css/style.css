@@ -762,3 +762,36 @@ nav.main>a::after,nav.main>button.nv::after{left:5px;right:5px}
 @media (min-width:1061px) and (max-width:1380px){nav.main>a,nav.main>button.nv{padding:10px 4px;font-size:.87rem}nav.main>a::after,nav.main>button.nv::after{left:4px;right:4px}.lang{min-width:76px;padding:9px 9px}}
 html.navtight nav.main>a,html.navtight nav.main>button.nv{padding:10px 3px;font-size:.8rem;gap:3px}html.navtight nav.main>a::after,html.navtight nav.main>button.nv::after{left:3px;right:3px}html.navtight .tools{gap:3px}html.navtight .lang{min-width:70px;padding:8px 7px;font-size:.8rem}html.navtight .tools .btn.sm{padding:8px 12px;font-size:.8rem}html.navtight .brand{font-size:1.15rem}html.navtight .brand img{width:40px;height:40px}
 html.navtighter .appbtn{display:none}
+
+/* player stat tiles: same structure, same height, number row always on the same line */
+.rw2-pstats{align-items:stretch}.rw2-pstats div{justify-content:center;min-height:92px;padding:14px 8px;gap:4px}
+.rw2-pstats b{min-height:1.9rem;line-height:1.2;justify-content:center;gap:6px;margin:0}.rw2-pstats .fl{display:inline-flex;align-items:center}
+.rw2-pstats small{margin:0;line-height:1.3;text-align:center}
+
+/* header breathing room: the header gets a little more width on larger screens, so all six items keep comfortable spacing (the tight spacing above is only the fallback for narrower windows) */
+@media (min-width:1200px) and (max-width:1399px){
+ header.top .wrap{max-width:1260px}
+ nav.main{margin-left:14px}
+ nav.main>a,nav.main>button.nv{padding:10px 7px;font-size:.9rem;gap:5px}
+ nav.main>a::after,nav.main>button.nv::after{left:7px;right:7px}
+ .tools{gap:6px}.bar{gap:10px}
+}
+@media (min-width:1400px){
+ header.top .wrap{max-width:1360px}
+ nav.main{margin-left:32px}
+ nav.main>a,nav.main>button.nv{padding:10px 12px;font-size:.95rem;gap:6px}
+ nav.main>a::after,nav.main>button.nv::after{left:12px;right:12px}
+ .tools{gap:8px}.bar{gap:16px}
+}
+
+/* lighter top bar: icon tools are plain (no tinted circles), language shows a short code, Log In is a text link so Connect Wearable is the one button */
+header.top .tools .ibtn{width:38px;height:38px;background:transparent;color:var(--ink)}
+header.top .tools .ibtn:hover{background:var(--red-t);color:var(--red)}
+header.top .tools .ibtn svg{width:21px;height:21px}
+html[data-theme="dark"] header.top .tools .ibtn{background:transparent;color:var(--ink)}
+html[data-theme="dark"] header.top .tools .ibtn:hover{background:#2A1F27;color:#FF7C95}
+header.top .tools .lbtn{min-width:0;padding:8px 10px;border-color:transparent;background:transparent;font-weight:600}
+header.top .tools .lbtn:hover{background:var(--red-t)}
+header.top .tools #authbtn{border-color:transparent;background:transparent;box-shadow:none;padding-left:12px;padding-right:12px}
+header.top .tools #authbtn:hover{background:var(--red-t)}
+header.top .tools{gap:4px}

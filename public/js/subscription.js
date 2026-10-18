@@ -131,7 +131,7 @@
   };
 
   /* ---------- savings vs subscription card ---------- */
-  /* opts: { kind: 'ind' | 'family' | 'biz', metrics, plan, members, heads, sample }  (Pricing engine: window.PCPricing) */
+  /* opts: { kind: 'ind' | 'family', metrics, plan, members, sample }  (Pricing engine: window.PCPricing) */
   sub.savings = function (host, opts) {
     var P = window.PCPricing; if (!P) return;
     var b = read().billing, cost = sub.annualCost(b);
@@ -141,10 +141,6 @@
       var n = opts.members; nowS = q.savings * n; bestS = imp.best.totalSaving * n;
       rows = line(T('sv.now'), rm(nowS)) + line(T('sv.fam.per'), rm(imp.best.totalSaving) + ' <small>(' + T('sv.now.per', { x: rm(q.savings) }) + ')</small>') + line(T('sv.best'), rm(bestS));
       note = T('sv.fam.note');
-    } else if (kind === 'biz') {
-      var h = opts.heads, cur = P.smeQuote(h, q.score).savingsVsFlat, bs = P.smeQuote(h, imp.best.score).savingsVsFlat; nowS = cur; bestS = bs;
-      rows = line(T('sv.now'), rm(nowS)) + line(T('sv.biz.per'), rm(bs / h)) + line(T('sv.best'), rm(bestS));
-      note = T('sv.biz.note');
     } else {
       nowS = q.savings; bestS = imp.best.totalSaving;
       rows = line(T('sv.now'), rm(nowS)) + line(T('sv.best'), rm(bestS));

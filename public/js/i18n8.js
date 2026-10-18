@@ -14,13 +14,7 @@ Object.assign(window.PC_I18N, {
   'pl2.fam.combined': ['Combined annual premium', '合计年保费', 'Premium tahunan gabungan', 'ஒட்டுமொத்த ஆண்டுப் பிரீமியம்'],
   'pl2.fam.per': ['Per member (average)', '每位成员（平均）', 'Setiap ahli (purata)', 'ஒரு உறுப்பினருக்கு (சராசரி)'],
   'pl2.fam.note': ['One family plan covers the whole household. The per-member figure is just the average.', '一份家庭计划涵盖全家。每位成员的数字仅为平均值。', 'Satu pelan keluarga melindungi seluruh isi rumah. Angka setiap ahli hanyalah purata.', 'ஒரு குடும்பத் திட்டம் முழுக் குடும்பத்தையும் உள்ளடக்கும். ஒரு உறுப்பினர் தொகை சராசரி மட்டுமே.'],
-  'pl2.biz.h': ['Group view', '团体视图', 'Paparan kumpulan', 'குழுப் பார்வை'],
-  'pl2.biz.heads': ['Employees covered', '受保员工人数', 'Pekerja dilindungi', 'காப்பீட்டு ஊழியர்கள்'],
-  'pl2.biz.per': ['Per employee per year', '每位员工每年', 'Setiap pekerja setahun', 'ஒரு ஊழியருக்கு ஆண்டுக்கு'],
-  'pl2.biz.total': ['Total per year', '每年合计', 'Jumlah setahun', 'ஆண்டுக்கு மொத்தம்'],
-  'pl2.biz.disc': ['Group discount', '团体折扣', 'Diskaun kumpulan', 'குழுத் தள்ளுபடி'],
   'pl2.biz.cta': ['Request a Group Quote', '申请团体报价', 'Mohon Sebut Harga Kumpulan', 'குழு விலைப்புள்ளி கோருங்கள்'],
-  'pl2.biz.note': ['Group pricing is indicative. Our team confirms the final price with the Partnered Insurer.', '团体价格仅供参考，最终价格由我们的团队与合作保险公司确认。', 'Harga kumpulan hanyalah panduan. Pasukan kami mengesahkan harga akhir dengan Penanggung Insurans Rakan Kongsi.', 'குழு விலை குறிப்புக்கு மட்டும். இறுதி விலையை எங்கள் குழு கூட்டாளர் காப்பீட்டாளருடன் உறுதிசெய்யும்.'],
   'pl2.up.badge': ['Premium', '高级版', 'Premium', 'பிரீமியம்'],
   'pl2.up.h': ['Want to save more?', '想节省更多吗？', 'Mahu jimat lebih banyak?', 'இன்னும் சேமிக்க வேண்டுமா?'],
   'pl2.up.p': ['Premium shows exactly which habits move you to a cheaper band, plus the best-fit policy and exclusive partner perks.', '高级版会准确告诉您哪些习惯可让您进入更低费率区间，并提供最适合的保单和专属合作伙伴福利。', 'Premium menunjukkan dengan tepat tabiat mana yang membawa anda ke jalur lebih murah, serta polisi paling sesuai dan ganjaran rakan eksklusif.', 'எந்தப் பழக்கங்கள் உங்களை மலிவான பிரிவுக்கு நகர்த்தும், சிறந்த பாலிசி, பிரத்யேக கூட்டாளர் சலுகைகள் ஆகியவற்றை பிரீமியம் காட்டும்.'],
@@ -32,8 +26,5 @@ Object.assign(window.PC_I18N, {
   'pl2.up.note': ['Savings are not guaranteed. Insurers set the final price.', '不保证节省。最终价格由保险公司决定。', 'Penjimatan tidak dijamin. Penanggung insurans menetapkan harga akhir.', 'சேமிப்பு உறுதியில்லை. இறுதி விலையை காப்பீட்டாளர்கள் நிர்ணயிப்பர்.'],
   'pl2.type.biz': ['Business', '企业', 'Perniagaan', 'வணிகம்'],
   'pl2.biz.cat': ['Group life & health protection', '团体人寿与健康保障', 'Perlindungan hayat & kesihatan kumpulan', 'குழு ஆயுள் & சுகாதாரப் பாதுகாப்பு'],
-  'pl2.biz.c1': ['Priced per employee, not per policy', '按员工人数定价，而非按保单', 'Harga setiap pekerja, bukan setiap polisi', 'ஒரு ஊழியருக்கு விலை, பாலிசிக்கு அல்ல'],
-  'pl2.biz.c2': ['Group discount from 10 employees', '10 名员工起享团体折扣', 'Diskaun kumpulan bermula 10 pekerja', '10 ஊழியர்களிலிருந்து குழுத் தள்ளுபடி'],
-  'pl2.biz.from': ['Per employee from', '每位员工起', 'Setiap pekerja bermula', 'ஒரு ஊழியருக்கு தொடக்கம்'],
   'pl2.biz.enquire': ['Enquire', '咨询', 'Pertanyaan', 'விசாரணை']
 });

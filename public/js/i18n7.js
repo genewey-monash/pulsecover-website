@@ -15,6 +15,7 @@ Object.assign(window.PC_I18N, {
   'rw2.toNext': ['{n} XP to {l}', '距 {l} 还差 {n} 经验值', '{n} XP lagi ke {l}', '{l} நிலைக்கு {n} XP'],
   'rw2.maxlvl': ['Top level reached', '已达最高等级', 'Tahap tertinggi dicapai', 'உயர் நிலையை அடைந்துவிட்டீர்கள்'],
   'rw2.badges': ['{a} of {b} badges', '{b} 枚徽章中已获 {a} 枚', '{a} daripada {b} lencana', '{b} பேட்ஜ்களில் {a}'],
+  'rw2.badges.short': ['Badges earned', '已获徽章', 'Lencana diperoleh', 'பெற்ற பேட்ஜ்கள்'],
   'rw2.streakday': ['day streak', '天连续', 'hari berturut-turut', 'நாள் தொடர்'],
   'rw2.longest': ['Longest streak', '最长连续', 'Rentetan terpanjang', 'நீண்ட தொடர்'],
   'rw2.safe': ['Goals are capped at safe, realistic levels. Nothing here asks you to over-exercise or skip sleep.', '所有目标均设在安全且现实的水平，不会鼓励过度运动或牺牲睡眠。', 'Sasaran dihadkan pada tahap selamat dan realistik. Tiada apa di sini menggalakkan senaman berlebihan atau kurang tidur.', 'இலக்குகள் பாதுகாப்பான, நடைமுறை அளவில் வரையறுக்கப்பட்டுள்ளன. அதிகப்படியான உடற்பயிற்சி அல்லது தூக்கக் குறைவை இங்கு ஊக்குவிக்கவில்லை.'],

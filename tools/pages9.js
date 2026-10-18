@@ -19,7 +19,7 @@ module.exports = (pages, D) => {
   {
     const [ht, hd, hb, hj] = pages['how-pricing-works'];
     const base = `<h2 style="margin-top:44px" ${D('pp.base.h')}></h2><p class="mute" ${D('pp.base.p')}></p>
- <div class="pp-base"><div class="card"><b>RM${PRICING.CONFIG.base.individual.toLocaleString('en-US')}</b><span ${D('pp.base.ind')}></span></div><div class="card"><b>RM${PRICING.CONFIG.base.family.toLocaleString('en-US')}</b><span ${D('pp.base.fam')}></span></div><div class="card"><b>RM${PRICING.CONFIG.base.business.toLocaleString('en-US')}</b><span ${D('pp.base.biz')}></span></div></div>
+ <div class="pp-base"><div class="card"><b>RM${PRICING.CONFIG.base.individual.toLocaleString('en-US')}</b><span ${D('pp.base.ind')}></span></div><div class="card"><b>RM${PRICING.CONFIG.base.family.toLocaleString('en-US')}</b><span ${D('pp.base.fam')}></span></div><div class="card"><b ${D('pp.base.custom')}></b><span ${D('pp.base.biz')}></span></div></div>
  <h2 style="margin-top:44px" id="premium-pricing" ${D('pp.h')}></h2><p class="mute" ${D('pp.sub')}></p>
  <div class="pp-grid" id="pp_grid"></div><p class="fnote" style="margin-top:14px" ${D('pp.cancel')}></p>
  `;
