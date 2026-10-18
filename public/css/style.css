@@ -784,12 +784,7 @@ html.navtighter .appbtn{display:none}
  .tools{gap:8px}.bar{gap:16px}
 }
 
-/* lighter top bar: icon tools are plain (no tinted circles), language shows a short code, Log In is a text link so Connect Wearable is the one button */
-header.top .tools .ibtn{width:38px;height:38px;background:transparent;color:var(--ink)}
-header.top .tools .ibtn:hover{background:var(--red-t);color:var(--red)}
-header.top .tools .ibtn svg{width:21px;height:21px}
-html[data-theme="dark"] header.top .tools .ibtn{background:transparent;color:var(--ink)}
-html[data-theme="dark"] header.top .tools .ibtn:hover{background:#2A1F27;color:#FF7C95}
+/* lighter top bar: icon tools keep their tinted circles, language shows a short code, Log In is a text link so Connect Wearable is the one button */
 header.top .tools .lbtn{min-width:0;padding:8px 10px;border-color:transparent;background:transparent;font-weight:600}
 header.top .tools .lbtn:hover{background:var(--red-t)}
 header.top .tools #authbtn{border-color:transparent;background:transparent;box-shadow:none;padding-left:12px;padding-right:12px}
