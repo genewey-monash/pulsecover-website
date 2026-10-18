@@ -143,7 +143,7 @@
       note = T('sv.fam.note');
     } else {
       nowS = q.savings; bestS = imp.best.totalSaving;
-      rows = line(T('sv.now'), rm(nowS)) + line(T('sv.best'), rm(bestS));
+      rows = line(T('sv.now'), rm(nowS)) + line(T('sv.extra'), '+' + rm(Math.max(0, bestS - nowS))) + line(T('sv.best'), rm(bestS));
     }
     var net = Math.round((bestS - cost) * 100) / 100, pos = net > 0, max = Math.max(cost, bestS, 1);
     function line(k, v) { return '<div class="row"><span>' + k + '</span><b>' + v + '</b></div>'; }
