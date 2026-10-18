@@ -123,7 +123,7 @@
             <a role="menuitem" href="/dashboard">${PC.icon('grid')}<span data-i18n="nav.dash"></span></a>
             <a role="menuitem" href="/profile">${PC.icon('user')}<span data-i18n="nav.profile"></span></a>
             <hr><button role="menuitem" type="button" id="logoutbtn" class="out">${PC.icon('logout')}<span data-i18n="nav.logout"></span></button></div></div>
-        <a class="btn sm" href="/connect" data-i18n="nav.connect"></a>
+        <a class="btn sm" href="/connect" data-i18n="nav.connect" data-connect-cta></a>
         <button class="burger" id="burger" aria-label="Menu">&#9776;</button>
       </div></div>
       ${megaHtml}
@@ -321,7 +321,7 @@
     m.addEventListener('click', (e) => { if (e.target === m || e.target.hasAttribute('data-close')) { close(); reject(new Error('cancel')); } });
     m.querySelector('#cnok').onclick = async () => {
       const b = m.querySelector('#cnok'); b.disabled = true;
-      try { const r = PC.user ? await PC.api('/connect', { provider, consent: true, plan }) : await PC.guestConnect(provider, plan); close(); resolve(r); }
+      try { const r = PC.user ? await PC.api('/connect', { provider, consent: true, plan }) : await PC.guestConnect(provider, plan); close(); PC.connected = true; PC.paintConnect(); resolve(r); }
       catch (e) { PC.msg(m.querySelector('.msg'), e.message); b.disabled = false; }
     };
   });
@@ -400,6 +400,14 @@
     if (na) na.innerHTML = u ? `<a href="/dashboard">${PC.t('nav.dash')}</a><a href="/profile">${PC.t('nav.profile')}</a><button type="button" class="out" id="navout">${PC.t('nav.logout')}</button>` : `<a href="/account">${PC.t('nav.login')}</a>`;
     const no = document.getElementById('navout'); if (no) no.onclick = () => PC.logout();
   }
+  /* once a wearable is linked, every "Connect wearable" call to action becomes "View my score" and goes to the quote */
+  PC.paintConnect = () => {
+    document.querySelectorAll('[data-connect-cta]').forEach((e) => {
+      if (!e.dataset.cta0) e.dataset.cta0 = e.dataset.i18n;
+      e.dataset.i18n = PC.connected ? 'nav.myscore' : e.dataset.cta0; e.textContent = PC.t(e.dataset.i18n);
+      e.setAttribute('href', PC.connected ? '/plan-result?plan=A' : '/connect');
+    });
+  };
   PC.apply = (scope) => {
     const root = scope || document;
     if (!scope) document.documentElement.lang = { en: 'en', zh: 'zh-Hans', ms: 'ms', ta: 'ta' }[lang];
@@ -409,7 +417,7 @@
     root.querySelectorAll('[data-i18n-opt]').forEach((e) => { e.textContent = PC.t(e.dataset.i18nOpt); });
     root.querySelectorAll('[data-plan]').forEach((e) => { e.textContent = PC.planName(e.dataset.plan); });
     if (scope) return;
-    paintLangUI(); paintAcct();
+    paintLangUI(); paintAcct(); PC.paintConnect();
     document.querySelectorAll('#flangs button').forEach((b) => b.classList.toggle('on', b.dataset.l === lang));
     document.querySelectorAll('.modal input[name=clang]').forEach((r) => { r.checked = r.value === lang; });
     if (PC.paintTheme) PC.paintTheme();
@@ -424,6 +432,8 @@
     chrome();
     try { PC.user = (await PC.api('/me')).user; } catch (e) {}
     if (PC.user) PC.guestMigrate(); // a wearable connected as a guest is saved to the account after login
+    PC.connected = PC.guestProviders().length > 0;
+    if (PC.user) PC.api('/dashboard').then((d) => { PC.connected = PC.connected || (d.connections || []).length > 0; PC.paintConnect(); }).catch(() => {});
     idleGuard();
     if (PC.user && store.get('pc_lang') === null && idx[PC.user.lang] !== undefined) lang = PC.user.lang;
     PC.apply();

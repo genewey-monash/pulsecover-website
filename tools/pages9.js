@@ -19,7 +19,7 @@ module.exports = (pages, D) => {
   {
     const [ht, hd, hb, hj] = pages['how-pricing-works'];
     const base = `<h2 style="margin-top:44px" ${D('pp.base.h')}></h2><p class="mute" ${D('pp.base.p')}></p>
- <div class="pp-base"><div class="card"><b>RM${PRICING.CONFIG.base.individual.toLocaleString('en-US')}</b><span ${D('pp.base.ind')}></span></div><div class="card"><b>RM${PRICING.CONFIG.base.family.toLocaleString('en-US')}</b><span ${D('pp.base.fam')}></span></div><div class="card"><b ${D('pp.base.custom')}></b><span ${D('pp.base.biz')}></span></div></div>
+ <div class="pp-base"><div class="card"><b>RM${PRICING.CONFIG.base.individual.toLocaleString('en-US')}</b><span ${D('pp.base.ind')}></span><a class="btn sm" href="/plan-result?plan=A" ${D('plan.quote')}></a></div><div class="card"><b>RM${PRICING.CONFIG.base.family.toLocaleString('en-US')}</b><span ${D('pp.base.fam')}></span><a class="btn sm" href="/plan-result?plan=C" ${D('plan.quote')}></a></div><div class="card"><b ${D('pp.base.custom')}></b><span ${D('pp.base.biz')}></span><a class="btn sm" href="/plan-result?plan=business" ${D('plan.quote')}></a></div></div>
  <h2 style="margin-top:44px" id="premium-pricing" ${D('pp.h')}></h2><p class="mute" ${D('pp.sub')}></p>
  <div class="pp-grid" id="pp_grid"></div><p class="fnote" style="margin-top:14px" ${D('pp.cancel')}></p>
  `;
@@ -37,10 +37,10 @@ ppDraw();window.addEventListener('pc:sub',ppDraw);window.addEventListener('pc:la
     let [dt, dd, db, dj] = pages['dashboard'];
     db = db.replace('</h1>', `</h1>
  <div class="rw2-tabs" id="dtabs" role="group"><button type="button" class="on" data-dt="ov" aria-pressed="true" ${D('db.ov')}></button><button type="button" data-dt="pm" aria-pressed="false" ${D('db.prem')}></button></div>
- <div id="dprem" style="display:none"><h2 style="margin:6px 0 14px" ${D('db.prem.h')}></h2><div id="dprem_host" style="max-width:640px"></div></div>`);
+ <div id="dprem" style="display:none"><h2 style="margin:6px 0 14px" ${D('db.prem.h')}></h2><div id="dprem_host" style="max-width:640px"></div><div id="dprem_feat"></div></div>`);
     dj += `
 (function(){const w=document.querySelector('main .wrap');const set=(k)=>{w.classList.toggle('dprem-on',k==='pm');document.getElementById('dprem').style.display=k==='pm'?'':'none';document.querySelectorAll('[data-dt]').forEach(b=>{const on=b.dataset.dt===k;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});if(k==='pm')history.replaceState(null,'','#premium');else history.replaceState(null,'',location.pathname)};
- document.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>set(b.dataset.dt));PC.sub.manage(document.getElementById('dprem_host'));if(location.hash==='#premium')set('pm')})();`;
+ document.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>set(b.dataset.dt));PC.sub.manage(document.getElementById('dprem_host'));const feat=()=>{const f=document.getElementById('dprem_feat');if(!PC.sub.isPremium()){f.innerHTML='';return}const L=[['sb.f1','db.pf1.p','/premium-quote#pqr_s2','chart'],['sb.f2','db.pf2.p','/premium-quote#pqr_s4','spark'],['sb.f3','db.pf3.p','/premium-quote#pqr_s5','shield'],['sb.f4','db.pf4.p','/rewards','gift']];f.innerHTML='<h2 style="margin:28px 0 14px">'+PC.t('db.pf.h')+'</h2><div class="cards c2 pf-grid">'+L.map(x=>'<div class="card pf-card"><h3>'+PC.t(x[0])+'</h3><p>'+PC.t(x[1])+'</p><a class="btn ghost sm" href="'+x[2]+'">'+PC.t('db.pf.open')+'</a></div>').join('')+'</div>'};feat();window.addEventListener('pc:sub',feat);window.addEventListener('pc:lang',feat);if(location.hash==='#premium')set('pm')})();`;
     pages['dashboard'] = [dt, dd, db, dj];
   }
 

@@ -82,7 +82,7 @@ pages['compare'] = [`Compare`, `PulseCover versus AIA Vitality and flat-rate ins
 <main><section class="sec"><div class="wrap"><h1 ${D('cmp.h1')}></h1><p class="lead" ${D('cmp.sub')}></p><div class="scroll" style="margin-top:28px"><table class="tbl"><thead><tr><th></th><th>PulseCover</th><th>AIA Vitality</th><th ${D('cmp.flat')}></th></tr></thead><tbody>
 ${cmpRows.map(([f,v])=>`<tr><td ${D('cmp.'+f)}></td><td class="hl">${cell(v[0],f,'pc')}</td><td>${cell(v[1],f,'aia')}</td><td>${cell(v[2],f,'flat')}</td></tr>`).join('')}
 </tbody></table></div><p style="margin-top:18px;font-size:.88rem;color:var(--mute)" ${D('cmp.note')}></p>
-<div class="cta"><a class="btn" href="/calculator" ${D('home.cta1')}></a></div></div></section></main>`, ''];
+<div class="cta"><a class="btn" href="/connect" ${D('home.cta1')} data-connect-cta></a></div></div></section></main>`, ''];
 
 pages['account'] = [`Account`, `Log in or create your PulseCover account.`, `
 <main><section class="sec"><div class="wrap" style="max-width:520px"><h1 ${D('acc.h1')}></h1>

@@ -790,3 +790,8 @@ header.top .tools .lbtn:hover{background:var(--red-t)}
 header.top .tools #authbtn{border-color:transparent;background:transparent;box-shadow:none;padding-left:12px;padding-right:12px}
 header.top .tools #authbtn:hover{background:var(--red-t)}
 header.top .tools{gap:4px}
+
+/* pricing base cards: equal height with the Get quote button pinned to the bottom; premium feature cards on the dashboard */
+.pp-base .card{display:flex;flex-direction:column;align-items:flex-start;gap:6px}.pp-base .card .btn{margin-top:auto;align-self:stretch;text-align:center}.pp-base .card span{margin-bottom:14px}
+.pf-grid .card{display:flex;flex-direction:column;align-items:flex-start;gap:8px}.pf-grid .card h3{margin:0}.pf-grid .card p{margin:0 0 10px;color:var(--mute)}.pf-grid .card .btn{margin-top:auto}
+#pqr_s2,#pqr_s4,#pqr_s5{scroll-margin-top:90px}

@@ -11,23 +11,23 @@ module.exports = (pages, D) => {
  <div class="card pqr-hero" id="pqr_hero" aria-live="polite"></div>
  <div id="pqr_sav"></div>
 
- <h2 class="pqr-h" ${D('pqr.s2.h')}></h2><p class="mute" ${D('pqr.s2.p')}></p>
+ <h2 class="pqr-h" id="pqr_s2" ${D('pqr.s2.h')}></h2><p class="mute" ${D('pqr.s2.p')}></p>
  <div class="cards c4 pqr-factors" id="pqr_factors"></div>
  <div class="cards c2 pqr-pair"><div class="card" id="pqr_next"></div><div class="card" id="pqr_quality"></div></div>
  <div class="card pqr-trend"><div class="pqr-fh"><b ${D('pqr.tr.h')}></b><span class="pqr-tag" id="pqr_tr_tag" ${D('pqr.sample')}></span><div class="pqr-seg" id="pqr_tr_tog" role="group"><button type="button" data-d="30" ${D('pqr.tr.30')}></button><button type="button" data-d="90" ${D('pqr.tr.90')}></button></div></div><div id="pqr_trend"></div><p class="pqr-fn" ${D('pqr.tr.note')}></p></div>
 
- <h2 class="pqr-h" ${D('pqr.s3.h')}></h2><p class="mute" ${D('pqr.s3.p')}></p>
+ <h2 class="pqr-h" id="pqr_s3" ${D('pqr.s3.h')}></h2><p class="mute" ${D('pqr.s3.p')}></p>
  <div class="card"><div class="scroll"><table class="tbl pqr-sv" id="pqr_sv"></table></div></div>
  <div class="cards c2 pqr-pair"><div class="card"><h3 ${D('pqr.s.chart')}></h3><div id="pqr_chart" class="pqr-bars"></div></div>
   <div class="card"><div class="pqr-fh"><h3 style="margin:0" ${D('pqr.w.h')}></h3><button type="button" class="btn ghost sm" id="pqr_wi_reset" ${D('pqr.w.reset')}></button></div><p class="mute" ${D('pqr.w.p')}></p><div id="pqr_wi"></div><div class="pqr-out" id="pqr_wi_out" aria-live="polite"></div></div></div>
  <p class="pqr-fn" ${D('pqr.s3.note')}></p>
 
- <h2 class="pqr-h" ${D('pqr.s4.h')}></h2><p class="mute" ${D('pqr.s4.p')}></p>
+ <h2 class="pqr-h" id="pqr_s4" ${D('pqr.s4.h')}></h2><p class="mute" ${D('pqr.s4.p')}></p>
  <div class="pqr-ring" id="pqr_ring"></div>
  <div class="cards c2 pqr-plan" id="pqr_plan"></div>
  <div class="pqr-fh" style="margin-top:12px"><p class="pqr-fn" style="margin:0" ${D('pqr.s4.note')}></p><button type="button" class="btn ghost sm" id="pqr_plan_reset" ${D('pqr.p.restart')}></button></div>
 
- <h2 class="pqr-h" ${D('pqr.s5.h')}></h2><p class="mute" ${D('pqr.s5.p')}></p>
+ <h2 class="pqr-h" id="pqr_s5" ${D('pqr.s5.h')}></h2><p class="mute" ${D('pqr.s5.p')}></p>
  <div class="cards c3 pqr-pols" id="pqr_pol"></div>
  <p class="pqr-fn" ${D('pqr.s5.note')}></p>
 

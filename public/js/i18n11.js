@@ -75,5 +75,12 @@ Object.assign(window.PC_I18N, {
   'iv.bad.used': ['This invite has already been used, declined or cancelled.', '此邀请已被使用、拒绝或取消。', 'Jemputan ini telah digunakan, ditolak atau dibatalkan.', 'இந்த அழைப்பு ஏற்கனவே பயன்படுத்தப்பட்டது, நிராகரிக்கப்பட்டது அல்லது ரத்து செய்யப்பட்டது.'],
   'iv.err': ['Something went wrong. Please try again.', '出错了，请重试。', 'Sesuatu tidak kena. Sila cuba lagi.', 'ஏதோ தவறு நடந்தது. மீண்டும் முயலுங்கள்.'],
   'iv.home': ['Back to home', '返回首页', 'Kembali ke utama', 'முகப்புக்குத் திரும்பு'],
+  'nav.myscore': ['View My Score', '查看我的评分', 'Lihat Skor Saya', 'என் மதிப்பெண்ணைக் காண்க'],
+  'db.pf.h': ['What is included in Premium', 'Premium 包含的内容', 'Apa yang termasuk dalam Premium', 'பிரீமியத்தில் என்ன உள்ளது'],
+  'db.pf.open': ['Open', '打开', 'Buka', 'திற'],
+  'db.pf1.p': ['See what drives your score, how far you are from the next band and what-if changes.', '查看影响评分的因素、距离下一区间的差距以及假设情景。', 'Lihat apa yang mempengaruhi skor anda, jarak ke jalur seterusnya dan perubahan bagaimana-jika.', 'உங்கள் மதிப்பெண்ணைப் பாதிப்பவை, அடுத்த பிரிவுக்கான தூரம் மற்றும் மாற்றங்களைப் பாருங்கள்.'],
+  'db.pf2.p': ['Simple tips based on your own steps, exercise, sleep and heart rate.', '根据您的步数、运动、睡眠和心率提供的简单建议。', 'Petua mudah berdasarkan langkah, senaman, tidur dan kadar jantung anda.', 'உங்கள் படிகள், உடற்பயிற்சி, தூக்கம், இதயத் துடிப்பு அடிப்படையிலான எளிய குறிப்புகள்.'],
+  'db.pf3.p': ['Plain-language guidance on cover, what to expect and next steps with the Partnered Insurer.', '用通俗语言说明保障内容、预期情况和与合作保险公司的后续步骤。', 'Panduan bahasa mudah tentang perlindungan, jangkaan dan langkah seterusnya dengan Penanggung Insurans Rakan.', 'பாதுகாப்பு, எதிர்பார்ப்புகள் மற்றும் கூட்டு காப்பீட்டாளருடன் அடுத்த படிகள் பற்றிய எளிய வழிகாட்டுதல்.'],
+  'db.pf4.p': ['Unlock partner perks and upcoming events in the Rewards vault.', '在奖励保险库中解锁合作伙伴优惠和即将举行的活动。', 'Buka ganjaran rakan dan acara akan datang di peti Ganjaran.', 'ரிவார்ட்ஸ் வால்ட்டில் கூட்டாளர் சலுகைகள் மற்றும் வரவிருக்கும் நிகழ்வுகளைத் திறக்கவும்.'],
   'iv.loading': ['Checking your invite...', '正在检查您的邀请...', 'Menyemak jemputan anda...', 'உங்கள் அழைப்பைச் சரிபார்க்கிறது...']
 });
