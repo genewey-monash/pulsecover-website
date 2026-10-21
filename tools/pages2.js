@@ -34,7 +34,7 @@ function covs(p){return 'ABCDEF'.slice(0,{A:3,B:4,C:5,D:6}[p.id]||3).split('')}`
 
 <section class="sec dark"><div class="wrap"><h2 class="center" ${D('home.trust.h')}></h2><div class="cards c3" style="margin-top:28px;text-align:center">
  ${[1,2,3].map(i=>`<div><b style="font-size:2.6rem;color:var(--gold)" ${D('home.trust.'+i)}></b><p style="color:rgba(255,255,255,.8)" ${D('home.trust.'+i+'d')}></p></div>`).join('')}</div>
- <p class="center" style="margin-top:22px"><a class="btn gold" href="/investors" ${D('nav.investors')}></a></p></div></section>
+</div></section>
 
 <section class="sec"><div class="wrap"><h2 class="center" ${D('home.tools.h')}></h2><p class="lead center" ${D('home.tools.sub')}></p><div class="cards c3" style="margin-top:28px">
  <a class="card" href="/calculator" style="text-decoration:none"><div class="ico" data-ic="calc"></div><h3 ${D('nav.calc')}></h3><p ${D('calc.sub')}></p></a>

@@ -44,14 +44,14 @@
       key: 'nav.help', cols: [
         ['mega.support', [['/contact', 'phone', 'nav.contact'], ['/faq', 'book', 'nav.faq'], ['/claims', 'file', 'nav.claims']]],
         ['mega.account', [['/account', 'lock', 'nav.login'], ['/dashboard', 'chart', 'nav.dashboard'], ['/profile', 'user', 'nav.profile']]],
-        ['mega.learn', [['/investors', 'cash', 'nav.investors'], ['/privacy', 'shield', 'footer.privacy']]]
+        ['mega.learn', [['/privacy', 'shield', 'footer.privacy']]]
       ], links: []
     }
   };
   const TOP = [['mega:products'], ['/how-pricing-works', 'nav.pricing'], ['/dashboard', 'nav.dashboard'], ['/rewards', 'nav.rewards'], ['/business', 'nav.sme'], ['mega:help']];
   // pages that belong to a dropdown highlight its button (the Calculator stays reachable from the Pricing page and the footer, not the navbar)
-  const MEGA_PAGES = { products: ['/plans', '/plan-result', '/connect', '/compare', '/campaigns', '/premium', '/premium-quote', '/claims', '/apply'], help: ['/faq', '/contact', '/investors', '/privacy', '/profile'] };
-  const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/premium-quote': 'pqr.h1', '/compare': 'nav.compare', '/business': 'nav.sme', '/investors': 'nav.investors', '/faq': 'nav.faq', '/rewards': 'nav.rewards', '/premium': 'nav.premium', '/campaigns': 'nav.campaigns', '/app': 'nav.app', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/profile': 'nav.profile', '/app': 'nav.app', '/claims': 'nav.claims' };
+  const MEGA_PAGES = { products: ['/plans', '/plan-result', '/connect', '/compare', '/campaigns', '/premium', '/premium-quote', '/claims', '/apply'], help: ['/faq', '/contact', '/privacy', '/profile'] };
+  const CRUMB = { '/plans': 'nav.plans', '/how-pricing-works': 'nav.how', '/connect': 'nav.connect', '/calculator': 'nav.calc', '/premium-quote': 'pqr.h1', '/compare': 'nav.compare', '/business': 'nav.sme', '/faq': 'nav.faq', '/rewards': 'nav.rewards', '/premium': 'nav.premium', '/campaigns': 'nav.campaigns', '/app': 'nav.app', '/contact': 'nav.contact', '/privacy': 'footer.privacy', '/apply': 'nav.apply', '/account': 'nav.login', '/dashboard': 'nav.dashboard', '/profile': 'nav.profile', '/app': 'nav.app', '/claims': 'nav.claims' };
   // Search index: [href, titleKey, descKey, group, extra English keywords]. Matches the current language AND English keywords.
   const SEARCH = [
     ['/', 'nav.home', 'footer.tag', 'page', 'home start welcome'],
@@ -63,7 +63,6 @@
     ['/compare', 'nav.compare', 'cmp.sub', 'page', 'compare aia vitality traditional flat rate difference'],
     ['/business', 'nav.sme', 'sme.sub', 'tool', 'business sme employer staff group employees hr'],
     ['/business#enquiry', 'sme.enquiry.h', 'sme.assoc', 'tool', 'enquiry business quote group contact'],
-    ['/investors', 'nav.investors', 'inv.sub', 'page', 'investors market financials breakeven revenue cost sources'],
     ['/privacy', 'footer.privacy', 'prv.sub', 'page', 'privacy data protection consent security pdpa'],
     ['/premium-quote', 'pqr.h1', 'pqr.lead', 'page', 'premium quote results detailed assessment savings what-if coaching plan policy guidance perks'],
     ['/premium', 'nav.premium', 'pq.p', 'page', 'premium quote paid upgrade free comparison detailed assessment coaching policy guidance partner discounts report savings'],
@@ -147,7 +146,7 @@
         <div class="badges"><a class="btn ghost sm" href="/app" data-i18n="dl.web.btn"></a></div></div>
       <div><h4 data-i18n="footer.product"></h4><a href="/plans" data-i18n="nav.plans"></a><a href="/calculator" data-i18n="nav.calc"></a><a href="/compare" data-i18n="nav.compare"></a><a href="/apply" data-i18n="nav.apply"></a><a href="/business" data-i18n="nav.sme"></a><a href="/app" data-i18n="nav.app"></a><a href="/premium" data-i18n="nav.premium"></a><a href="/rewards" data-i18n="nav.rewards"></a><a href="/campaigns" data-i18n="nav.campaigns"></a></div>
       <div><h4 data-i18n="footer.support"></h4><a href="/claims" data-i18n="nav.claims"></a><a href="/dashboard" data-i18n="nav.dashboard"></a><a href="/faq" data-i18n="nav.faq"></a><a href="/contact" data-i18n="nav.contact"></a></div>
-      <div><h4 data-i18n="footer.company"></h4><a href="/how-pricing-works" data-i18n="nav.how"></a><a href="/investors" data-i18n="nav.investors"></a><a href="/privacy" data-i18n="footer.privacy"></a></div>
+      <div><h4 data-i18n="footer.company"></h4><a href="/how-pricing-works" data-i18n="nav.how"></a><a href="/privacy" data-i18n="footer.privacy"></a></div>
       <div><h4 data-i18n="nav.language"></h4><div class="langs" id="flangs">${LANGS.map((l) => `<button data-l="${l.code}">${l.label}</button>`).join('')}</div></div></div>
       <div class="reg"><b data-i18n="footer.reg.h"></b> <span data-i18n="footer.reg.p"></span><br><span data-i18n="footer.partner"></span></div>
       <div class="fbot"><span data-i18n="footer.group"></span><span>&copy; 2026 PulseCover</span></div></div>`;
