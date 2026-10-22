@@ -1,7 +1,7 @@
-// v8: Premium Quote Results page (/premium-quote). All logic lives in public/js/premium-quote.js and reuses the shared scoring engine (pricing.js).
+// v8: Premium Subscription Results page (/premium-quote). All logic lives in public/js/premium-quote.js and reuses the shared scoring engine (pricing.js).
 module.exports = (pages, D) => {
   const faq = [1, 2, 3, 4].map((i) => `<details><summary ${D('pqr.faq.q' + i)}></summary><p ${D('pqr.faq.a' + i)}></p></details>`).join('');
-  pages['premium-quote'] = ['Premium Quote Results', 'Your detailed assessment, savings scenarios, coaching plan and perks.', `
+  pages['premium-quote'] = ['Premium Subscription Results', 'Your detailed assessment, savings scenarios, coaching plan and perks.', `
 <main id="pqr_page" class="pqr"><section class="sec"><div class="wrap">
  <div class="pqr-top"><span class="pqr-badge" ${D('pqr.badge')}></span><a href="/calculator" class="pqr-back" ${D('pqr.back')}></a></div>
  <h1 ${D('pqr.h1')}></h1><p class="lead" ${D('pqr.lead')}></p>

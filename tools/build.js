@@ -220,7 +220,7 @@ require('./pages8')(pages, D);
 require('./pages9')(pages, D);
 // {tokens} used in text (max discount, base premiums, subscription prices) come from the same config
 fs.writeFileSync(path.join(out, 'js', 'pricing-config.js'), '/* generated from /pricing.js (CONFIG) by tools/build.js - do not edit */\nwindow.PC_TOKENS=' + JSON.stringify(require('../pricing').tokens()) + ';\nwindow.PC_SUB=' + JSON.stringify(require('../pricing').SUB) + ';\n');
-// the browser gets the very same scoring engine the API runs (pricing.js), so the Premium Quote page cannot drift from the server
+// the browser gets the very same scoring engine the API runs (pricing.js), so the Premium Subscription page cannot drift from the server
 fs.writeFileSync(path.join(out, 'js', 'pricing.js'), '/* generated from /pricing.js by tools/build.js - do not edit */\n(function(){var module={exports:{}};\n' + fs.readFileSync(path.join(__dirname, '..', 'pricing.js'), 'utf8') + '\nwindow.PCPricing=module.exports;})();\n');
 fs.writeFileSync(path.join(out, 'js', 'rewards-catalog.js'), '/* generated from /data/rewards-catalog.json by tools/build.js - edit the JSON, not this file */\nwindow.PC_RW_CATALOG=' + JSON.stringify(JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'rewards-catalog.json'), 'utf8'))) + ';\n');
 for (const [name, [title, desc, body, js]] of Object.entries(pages))

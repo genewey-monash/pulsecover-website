@@ -139,7 +139,7 @@ Object.assign(window.PC_I18N, {
   'rw2.xp.ref': ['Referrals: {n} XP per friend who joins and links a wearable', '推荐：每位加入并连接设备的好友 {n} 经验值', 'Rujukan: {n} XP bagi setiap rakan yang sertai dan sambung peranti', 'பரிந்துரைகள்: இணைந்து சாதனத்தை இணைக்கும் ஒவ்வொரு நண்பருக்கும் {n} XP'],
   /* vault */
   'rw2.v.h': ['Reward vault', '奖励宝库', 'Peti ganjaran', 'வெகுமதிப் பெட்டகம்'],
-  'rw2.v.p': ['Standard coupons open up as you earn badges and levels. Exclusive perks and events are for Premium Quote members.', '随着您获得徽章和等级，标准优惠券会逐步解锁。专属福利与活动仅限高级报价会员。', 'Kupon biasa dibuka apabila anda memperoleh lencana dan tahap. Ganjaran eksklusif dan acara untuk ahli Sebut Harga Premium.', 'பேட்ஜ்கள், நிலைகளைப் பெற பெற வழக்கமான கூப்பன்கள் திறக்கும். பிரத்யேகச் சலுகைகள், நிகழ்வுகள் பிரீமியம் உறுப்பினர்களுக்கு.'],
+  'rw2.v.p': ['Standard coupons open up as you earn badges and levels. Exclusive perks and events are for Premium Subscription members.', '随着您获得徽章和等级，标准优惠券会逐步解锁。专属福利与活动仅限高级订阅会员。', 'Kupon biasa dibuka apabila anda memperoleh lencana dan tahap. Ganjaran eksklusif dan acara untuk ahli Langganan Premium.', 'பேட்ஜ்கள், நிலைகளைப் பெற பெற வழக்கமான கூப்பன்கள் திறக்கும். பிரத்யேகச் சலுகைகள், நிகழ்வுகள் பிரீமியம் உறுப்பினர்களுக்கு.'],
   'rw2.v.all': ['All', '全部', 'Semua', 'அனைத்தும்'],
   'rw2.v.unlocked': ['Unlocked', '已解锁', 'Dibuka', 'திறந்தவை'],
   'rw2.v.locked': ['Locked', '未解锁', 'Dikunci', 'பூட்டியவை'],
@@ -171,6 +171,6 @@ Object.assign(window.PC_I18N, {
   'rw2.fc.friend': ['Friend {n}', '好友 {n}', 'Rakan {n}', 'நண்பர் {n}'],
   'rw2.fc.note': ['Friends shown here are SAMPLE examples. Your XP is private unless you opt in.', '此处好友为示例。除非您选择加入，您的经验值保持私密。', 'Rakan di sini ialah CONTOH. XP anda peribadi kecuali anda memilih sertai.', 'இங்குள்ள நண்பர்கள் மாதிரிகள். நீங்கள் சேராதவரை உங்கள் XP தனிப்பட்டதாகவே இருக்கும்.'],
   'rw2.up.h': ['Unlock exclusive discounts and events', '解锁专属折扣与活动', 'Buka diskaun dan acara eksklusif', 'பிரத்யேக தள்ளுபடிகள், நிகழ்வுகளைத் திறக்கவும்'],
-  'rw2.up.p': ['Premium Quote members get partner discounts, higher-value offers and events, plus a detailed assessment and coaching.', '高级报价会员可享合作伙伴折扣、更高价值的优惠与活动，以及详细评估和健康指导。', 'Ahli Sebut Harga Premium dapat diskaun rakan, tawaran dan acara bernilai lebih tinggi, serta penilaian terperinci dan bimbingan.', 'பிரீமியம் உறுப்பினர்களுக்குக் கூட்டாளர் தள்ளுபடிகள், அதிக மதிப்புச் சலுகைகள், நிகழ்வுகள், விரிவான மதிப்பீடு, பயிற்சி கிடைக்கும்.'],
-  'rw2.up.cta': ['See the Premium Quote', '查看高级报价', 'Lihat Sebut Harga Premium', 'பிரீமியம் விலைப்புள்ளியைப் பாருங்கள்']
+  'rw2.up.p': ['Premium Subscription members get partner discounts, higher-value offers and events, plus a detailed assessment and coaching.', '高级订阅会员可享合作伙伴折扣、更高价值的优惠与活动，以及详细评估和健康指导。', 'Ahli Langganan Premium dapat diskaun rakan, tawaran dan acara bernilai lebih tinggi, serta penilaian terperinci dan bimbingan.', 'பிரீமியம் உறுப்பினர்களுக்குக் கூட்டாளர் தள்ளுபடிகள், அதிக மதிப்புச் சலுகைகள், நிகழ்வுகள், விரிவான மதிப்பீடு, பயிற்சி கிடைக்கும்.'],
+  'rw2.up.cta': ['See the Premium Subscription', '查看高级订阅', 'Lihat Langganan Premium', 'பிரீமியம் சந்தாவைப் பாருங்கள்']
 });

@@ -1,4 +1,4 @@
-/* Premium Quote Results page. Reuses the shared scoring engine (pricing.js -> window.PCPricing). Figures are indicative only. */
+/* Premium Subscription Results page. Reuses the shared scoring engine (pricing.js -> window.PCPricing). Figures are indicative only. */
 (function () {
   'use strict';
   var P = window.PCPricing;

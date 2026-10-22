@@ -12,7 +12,7 @@ Object.assign(window.PC_I18N, {
   'sb.eff.short': ['about RM{subEff}/month', '约每月 RM{subEff}', 'kira-kira RM{subEff}/bulan', 'மாதம் சுமார் RM{subEff}'],
   'sb.hint': ['Switch to yearly and save {subPct}%', '改为按年付款可节省 {subPct}%', 'Tukar ke tahunan dan jimat {subPct}%', 'ஆண்டுக்கு மாறி {subPct}% சேமியுங்கள்'],
   'sb.cta': ['Unlock My Savings Plan', '解锁我的节省计划', 'Buka Pelan Penjimatan Saya', 'என் சேமிப்புத் திட்டத்தைத் திறக்கவும்'],
-  'sb.see': ['See My Premium Quote', '查看我的高级报价', 'Lihat Sebut Harga Premium Saya', 'என் பிரீமியம் விலைப்புள்ளியைப் பாருங்கள்'],
+  'sb.see': ['See My Premium Subscription', '查看我的高级订阅', 'Lihat Langganan Premium Saya', 'என் பிரீமியம் சந்தாவைப் பாருங்கள்'],
   'sb.active': ['Premium is active. Renews on {d}.', '高级版已生效，将于 {d} 续订。', 'Premium aktif. Diperbaharui pada {d}.', 'பிரீமியம் செயலில் உள்ளது. {d} அன்று புதுப்பிக்கப்படும்.'],
   'sb.m.h': ['Confirm your Premium plan', '确认您的高级版计划', 'Sahkan pelan Premium anda', 'உங்கள் பிரீமியம் திட்டத்தை உறுதிசெய்யுங்கள்'],
   'sb.m.plan': ['Plan', '计划', 'Pelan', 'திட்டம்'],
