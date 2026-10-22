@@ -39,7 +39,7 @@ Object.assign(window.PC_I18N, {
   'how.sum.h': ['What we summarise', '我们汇总什么', 'Apa yang kami ringkaskan', 'நாங்கள் சுருக்குவது'],
   'how.sum.p': ['Daily steps, exercise minutes, sleep hours and resting heart rate, rolled into weekly summaries and one monthly rating.', '每日步数、运动分钟、睡眠时间和静息心率，汇总为每周摘要和一个月度评级。', 'Langkah harian, minit senaman, jam tidur dan kadar jantung rehat, diringkaskan kepada ringkasan mingguan dan satu penarafan bulanan.', 'தினசரி படிகள், உடற்பயிற்சி நிமிடங்கள், தூக்க மணிநேரம், ஓய்வு இதயத் துடிப்பு ஆகியவை வாராந்திர சுருக்கங்களாகவும் ஒரு மாதாந்திர மதிப்பீடாகவும் தொகுக்கப்படும்.'],
   'how.never.h': ['What we do not do', '我们不会做什么', 'Apa yang kami tidak lakukan', 'நாங்கள் செய்யாதவை'],
-  'how.never.p': ['We do not track your location, show minute-by-minute data, sell your data, or share individual data with employers.', '我们不追踪你的位置，不展示逐分钟数据，不出售你的数据，也不向雇主披露个人数据。', 'Kami tidak menjejak lokasi anda, memaparkan data minit demi minit, menjual data anda, atau berkongsi data individu dengan majikan.', 'உங்கள் இருப்பிடத்தைக் கண்காணிக்க மாட்டோம், நிமிடத்திற்கு நிமிடத் தரவைக் காட்ட மாட்டோம், தரவை விற்க மாட்டோம், தனிநபர் தரவை முதலாளிகளுடன் பகிர மாட்டோம்.'],
+  'how.never.p': ['We do not store your routes or location history, show minute-by-minute data, sell your data, or share individual data with employers.', '我们不保存你的行踪或位置记录，不展示逐分钟数据，不出售你的数据，也不向雇主披露个人数据。', 'Kami tidak menyimpan laluan atau sejarah lokasi anda, memaparkan data minit demi minit, menjual data anda, atau berkongsi data individu dengan majikan.', 'உங்கள் பயணப் பாதைகள் அல்லது இருப்பிட வரலாற்றைச் சேமிக்க மாட்டோம், நிமிடத்திற்கு நிமிடத் தரவைக் காட்ட மாட்டோம், தரவை விற்க மாட்டோம், தனிநபர் தரவை முதலாளிகளுடன் பகிர மாட்டோம்.'],
 
   // traditional vs PulseCover
   'vs.h': ['Traditional insurance vs PulseCover', '传统保险 vs PulseCover', 'Insurans tradisional vs PulseCover', 'பாரம்பரிய காப்பீடு vs PulseCover'],
@@ -87,8 +87,9 @@ Object.assign(window.PC_I18N, {
   'connect.a2': ['Exercise minutes', '运动分钟', 'Minit senaman', 'உடற்பயிற்சி நிமிடங்கள்'],
   'connect.a3': ['Sleep hours', '睡眠时间', 'Jam tidur', 'தூக்க மணிநேரம்'],
   'connect.a4': ['Resting heart rate', '静息心率', 'Kadar jantung rehat', 'ஓய்வு இதயத் துடிப்பு'],
+  'connect.a5': ['Location, only so your device can count your steps', '位置信息（仅用于让你的设备计算步数）', 'Lokasi (hanya supaya peranti anda boleh mengira langkah)', 'இருப்பிடம் (உங்கள் சாதனம் படிகளை எண்ண மட்டும்)'],
   'connect.never.h': ['What we never access', '我们绝不读取', 'Apa yang tidak pernah kami akses', 'நாங்கள் ஒருபோதும் அணுகாதவை'],
-  'connect.n1': ['Your location', '你的位置', 'Lokasi anda', 'உங்கள் இருப்பிடம்'],
+  'connect.n1': ['Your routes or location history', '你的行踪或位置记录', 'Laluan atau sejarah lokasi anda', 'உங்கள் பயணப் பாதைகள் அல்லது இருப்பிட வரலாறு'],
   'connect.n2': ['Messages, photos or contacts', '信息、照片或通讯录', 'Mesej, foto atau kenalan', 'செய்திகள், புகைப்படங்கள், தொடர்புகள்'],
   'connect.n3': ['Anything you do not approve', '任何你未批准的内容', 'Apa-apa yang tidak anda luluskan', 'நீங்கள் அனுமதிக்காத எதுவும்'],
   'connect.cta': ['Connect now', '立即连接', 'Sambung sekarang', 'இப்போது இணை'],
