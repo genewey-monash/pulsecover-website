@@ -37,7 +37,7 @@ const ages = `<section class="sec alt"><div class="wrap"><div class="center"><h2
 <div class="devrow" id="devrow"></div><div id="cres"></div><div class="msg" id="cmsg"></div></div>
 <img class="photo" src="/img/connect-wrist.jpg" alt="A wrist wearing a plain smartwatch beside a phone showing a ring graphic" width="1200" height="896"></div></div></section>
 <section class="sec alt"><div class="wrap"><div class="cards c3">${[1, 2, 3].map((i) => `<div class="card"><div class="ico">${i}</div><h3 ${D('connect.s' + i)}></h3></div>`).join('')}</div></div></section>
-<section class="sec white"><div class="wrap"><div class="cards c2"><div class="card"><h3 ${D('connect.allow.h')}></h3><ul class="perm">${[1, 2, 3, 4, 5].map((i) => `<li ${D('connect.a' + i)}></li>`).join('')}</ul></div><div class="card"><h3 ${D('connect.never.h')}></h3><ul class="perm no">${[1, 2, 3].map((i) => `<li ${D('connect.n' + i)}></li>`).join('')}</ul></div></div>
+<section class="sec white"><div class="wrap"><div class="cards c2"><div class="card"><h3 ${D('connect.allow.h')}></h3><ul class="perm">${[1, 2, 3, 4, 5].map((i) => `<li ${D('connect.a' + i)}></li>`).join('')}</ul></div><div class="card"><h3 ${D('connect.never.h')}></h3><ul class="perm no">${[2, 3].map((i) => `<li ${D('connect.n' + i)}></li>`).join('')}</ul></div></div>
 <div class="card" style="margin-top:20px"><p ${D('connect.hc')}></p></div><p style="margin-top:16px;color:var(--mute);font-size:.88rem" ${D('connect.demo')}></p></div></section>
 <section class="sec"><div class="wrap center"><h2 ${D('flow.h')}></h2>${flow}</div></section>
 </main>`, `
