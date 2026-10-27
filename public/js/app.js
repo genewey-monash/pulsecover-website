@@ -76,7 +76,6 @@
     ['/profile', 'nav.profile', 'pf.sub', 'tool', 'profile account personal details update plan change password phone address name logout log out sign out'],
     ['#theme', 'theme.dark', 'theme.light', 'tool', 'dark mode light mode theme night appearance'],
     ['/dashboard', 'dash.ref.h', 'dash.ref.p', 'tool', 'referral refer friend code credit leaderboard'],
-    ['/dashboard', 'dash.pause.h', 'dash.pause.p', 'tool', 'pause tracking illness injury travel pregnancy'],
     ['/contact', 'nav.contact', 'ct.sub', 'page', 'contact email phone address message help'],
     ['#callback', 'cb.h', 'cb.sub', 'tool', 'call back talk callback phone request'],
     ['/plans#A', 'plan.A', 'plan.wear', 'plan', 'plan a 600 individual'],

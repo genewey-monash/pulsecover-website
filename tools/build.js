@@ -148,8 +148,7 @@ pages['dashboard'] = [`My dashboard`, `Your policy, health score and projected p
   <div class="cta" style="margin-top:12px"><button class="btn sm" id="sync" ${D('dash.sync')}></button></div><div class="msg" id="sm"></div>
   <details style="margin-top:14px"><summary ${D('dash.sync.manual')}></summary><div class="rowf"><div><label ${D('dash.steps')}></label><input type="number" id="m_s" value="8000"></div><div><label ${D('dash.exercise')}></label><input type="number" id="m_e" value="30"></div><div><label ${D('dash.sleep')}></label><input type="number" step="0.25" id="m_sl" value="7.5"></div><div><label ${D('dash.hr')}></label><input type="number" id="m_h" value="65"></div></div><button class="btn sm" style="margin-top:12px" id="msave" ${D('dash.save')}></button></details></div>
  <div class="card" style="margin-top:18px"><h3 ${D('dash.myclaims')}></h3><div id="cl"></div><a class="btn sm" href="/claims" ${D('dash.newclaim')}></a></div></div>
-<div><div class="card"><h3 ${D('dash.pause.h')}></h3><p ${D('dash.pause.p')}></p><div id="pausedmsg" class="pill" style="display:none"></div>
- <div class="rowf"><div><label ${D('dash.pause.days')}></label><input type="number" id="pdays" value="14" min="1" max="60"></div><div><label>&nbsp;</label><select id="preason"><option value="illness">Illness</option><option value="injury">Injury</option><option value="travel">Travel</option><option value="pregnancy">Pregnancy</option><option value="other">Other</option></select></div></div><button class="btn sm" style="margin-top:12px" id="pbtn" ${D('dash.pause.btn')}></button><div class="msg" id="pm"></div></div>
+<div>
  <div class="card" style="margin-top:18px"><h3 ${D('dash.ref.h')}></h3><p ${D('dash.ref.p')}></p><p><span ${D('dash.ref.code')}></span>: <b id="rcode"></b> &middot; <span ${D('dash.ref.count')}></span>: <b id="rcount"></b></p><button class="btn sm" id="copy" ${D('dash.ref.copy')}></button></div>
  <p style="margin-top:18px"><a href="#" id="lo" ${D('nav.logout')}></a></p></div></div></div></div></section></main>`, `
 let D;
@@ -163,14 +162,12 @@ function chart(){const c=document.getElementById('chart'),x=c.getContext('2d'),W
 function paint(){if(!D)return;const p=D.policy;who.textContent=D.user.name.split(' ')[0];if(!p){nop.style.display='';main.style.display='none';return}
  nop.style.display='none';main.style.display='';k_pol.textContent=p.number;k_prem.textContent='RM '+PC.fmt(p.premium)+PC.t('common.year');k_score.textContent=D.score30==null?'-':D.score30;
  k_proj.textContent='RM '+PC.fmt(D.projected.annualPremium)+' ('+(D.projected.adjustmentPct>0?'+':'')+D.projected.adjustmentPct+'%)';
- if(D.paused){pausedmsg.style.display='';pausedmsg.textContent=PC.t('dash.paused')+' '+D.paused}else pausedmsg.style.display='none';
  rcode.textContent=D.user.refcode;rcount.textContent=D.referrals;
  cl.innerHTML=D.claims.length?D.claims.slice(0,3).map(c=>'<p><b>'+PC.esc(c.number)+'</b> &middot; RM '+PC.fmt(c.amount)+' &middot; <span class="pill">'+PC.t('cl.s.'+c.status)+'</span></p>').join(''):(form.style.display==='none'?'':'<div class="empty"><p>'+PC.t('cl.none')+'</p></div>');chart()}
 async function load(){try{D=await PC.api('/dashboard');paint()}catch(e){if(e.status===401)location.href='/account?next=/dashboard'}}
 PC.ready.then(load);window.addEventListener('pc:lang',paint);
 sync.onclick=async()=>{try{const r=await PC.api('/sync',{});PC.msg(sm,PC.t('dash.synced')+': '+r.steps+' / '+r.exerciseMin+' / '+r.sleepHours+' / '+r.restingHr,true);load()}catch(e){PC.msg(sm,e.message)}};
 msave.onclick=async()=>{try{await PC.api('/sync',{manual:true,steps:+m_s.value,exerciseMin:+m_e.value,sleepHours:+m_sl.value,restingHr:+m_h.value});PC.msg(sm,PC.t('dash.synced'),true);load()}catch(e){PC.msg(sm,e.message)}};
-pbtn.onclick=async()=>{try{await PC.api('/pause',{days:+pdays.value,reason:preason.value});PC.msg(pm,PC.t('dash.synced'),true);load()}catch(e){PC.msg(pm,e.message)}};
 copy.onclick=()=>{const u=location.origin+'/account?ref='+D.user.refcode;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).catch(()=>{}).finally(()=>{copy.textContent=PC.t('dash.ref.copied');setTimeout(()=>copy.textContent=PC.t('dash.ref.copy'),1500)})};
 lo.onclick=e=>{e.preventDefault();PC.logout()};`];
 

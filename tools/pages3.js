@@ -120,8 +120,7 @@ n4.onclick=async()=>{if(!c1.checked||!c2.checked)return PC.msg(m4,PC.t('common.r
  <div class="card" style="margin-top:18px"><h3 ${D('dash.weekly')}></h3><p style="color:var(--mute);font-size:.9rem" ${D('dash.summ.note')}></p><canvas id="chart" width="700" height="240"></canvas><p id="nodata" style="display:none;color:var(--mute)" ${D('dash.nodata')}></p><div class="scroll"><table class="wk" id="wk"></table></div>
   <div class="cta" style="margin-top:12px"><button class="btn sm" id="sync" ${D('dash.refresh')}></button></div></div>
  <div class="card" style="margin-top:18px"><h3 ${D('dash.myclaims')}></h3><div id="cl"></div><a class="btn sm" href="/claims" ${D('dash.newclaim')}></a></div></div>
-<div><div class="card"><h3 ${D('dash.pause.h')}></h3><p ${D('dash.pause.p')}></p><div id="pausedmsg" class="pill" style="display:none"></div>
- <div class="rowf"><div><label ${D('dash.pause.days')}></label><input type="number" id="pdays" value="14" min="1" max="60"></div><div><label>&nbsp;</label><select id="preason"><option value="illness">Illness</option><option value="injury">Injury</option><option value="travel">Travel</option><option value="pregnancy">Pregnancy</option><option value="other">Other</option></select></div></div><button class="btn sm" style="margin-top:12px" id="pbtn" ${D('dash.pause.btn')}></button><div class="msg" id="pm"></div></div>
+<div>
  <div class="card" style="margin-top:18px"><h3 ${D('dash.ref.h')}></h3><p ${D('dash.ref.p')}></p><p><span ${D('dash.ref.code')}></span>: <b id="rcode"></b> &middot; <span ${D('dash.ref.count')}></span>: <b id="rcount"></b></p><button class="btn sm" id="copy" ${D('dash.ref.copy')}></button></div>
  <p style="margin-top:18px"><a href="#" id="lo" ${D('nav.logout')}></a></p></div></div></div></div></section></main>`.replace('<span data-i18n="dash.rating"</span>', '<span data-i18n="dash.rating"></span>'), `
 let D;
@@ -143,14 +142,12 @@ function paint(){if(!D)return;const p=D.policy;who.textContent=D.user.name.split
  k_score.innerHTML=D.score30==null?'-':'<span class="gr '+gc(D.grade)+'">'+D.grade+'</span> '+D.score30+'/100';
  k_proj.textContent='RM '+PC.fmt(D.projected.annualPremium)+' ('+(D.projected.adjustmentPct>0?'+':'')+D.projected.adjustmentPct+'%)';
  const n=D.connections.length,has=D.metrics.length>=7;pipe.innerHTML=['dash.p1','dash.p2','dash.p3','dash.p4','dash.p5'].map((k,i)=>'<span class="'+((i<2?n>0:i<3?has:true)?(i===4?'now':'done'):'')+'">'+(i<4?'&#10003; ':'')+PC.t(k)+'</span>').join('');
- if(D.paused){pausedmsg.style.display='';pausedmsg.textContent=PC.t('dash.paused')+' '+D.paused}else pausedmsg.style.display='none';
  rcode.textContent=D.user.refcode;rcount.textContent=D.referrals;
  wk.innerHTML='<tr><th>'+PC.t('dash.week')+'</th><th>'+PC.t('dash.dayscount')+'</th><th>'+PC.t('dash.steps')+'</th><th>'+PC.t('dash.exercise')+' /wk</th><th>'+PC.t('dash.sleep')+'</th><th>'+PC.t('dash.hr')+'</th><th>'+PC.t('rate.grade')+'</th></tr>'+(D.weekly||[]).slice().reverse().slice(0,6).map(w=>'<tr><td>'+w.start.slice(5)+'</td><td>'+w.days+'</td><td>'+w.steps.toLocaleString()+'</td><td>'+w.exerciseMin+'</td><td>'+w.sleepHours+'</td><td>'+w.restingHr+'</td><td><span class="gr '+gc(w.grade)+'">'+w.grade+'</span></td></tr>').join('');
  cl.innerHTML=D.claims.length?D.claims.slice(0,3).map(c=>'<p><b>'+PC.esc(c.number)+'</b> &middot; RM '+PC.fmt(c.amount)+' &middot; <span class="pill">'+PC.t('cl.s.'+c.status)+'</span></p>').join(''):'<p style="color:var(--mute)">'+PC.t('cl.none')+'</p>';devs();chart()}
 async function load(){try{D=await PC.api('/dashboard');paint()}catch(e){if(e.status===401)location.href='/account?next=/dashboard'}}
 PC.ready.then(load);window.addEventListener('pc:lang',paint);
 sync.onclick=async()=>{try{await PC.api('/sync',{});PC.msg(sm,PC.t('dash.synced'),true);load()}catch(e){PC.msg(sm,e.message)}};
-pbtn.onclick=async()=>{try{await PC.api('/pause',{days:+pdays.value,reason:preason.value});PC.msg(pm,PC.t('dash.synced'),true);load()}catch(e){PC.msg(pm,e.message)}};
 copy.onclick=()=>{const u=location.origin+'/account?ref='+D.user.refcode;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).catch(()=>{}).finally(()=>{copy.textContent=PC.t('dash.ref.copied');setTimeout(()=>copy.textContent=PC.t('dash.ref.copy'),1500)})};
 lo.onclick=e=>{e.preventDefault();PC.logout()};`];
 
